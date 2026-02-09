@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:voxai_quest/core/error/failures.dart';
+import 'package:voxai_quest/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:voxai_quest/features/auth/data/models/user_model.dart';
 import 'package:voxai_quest/features/auth/domain/entities/user_entity.dart';
 import 'package:voxai_quest/features/auth/domain/repositories/auth_repository.dart';
