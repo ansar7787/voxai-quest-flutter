@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'firebase_options.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart' as di;
+import 'package:voxai_quest/core/utils/app_router.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/auth/presentation/pages/login_page.dart';
 import 'package:voxai_quest/features/game/presentation/pages/game_screen.dart';
