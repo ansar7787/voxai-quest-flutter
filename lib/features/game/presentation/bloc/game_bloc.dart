@@ -1,79 +1,80 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:voxai_quest/core/error/failures.dart';
 import 'package:voxai_quest/features/game/domain/entities/game_quest.dart';
 import 'package:voxai_quest/features/reading/domain/entities/reading_quest.dart';
 import 'package:voxai_quest/features/writing/domain/entities/writing_quest.dart';
 import 'package:voxai_quest/features/speaking/domain/entities/speaking_quest.dart';
+import 'package:voxai_quest/features/reading/domain/repositories/reading_repository.dart';
+import 'package:voxai_quest/features/writing/domain/repositories/writing_repository.dart';
+import 'package:voxai_quest/features/speaking/domain/repositories/speaking_repository.dart';
 import 'game_bloc_event_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
-  GameBloc() : super(GameInitial()) {
+  final ReadingRepository _readingRepository;
+  final WritingRepository _writingRepository;
+  final SpeakingRepository _speakingRepository;
+
+  GameBloc({
+    required ReadingRepository readingRepository,
+    required WritingRepository writingRepository,
+    required SpeakingRepository speakingRepository,
+  }) : _readingRepository = readingRepository,
+       _writingRepository = writingRepository,
+       _speakingRepository = speakingRepository,
+       super(GameInitial()) {
     on<StartGame>(_onStartGame);
     on<SubmitAnswer>(_onSubmitAnswer);
-    on<NextLevel>(_onNextLevel);
+    on<NextQuest>(_onNextQuest);
   }
 
-  void _onStartGame(StartGame event, Emitter<GameState> emit) {
-    emit(GameInProgress(currentQuest: _generateQuest(1), level: 1, score: 0));
+  Future<void> _onStartGame(StartGame event, Emitter<GameState> emit) async {
+    emit(GameLoading());
+    final result = await _generateQuest(1);
+    result.fold(
+      (failure) => emit(GameError(failure.message)),
+      (quest) => emit(GameInProgress(currentQuest: quest, level: 1, score: 0)),
+    );
   }
 
   void _onSubmitAnswer(SubmitAnswer event, Emitter<GameState> emit) {
     if (state is GameInProgress) {
       final currentState = state as GameInProgress;
-      // Logic for checking answer would go here
-      // For now, we'll just increment score if it's correct
-      emit(
-        GameInProgress(
-          currentQuest: currentState.currentQuest,
-          level: currentState.level,
-          score: currentState.score + 10,
-        ),
-      );
-      add(NextLevel());
+      // In a real app, validate answer here
+      final isCorrect = true;
+      final newScore = isCorrect ? currentState.score + 10 : currentState.score;
+
+      if (currentState.level >= 50) {
+        // Keep it going for now
+        emit(GameFinished(newScore));
+      } else {
+        add(NextQuest());
+        emit(currentState.copyWith(score: newScore));
+      }
     }
   }
 
-  void _onNextLevel(NextLevel event, Emitter<GameState> emit) {
+  Future<void> _onNextQuest(NextQuest event, Emitter<GameState> emit) async {
     if (state is GameInProgress) {
       final currentState = state as GameInProgress;
       final nextLevel = currentState.level + 1;
-      emit(
-        GameInProgress(
-          currentQuest: _generateQuest(nextLevel),
-          level: nextLevel,
-          score: currentState.score,
-        ),
+      emit(GameLoading());
+      final result = await _generateQuest(nextLevel);
+      result.fold(
+        (failure) => emit(GameError(failure.message)),
+        (quest) =>
+            emit(currentState.copyWith(currentQuest: quest, level: nextLevel)),
       );
     }
   }
 
-  GameQuest _generateQuest(int level) {
-    // Deterministic mock quest generation for "unlimited" levels
-    final questId = 'q_$level';
+  Future<Either<Failure, GameQuest>> _generateQuest(int level) async {
     if (level % 3 == 1) {
-      return ReadingQuest(
-        id: questId,
-        instruction: 'Read the text and answer the question.',
-        difficulty: level,
-        passage:
-            'Alice was beginning to get very tired of sitting by her sister on the bank...',
-        options: ['Sitting', 'Running', 'Sleeping', 'Eating'],
-        correctOptionIndex: 0,
-      );
+      return await _readingRepository.getReadingQuest(level);
     } else if (level % 3 == 2) {
-      return WritingQuest(
-        id: questId,
-        instruction: 'Translate the following to English.',
-        difficulty: level,
-        prompt: 'Hola, ¿cómo estás?',
-        expectedAnswer: 'Hello, how are you?',
-      );
+      return await _writingRepository.getWritingQuest(level);
     } else {
-      return SpeakingQuest(
-        id: questId,
-        instruction: 'Say the following sentence clearly.',
-        difficulty: level,
-        textToSpeak: 'The quick brown fox jumps over the lazy dog.',
-      );
+      return await _speakingRepository.getSpeakingQuest(level);
     }
   }
 }

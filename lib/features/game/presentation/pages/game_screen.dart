@@ -7,13 +7,22 @@ import 'package:voxai_quest/features/speaking/domain/entities/speaking_quest.dar
 import 'package:voxai_quest/features/game/presentation/bloc/game_bloc.dart';
 import 'package:voxai_quest/features/game/presentation/bloc/game_bloc_event_state.dart';
 
+import 'package:voxai_quest/core/utils/injection_container.dart' as di;
+import 'package:voxai_quest/features/reading/domain/repositories/reading_repository.dart';
+import 'package:voxai_quest/features/writing/domain/repositories/writing_repository.dart';
+import 'package:voxai_quest/features/speaking/domain/repositories/speaking_repository.dart';
+
 class GameScreen extends StatelessWidget {
   const GameScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => GameBloc()..add(StartGame()),
+      create: (context) => GameBloc(
+        readingRepository: di.sl<ReadingRepository>(),
+        writingRepository: di.sl<WritingRepository>(),
+        speakingRepository: di.sl<SpeakingRepository>(),
+      )..add(StartGame()),
       child: Scaffold(
         appBar: AppBar(
           title: BlocBuilder<GameBloc, GameState>(
