@@ -56,24 +56,26 @@ class LoginCubit extends Cubit<LoginState> {
   Future<void> logInWithCredentials() async {
     if (state.isSubmitting) return;
     emit(state.copyWith(isSubmitting: true));
-    try {
-      await _authRepository.logInWithEmail(
-        email: state.email,
-        password: state.password,
-      );
-      emit(state.copyWith(isSubmitting: false, isSuccess: true));
-    } catch (e) {
-      emit(state.copyWith(isSubmitting: false, errorMessage: e.toString()));
-    }
+    final result = await _authRepository.logInWithEmail(
+      email: state.email,
+      password: state.password,
+    );
+    result.fold(
+      (failure) => emit(
+        state.copyWith(isSubmitting: false, errorMessage: failure.message),
+      ),
+      (_) => emit(state.copyWith(isSubmitting: false, isSuccess: true)),
+    );
   }
 
   Future<void> logInWithGoogle() async {
     emit(state.copyWith(isSubmitting: true));
-    try {
-      await _authRepository.logInWithGoogle();
-      emit(state.copyWith(isSubmitting: false, isSuccess: true));
-    } catch (e) {
-      emit(state.copyWith(isSubmitting: false, errorMessage: e.toString()));
-    }
+    final result = await _authRepository.logInWithGoogle();
+    result.fold(
+      (failure) => emit(
+        state.copyWith(isSubmitting: false, errorMessage: failure.message),
+      ),
+      (_) => emit(state.copyWith(isSubmitting: false, isSuccess: true)),
+    );
   }
 }
