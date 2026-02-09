@@ -16,7 +16,7 @@ class SubmitAnswer extends GameEvent {
   List<Object?> get props => [answer];
 }
 
-class NextLevel extends GameEvent {}
+class NextQuest extends GameEvent {}
 
 abstract class GameState extends Equatable {
   @override
@@ -40,6 +40,14 @@ class GameInProgress extends GameState {
 
   @override
   List<Object?> get props => [currentQuest, level, score];
+
+  GameInProgress copyWith({GameQuest? currentQuest, int? level, int? score}) {
+    return GameInProgress(
+      currentQuest: currentQuest ?? this.currentQuest,
+      level: level ?? this.level,
+      score: score ?? this.score,
+    );
+  }
 }
 
 class GameFinished extends GameState {

@@ -5,6 +5,12 @@ import 'package:voxai_quest/features/auth/data/datasources/auth_remote_data_sour
 import 'package:voxai_quest/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:voxai_quest/features/auth/domain/repositories/auth_repository.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:voxai_quest/features/reading/domain/repositories/reading_repository.dart';
+import 'package:voxai_quest/features/reading/data/repositories/mock_reading_repository.dart';
+import 'package:voxai_quest/features/writing/domain/repositories/writing_repository.dart';
+import 'package:voxai_quest/features/writing/data/repositories/mock_writing_repository.dart';
+import 'package:voxai_quest/features/speaking/domain/repositories/speaking_repository.dart';
+import 'package:voxai_quest/features/speaking/data/repositories/mock_speaking_repository.dart';
 
 final sl = GetIt.instance;
 
