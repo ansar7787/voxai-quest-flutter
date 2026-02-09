@@ -7,14 +7,14 @@ import 'package:voxai_quest/features/auth/domain/entities/user_entity.dart';
 import 'package:voxai_quest/features/auth/domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
+  final AuthRemoteDataSource _remoteDataSource;
   final firebase_auth.FirebaseAuth _firebaseAuth;
-  final GoogleSignIn _googleSignIn;
 
   AuthRepositoryImpl({
+    required AuthRemoteDataSource remoteDataSource,
     firebase_auth.FirebaseAuth? firebaseAuth,
-    GoogleSignIn? googleSignIn,
-  }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
-       _googleSignIn = googleSignIn ?? GoogleSignIn();
+  }) : _remoteDataSource = remoteDataSource,
+       _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
   @override
   Stream<UserEntity?> get user {
@@ -35,16 +35,13 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
   }) async {
     try {
-      final credential = await _firebaseAuth.createUserWithEmailAndPassword(
+      final userModel = await _remoteDataSource.signUp(
         email: email,
         password: password,
       );
-      final user = credential.user!;
-      return Right(UserModel(id: user.uid, email: user.email ?? ''));
+      return Right(userModel);
     } on firebase_auth.FirebaseAuthException catch (e) {
-      return Left(
-        AuthFailure(e.message ?? 'An unknown error occurred during sign up.'),
-      );
+      return Left(AuthFailure(e.message ?? 'Sign up failed.'));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -56,14 +53,13 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
   }) async {
     try {
-      final credential = await _firebaseAuth.signInWithEmailAndPassword(
+      final userModel = await _remoteDataSource.logInWithEmail(
         email: email,
         password: password,
       );
-      final user = credential.user!;
-      return Right(UserModel(id: user.uid, email: user.email ?? ''));
+      return Right(userModel);
     } on firebase_auth.FirebaseAuthException catch (e) {
-      return Left(AuthFailure(e.message ?? 'Invalid email or password.'));
+      return Left(AuthFailure(e.message ?? 'Login failed.'));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -72,19 +68,10 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> logInWithGoogle() async {
     try {
-      final googleUser = await _googleSignIn.signIn();
-      if (googleUser != null) {
-        final googleAuth = await googleUser.authentication;
-        final credential = firebase_auth.GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-        await _firebaseAuth.signInWithCredential(credential);
-        return const Right(null);
-      }
-      return const Left(AuthFailure('Google sign in canceled by user.'));
+      await _remoteDataSource.logInWithGoogle();
+      return const Right(null);
     } on firebase_auth.FirebaseAuthException catch (e) {
-      return Left(AuthFailure(e.message ?? 'Google authentication failed.'));
+      return Left(AuthFailure(e.message ?? 'Google Login failed.'));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -93,7 +80,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> logOut() async {
     try {
-      await Future.wait([_firebaseAuth.signOut(), _googleSignIn.signOut()]);
+      await _remoteDataSource.logOut();
       return const Right(null);
     } catch (e) {
       return Left(CacheFailure(e.toString()));

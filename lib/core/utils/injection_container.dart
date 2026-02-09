@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:voxai_quest/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:voxai_quest/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:voxai_quest/features/auth/domain/repositories/auth_repository.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
@@ -12,9 +13,14 @@ Future<void> init() async {
   sl.registerLazySingleton(() => FirebaseAuth.instance);
   sl.registerLazySingleton(() => GoogleSignIn());
 
+  // Data Sources
+  sl.registerLazySingleton<AuthRemoteDataSource>(
+    () => AuthRemoteDataSourceImpl(firebaseAuth: sl(), googleSignIn: sl()),
+  );
+
   // Repositories
   sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(firebaseAuth: sl(), googleSignIn: sl()),
+    () => AuthRepositoryImpl(remoteDataSource: sl(), firebaseAuth: sl()),
   );
 
   // Blocs
