@@ -37,6 +37,8 @@ class MyApp extends StatelessWidget {
               ),
               useMaterial3: true,
             ),
+            onGenerateRoute: AppRouter.generateRoute,
+            initialRoute: AppRouter.initialRoute,
             home: const AuthGate(),
           ),
         );

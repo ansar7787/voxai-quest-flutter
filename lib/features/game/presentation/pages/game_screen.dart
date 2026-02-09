@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:voxai_quest/features/game/domain/entities/game_quest.dart';
+import 'package:voxai_quest/features/reading/domain/entities/reading_quest.dart';
+import 'package:voxai_quest/features/writing/domain/entities/writing_quest.dart';
+import 'package:voxai_quest/features/speaking/domain/entities/speaking_quest.dart';
 import 'package:voxai_quest/features/game/presentation/bloc/game_bloc.dart';
 import 'package:voxai_quest/features/game/presentation/bloc/game_bloc_event_state.dart';
-import 'package:voxai_quest/features/game/domain/entities/game_quest.dart';
 
 class GameScreen extends StatelessWidget {
   const GameScreen({super.key});
