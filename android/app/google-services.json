@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "979122525797",
+    "project_id": "voxai-quest",
+    "storage_bucket": "voxai-quest.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:979122525797:android:a44a492d7a6fec854d988c",
+        "android_client_info": {
+          "package_name": "com.voxai.quest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC67mjKunDsrot3Uh6Tg9XjNn1hhFv_5Co"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
