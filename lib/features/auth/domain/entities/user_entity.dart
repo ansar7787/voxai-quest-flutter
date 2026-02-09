@@ -8,6 +8,11 @@ class UserEntity extends Equatable {
   final int coins;
   final int totalExp;
   final int level;
+  final bool isAdmin;
+  final int currentStreak;
+  final DateTime? lastLoginDate;
+  final bool isPremium;
+  final DateTime? premiumExpiryDate;
 
   const UserEntity({
     required this.id,
@@ -17,6 +22,11 @@ class UserEntity extends Equatable {
     this.coins = 0,
     this.totalExp = 0,
     this.level = 1,
+    this.isAdmin = false,
+    this.currentStreak = 0,
+    this.lastLoginDate,
+    this.isPremium = false,
+    this.premiumExpiryDate,
   });
 
   @override
@@ -28,6 +38,11 @@ class UserEntity extends Equatable {
     coins,
     totalExp,
     level,
+    isAdmin,
+    currentStreak,
+    lastLoginDate,
+    isPremium,
+    premiumExpiryDate,
   ];
 
   UserEntity copyWith({
@@ -36,6 +51,11 @@ class UserEntity extends Equatable {
     int? coins,
     int? totalExp,
     int? level,
+    bool? isAdmin,
+    int? currentStreak,
+    DateTime? lastLoginDate,
+    bool? isPremium,
+    DateTime? premiumExpiryDate,
   }) {
     return UserEntity(
       id: id,
@@ -45,6 +65,11 @@ class UserEntity extends Equatable {
       coins: coins ?? this.coins,
       totalExp: totalExp ?? this.totalExp,
       level: level ?? this.level,
+      isAdmin: isAdmin ?? this.isAdmin,
+      currentStreak: currentStreak ?? this.currentStreak,
+      lastLoginDate: lastLoginDate ?? this.lastLoginDate,
+      isPremium: isPremium ?? this.isPremium,
+      premiumExpiryDate: premiumExpiryDate ?? this.premiumExpiryDate,
     );
   }
 }

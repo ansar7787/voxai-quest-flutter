@@ -2,7 +2,9 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:voxai_quest/features/auth/domain/entities/user_entity.dart';
-import 'package:voxai_quest/features/auth/domain/repositories/auth_repository.dart';
+import 'package:voxai_quest/features/auth/domain/usecases/get_user_stream.dart';
+import 'package:voxai_quest/features/auth/domain/usecases/log_out.dart';
+import 'package:voxai_quest/core/usecases/usecase.dart';
 
 // Events
 abstract class AuthEvent extends Equatable {
@@ -43,16 +45,18 @@ class AuthState extends Equatable {
 
 // BloC
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthRepository _authRepository;
+  final GetUserStream _getUserStream;
+  final LogOut _logOut;
   late StreamSubscription<UserEntity?> _userSubscription;
 
-  AuthBloc({required AuthRepository authRepository})
-    : _authRepository = authRepository,
+  AuthBloc({required GetUserStream getUserStream, required LogOut logOut})
+    : _getUserStream = getUserStream,
+      _logOut = logOut,
       super(const AuthState.unknown()) {
     on<AuthUserChanged>(_onUserChanged);
     on<AuthLogoutRequested>(_onLogoutRequested);
 
-    _userSubscription = _authRepository.user.listen(
+    _userSubscription = _getUserStream().listen(
       (user) => add(AuthUserChanged(user)),
     );
   }
@@ -66,7 +70,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _onLogoutRequested(AuthLogoutRequested event, Emitter<AuthState> emit) {
-    unawaited(_authRepository.logOut());
+    unawaited(_logOut(NoParams()));
   }
 
   @override

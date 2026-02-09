@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart';
-import 'package:voxai_quest/features/auth/domain/repositories/auth_repository.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/login_cubit.dart';
 import 'package:voxai_quest/features/auth/presentation/pages/signup_page.dart';
+import 'package:voxai_quest/features/game/presentation/pages/main_screen.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -13,7 +13,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(authRepository: sl<AuthRepository>()),
+      create: (context) => sl<LoginCubit>(),
       child: const LoginView(),
     );
   }
@@ -24,71 +24,90 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF2563EB), Color(0xFF7C3AED)],
+    return BlocListener<LoginCubit, LoginState>(
+      listener: (context, state) {
+        if (state.isSuccess) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const MainScreen()),
+          );
+        }
+        if (state.errorMessage != null) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+        }
+      },
+      child: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF2563EB), Color(0xFF7C3AED)],
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: 60.h),
-                Text(
-                  'VoxAI Quest',
-                  style: GoogleFonts.outfit(
-                    fontSize: 42.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  'Your English Learning Adventure',
-                  style: GoogleFonts.outfit(
-                    fontSize: 18.sp,
-                    color: Colors.white70,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 80.h),
-                _EmailInput(),
-                SizedBox(height: 16.h),
-                _PasswordInput(),
-                SizedBox(height: 24.h),
-                _LoginButton(),
-                SizedBox(height: 16.h),
-                _GoogleLoginButton(),
-                const Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "Don't have an account? ",
-                      style: TextStyle(color: Colors.white70),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: 60.h),
+                  Text(
+                    'VoxAI Quest',
+                    style: GoogleFonts.outfit(
+                      fontSize: 42.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
-                    TextButton(
-                      onPressed: () {
-                        // Navigate to Sign Up
-                      },
-                      child: const Text(
-                        'Sign Up',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    'Your English Learning Adventure',
+                    style: GoogleFonts.outfit(
+                      fontSize: 18.sp,
+                      color: Colors.white70,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 80.h),
+                  _EmailInput(),
+                  SizedBox(height: 16.h),
+                  _PasswordInput(),
+                  SizedBox(height: 24.h),
+                  _LoginButton(),
+                  SizedBox(height: 16.h),
+                  _GoogleLoginButton(),
+                  const Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Don't have an account? ",
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const SignUpPage(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          'Sign Up',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-              ],
+                    ],
+                  ),
+                  SizedBox(height: 20.h),
+                ],
+              ),
             ),
           ),
         ),

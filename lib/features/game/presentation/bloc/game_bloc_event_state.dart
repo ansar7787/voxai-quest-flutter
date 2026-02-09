@@ -27,25 +27,40 @@ class GameInitial extends GameState {}
 
 class GameLoading extends GameState {}
 
+enum SubmissionStatus { none, correct, incorrect }
+
 class GameInProgress extends GameState {
   final GameQuest currentQuest;
   final int level;
   final int score;
+  final SubmissionStatus status;
+
+  final int lives;
 
   GameInProgress({
     required this.currentQuest,
     required this.level,
     required this.score,
+    required this.lives,
+    this.status = SubmissionStatus.none,
   });
 
   @override
-  List<Object?> get props => [currentQuest, level, score];
+  List<Object?> get props => [currentQuest, level, score, lives, status];
 
-  GameInProgress copyWith({GameQuest? currentQuest, int? level, int? score}) {
+  GameInProgress copyWith({
+    GameQuest? currentQuest,
+    int? level,
+    int? score,
+    int? lives,
+    SubmissionStatus? status,
+  }) {
     return GameInProgress(
       currentQuest: currentQuest ?? this.currentQuest,
       level: level ?? this.level,
       score: score ?? this.score,
+      lives: lives ?? this.lives,
+      status: status ?? this.status,
     );
   }
 }
@@ -56,6 +71,27 @@ class GameFinished extends GameState {
 
   @override
   List<Object?> get props => [finalScore];
+}
+
+class GameSuccess extends GameState {
+  final String message;
+  final int score;
+  final GameQuest nextQuestHelper;
+  GameSuccess({
+    required this.message,
+    required this.score,
+    required this.nextQuestHelper,
+  });
+  @override
+  List<Object?> get props => [message, score, nextQuestHelper];
+}
+
+class GameFailure extends GameState {
+  final String message;
+  final int score;
+  GameFailure({required this.message, required this.score});
+  @override
+  List<Object?> get props => [message, score];
 }
 
 class GameError extends GameState {

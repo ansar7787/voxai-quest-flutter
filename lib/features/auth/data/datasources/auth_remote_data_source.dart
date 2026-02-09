@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:voxai_quest/features/auth/data/models/user_model.dart';
@@ -31,10 +32,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       email: email,
       password: password,
     );
-    return UserModel(
+
+    final newUser = UserModel(
       id: credential.user!.uid,
       email: credential.user!.email ?? '',
+      isAdmin: false, // Default false
     );
+
+    // Create Firestore document
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(newUser.id)
+        .set(newUser.toMap());
+
+    return newUser;
   }
 
   @override
@@ -61,7 +72,30 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      await _firebaseAuth.signInWithCredential(credential);
+      final userCredential = await _firebaseAuth.signInWithCredential(
+        credential,
+      );
+      final user = userCredential.user;
+
+      if (user != null) {
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .get();
+        if (!userDoc.exists) {
+          final newUser = UserModel(
+            id: user.uid,
+            email: user.email ?? '',
+            displayName: user.displayName,
+            photoUrl: user.photoURL,
+            isAdmin: false,
+          );
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .set(newUser.toMap());
+        }
+      }
     }
   }
 

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart';
-import 'package:voxai_quest/features/auth/domain/repositories/auth_repository.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/signup_cubit.dart';
 
 class SignUpPage extends StatelessWidget {
@@ -12,7 +11,7 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SignUpCubit(authRepository: sl<AuthRepository>()),
+      create: (context) => sl<SignUpCubit>(),
       child: const SignUpView(),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:voxai_quest/features/auth/domain/repositories/auth_repository.dart';
+import 'package:voxai_quest/features/auth/domain/usecases/sign_up.dart';
 
 class SignUpState extends Equatable {
   final String email;
@@ -44,10 +44,10 @@ class SignUpState extends Equatable {
 }
 
 class SignUpCubit extends Cubit<SignUpState> {
-  final AuthRepository _authRepository;
+  final SignUp _signUp;
 
-  SignUpCubit({required AuthRepository authRepository})
-    : _authRepository = authRepository,
+  SignUpCubit({required SignUp signUp})
+    : _signUp = signUp,
       super(const SignUpState());
 
   void emailChanged(String value) => emit(state.copyWith(email: value));
@@ -56,9 +56,8 @@ class SignUpCubit extends Cubit<SignUpState> {
   Future<void> signUp() async {
     if (state.isSubmitting) return;
     emit(state.copyWith(isSubmitting: true));
-    final result = await _authRepository.signUp(
-      email: state.email,
-      password: state.password,
+    final result = await _signUp(
+      SignUpParams(email: state.email, password: state.password),
     );
     result.fold(
       (failure) => emit(

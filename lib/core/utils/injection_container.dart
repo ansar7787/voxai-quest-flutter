@@ -1,34 +1,138 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:voxai_quest/core/network/network_info.dart';
+import 'package:voxai_quest/core/utils/seeding_service.dart';
+import 'package:voxai_quest/core/utils/sound_service.dart';
+import 'package:voxai_quest/core/utils/haptic_service.dart';
+import 'package:voxai_quest/core/utils/ad_service.dart';
+import 'package:voxai_quest/core/utils/payment_service.dart';
+import 'package:voxai_quest/core/theme/theme_cubit.dart';
 import 'package:voxai_quest/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:voxai_quest/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:voxai_quest/features/auth/domain/repositories/auth_repository.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/reading/domain/repositories/reading_repository.dart';
-import 'package:voxai_quest/features/reading/data/repositories/mock_reading_repository.dart';
+import 'package:voxai_quest/features/reading/data/repositories/reading_repository_impl.dart';
+import 'package:voxai_quest/features/reading/data/datasources/reading_remote_data_source.dart';
+import 'package:voxai_quest/features/reading/domain/usecases/get_reading_quest.dart';
+
 import 'package:voxai_quest/features/writing/domain/repositories/writing_repository.dart';
-import 'package:voxai_quest/features/writing/data/repositories/mock_writing_repository.dart';
+import 'package:voxai_quest/features/writing/data/repositories/writing_repository_impl.dart';
+import 'package:voxai_quest/features/writing/data/datasources/writing_remote_data_source.dart';
+import 'package:voxai_quest/features/writing/domain/usecases/get_writing_quest.dart';
+
 import 'package:voxai_quest/features/speaking/domain/repositories/speaking_repository.dart';
-import 'package:voxai_quest/features/speaking/data/repositories/mock_speaking_repository.dart';
+import 'package:voxai_quest/features/speaking/data/repositories/speaking_repository_impl.dart';
+import 'package:voxai_quest/features/speaking/data/datasources/speaking_remote_data_source.dart';
+import 'package:voxai_quest/features/speaking/domain/usecases/get_speaking_quest.dart';
+
+import 'package:voxai_quest/features/grammar/domain/repositories/grammar_repository.dart';
+import 'package:voxai_quest/features/grammar/data/repositories/grammar_repository_impl.dart';
+import 'package:voxai_quest/features/grammar/data/datasources/grammar_remote_data_source.dart';
+import 'package:voxai_quest/features/grammar/domain/usecases/get_grammar_quest.dart';
+
+import 'package:voxai_quest/features/auth/domain/usecases/sign_up.dart';
+import 'package:voxai_quest/features/auth/domain/usecases/log_in_with_email.dart';
+import 'package:voxai_quest/features/auth/domain/usecases/log_in_with_google.dart';
+import 'package:voxai_quest/features/auth/domain/usecases/log_out.dart';
+import 'package:voxai_quest/features/auth/domain/usecases/get_user_stream.dart';
+import 'package:voxai_quest/features/auth/domain/usecases/update_user_coins.dart';
+
+import 'package:voxai_quest/features/leaderboard/domain/repositories/leaderboard_repository.dart';
+import 'package:voxai_quest/features/leaderboard/data/repositories/leaderboard_repository_impl.dart';
+import 'package:voxai_quest/features/leaderboard/presentation/bloc/leaderboard_bloc.dart';
+import 'package:voxai_quest/features/auth/presentation/bloc/login_cubit.dart';
+import 'package:voxai_quest/features/auth/presentation/bloc/signup_cubit.dart';
+import 'package:voxai_quest/features/game/presentation/bloc/game_bloc.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
   // External
   sl.registerLazySingleton(() => FirebaseAuth.instance);
+  sl.registerLazySingleton(() => FirebaseFirestore.instance);
   sl.registerLazySingleton(() => GoogleSignIn());
+  sl.registerLazySingleton(() => InternetConnection());
+
+  // Core
+  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
+  sl.registerLazySingleton<SeedingService>(() => SeedingService(sl()));
+  sl.registerLazySingleton(() => SoundService());
+  sl.registerLazySingleton(() => HapticService());
+  sl.registerLazySingleton(() => AdService());
+  sl.registerLazySingleton(
+    () => PaymentService(authRepository: sl(), firestore: sl()),
+  );
 
   // Data Sources
   sl.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(firebaseAuth: sl(), googleSignIn: sl()),
   );
+  sl.registerLazySingleton<ReadingRemoteDataSource>(
+    () => ReadingRemoteDataSourceImpl(sl()),
+  );
+  sl.registerLazySingleton<WritingRemoteDataSource>(
+    () => WritingRemoteDataSourceImpl(sl()),
+  );
+  sl.registerLazySingleton<SpeakingRemoteDataSource>(
+    () => SpeakingRemoteDataSourceImpl(sl()),
+  );
+  sl.registerLazySingleton<GrammarRemoteDataSource>(
+    () => GrammarRemoteDataSourceImpl(sl()),
+  );
+
+  // Use Cases
+  sl.registerLazySingleton(() => GetReadingQuest(sl()));
+  sl.registerLazySingleton(() => GetWritingQuest(sl()));
+  sl.registerLazySingleton(() => GetSpeakingQuest(sl()));
+  sl.registerLazySingleton(() => GetGrammarQuest(sl()));
+  sl.registerLazySingleton(() => SignUp(sl()));
+  sl.registerLazySingleton(() => LogInWithEmail(sl()));
+  sl.registerLazySingleton(() => LogInWithGoogle(sl()));
+  sl.registerLazySingleton(() => LogOut(sl()));
+  sl.registerLazySingleton(() => GetUserStream(sl()));
+  sl.registerLazySingleton(() => UpdateUserCoins(sl()));
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(remoteDataSource: sl(), firebaseAuth: sl()),
   );
+  sl.registerLazySingleton<ReadingRepository>(
+    () => ReadingRepositoryImpl(remoteDataSource: sl()),
+  );
+  sl.registerLazySingleton<WritingRepository>(
+    () => WritingRepositoryImpl(remoteDataSource: sl()),
+  );
+  sl.registerLazySingleton<SpeakingRepository>(
+    () => SpeakingRepositoryImpl(remoteDataSource: sl()),
+  );
+  sl.registerLazySingleton<GrammarRepository>(
+    () => GrammarRepositoryImpl(remoteDataSource: sl()),
+  );
+  sl.registerLazySingleton<LeaderboardRepository>(
+    () => LeaderboardRepositoryImpl(sl()),
+  );
 
   // Blocs
-  sl.registerFactory(() => AuthBloc(authRepository: sl()));
+  sl.registerFactory(() => AuthBloc(getUserStream: sl(), logOut: sl()));
+  sl.registerFactory(
+    () => LoginCubit(logInWithEmail: sl(), logInWithGoogle: sl()),
+  );
+  sl.registerFactory(() => SignUpCubit(signUp: sl()));
+  sl.registerFactory(
+    () => GameBloc(
+      getReadingQuest: sl(),
+      getWritingQuest: sl(),
+      getSpeakingQuest: sl(),
+      getGrammarQuest: sl(),
+      updateUserCoins: sl(),
+      soundService: sl(),
+      hapticService: sl(),
+    ),
+  );
+  sl.registerFactory(() => LeaderboardBloc(repository: sl()));
+  sl.registerFactory(() => ThemeCubit());
 }

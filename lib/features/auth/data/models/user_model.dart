@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:voxai_quest/features/auth/domain/entities/user_entity.dart';
 
 class UserModel extends UserEntity {
@@ -9,6 +10,11 @@ class UserModel extends UserEntity {
     super.coins,
     super.totalExp,
     super.level,
+    super.isAdmin,
+    super.currentStreak,
+    super.lastLoginDate,
+    super.isPremium,
+    super.premiumExpiryDate,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
@@ -20,6 +26,15 @@ class UserModel extends UserEntity {
       coins: map['coins'] ?? 0,
       totalExp: map['totalExp'] ?? 0,
       level: map['level'] ?? 1,
+      isAdmin: map['isAdmin'] ?? false,
+      currentStreak: map['currentStreak'] ?? 0,
+      lastLoginDate: map['lastLoginDate'] != null
+          ? (map['lastLoginDate'] as dynamic).toDate()
+          : null,
+      isPremium: map['isPremium'] ?? false,
+      premiumExpiryDate: map['premiumExpiryDate'] != null
+          ? (map['premiumExpiryDate'] as dynamic).toDate()
+          : null,
     );
   }
 
@@ -32,6 +47,15 @@ class UserModel extends UserEntity {
       'coins': coins,
       'totalExp': totalExp,
       'level': level,
+      'isAdmin': isAdmin,
+      'currentStreak': currentStreak,
+      'lastLoginDate': lastLoginDate != null
+          ? Timestamp.fromDate(lastLoginDate!)
+          : null,
+      'isPremium': isPremium,
+      'premiumExpiryDate': premiumExpiryDate != null
+          ? Timestamp.fromDate(premiumExpiryDate!)
+          : null,
     };
   }
 }
