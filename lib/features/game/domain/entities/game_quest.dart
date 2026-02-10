@@ -1,4 +1,11 @@
-enum QuestType { speaking, reading, writing, grammar }
+enum QuestType {
+  speaking,
+  reading,
+  writing,
+  grammar,
+  conversation,
+  pronunciation,
+}
 
 abstract class GameQuest {
   final String id;

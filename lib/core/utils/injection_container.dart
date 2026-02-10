@@ -57,6 +57,17 @@ import 'package:voxai_quest/features/auth/presentation/bloc/login_cubit.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/signup_cubit.dart';
 import 'package:voxai_quest/features/game/presentation/bloc/game_bloc.dart';
 
+// Conversation & Pronunciation
+import 'package:voxai_quest/features/speaking/domain/repositories/conversation_repository.dart';
+import 'package:voxai_quest/features/speaking/data/repositories/conversation_repository_impl.dart';
+import 'package:voxai_quest/features/speaking/data/datasources/conversation_remote_data_source.dart';
+import 'package:voxai_quest/features/speaking/domain/usecases/get_conversation_quest.dart';
+
+import 'package:voxai_quest/features/speaking/domain/repositories/pronunciation_repository.dart';
+import 'package:voxai_quest/features/speaking/data/repositories/pronunciation_repository_impl.dart';
+import 'package:voxai_quest/features/speaking/data/datasources/pronunciation_remote_data_source.dart';
+import 'package:voxai_quest/features/speaking/domain/usecases/get_pronunciation_quest.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -167,8 +178,28 @@ Future<void> init() async {
       awardBadge: sl(), // New
       soundService: sl(),
       hapticService: sl(),
+      getConversationQuest: sl(),
+      getPronunciationQuest: sl(),
     ),
   );
   sl.registerFactory(() => LeaderboardBloc(repository: sl()));
   sl.registerFactory(() => ThemeCubit());
+
+  // Conversation & Pronunciation
+  sl.registerLazySingleton<ConversationRemoteDataSource>(
+    () => ConversationRemoteDataSourceImpl(firestore: sl()),
+  );
+  sl.registerLazySingleton<ConversationRepository>(
+    () => ConversationRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
+  );
+  sl.registerLazySingleton(() => GetConversationQuest(sl()));
+
+  sl.registerLazySingleton<PronunciationRemoteDataSource>(
+    () => PronunciationRemoteDataSourceImpl(firestore: sl()),
+  );
+  sl.registerLazySingleton<PronunciationRepository>(
+    () =>
+        PronunciationRepositoryImpl(remoteDataSource: sl(), networkInfo: sl()),
+  );
+  sl.registerLazySingleton(() => GetPronunciationQuest(sl()));
 }

@@ -11,6 +11,8 @@ import 'package:voxai_quest/features/reading/domain/usecases/get_reading_quest.d
 import 'package:voxai_quest/features/writing/domain/usecases/get_writing_quest.dart';
 import 'package:voxai_quest/features/speaking/domain/usecases/get_speaking_quest.dart';
 import 'package:voxai_quest/features/grammar/domain/usecases/get_grammar_quest.dart';
+import 'package:voxai_quest/features/speaking/domain/usecases/get_conversation_quest.dart';
+import 'package:voxai_quest/features/speaking/domain/usecases/get_pronunciation_quest.dart';
 import 'package:voxai_quest/features/auth/domain/usecases/update_user_coins.dart';
 import 'package:voxai_quest/features/auth/domain/usecases/update_category_stats.dart'; // New
 import 'package:voxai_quest/features/auth/domain/usecases/award_badge.dart'; // New
@@ -32,6 +34,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final AwardBadge _awardBadge; // New
   final SoundService _soundService;
   final HapticService _hapticService;
+  final GetConversationQuest _getConversationQuest;
+  final GetPronunciationQuest _getPronunciationQuest;
 
   // Local state to track progression since GameState is immutable/replaced
   int _currentLevel = 1;
@@ -49,6 +53,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     required AwardBadge awardBadge, // New
     required SoundService soundService,
     required HapticService hapticService,
+    required GetConversationQuest getConversationQuest,
+    required GetPronunciationQuest getPronunciationQuest,
   }) : _getReadingQuest = getReadingQuest,
        _getWritingQuest = getWritingQuest,
        _getSpeakingQuest = getSpeakingQuest,
@@ -59,6 +65,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
        _awardBadge = awardBadge, // New
        _soundService = soundService,
        _hapticService = hapticService,
+       _getConversationQuest = getConversationQuest,
+       _getPronunciationQuest = getPronunciationQuest,
        super(GameInitial()) {
     on<StartGame>(_onStartGame);
     on<SubmitAnswer>(_onSubmitAnswer);
@@ -209,6 +217,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       case 'grammar':
         result = await _getGrammarQuest(level);
         break;
+      case 'conversation':
+        result = await _getConversationQuest(level);
+        break;
+      case 'pronunciation':
+        result = await _getPronunciationQuest(level);
+        break;
       default:
         result = await _getReadingQuest(level);
     }
@@ -281,6 +295,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         return await _getSpeakingQuest(level);
       case 'grammar':
         return await _getGrammarQuest(level);
+      case 'conversation':
+        return await _getConversationQuest(level);
+      case 'pronunciation':
+        return await _getPronunciationQuest(level);
       default:
         return await _getReadingQuest(level);
     }

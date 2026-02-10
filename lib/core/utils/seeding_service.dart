@@ -3,6 +3,8 @@ import 'package:voxai_quest/features/reading/data/models/reading_quest_model.dar
 import 'package:voxai_quest/features/writing/data/models/writing_quest_model.dart';
 import 'package:voxai_quest/features/speaking/data/models/speaking_quest_model.dart';
 import 'package:voxai_quest/features/grammar/data/models/grammar_quest_model.dart';
+import 'package:voxai_quest/features/speaking/data/models/conversation_quest_model.dart';
+import 'package:voxai_quest/features/speaking/data/models/pronunciation_quest_model.dart';
 
 class SeedingService {
   final FirebaseFirestore firestore;
@@ -352,6 +354,72 @@ class SeedingService {
           correctOptionIndex: data['ans'] as int,
           explanation: data['exp'] as String,
           instruction: 'Choose the correct answer.',
+        ).toJson(),
+      );
+    }
+
+    // ==========================================
+    // 5. Conversation Roleplay Quests
+    // ==========================================
+    final conversationData = [
+      {
+        'level': 1,
+        'role': 'Waiter',
+        'prompt': 'Hello! Are you ready to order?',
+        'keys': ['order', 'menu', 'please', 'drink'],
+      },
+      {
+        'level': 2,
+        'role': 'Hotel Clerk',
+        'prompt': 'Welcome! Do you have a reservation?',
+        'keys': ['reservation', 'booking', 'check in', 'key'],
+      },
+      {
+        'level': 3,
+        'role': 'Doctor',
+        'prompt': 'How can I help you today? Where does it hurt?',
+        'keys': ['pain', 'stomach', 'headache', 'medicine'],
+      },
+    ];
+
+    for (var data in conversationData) {
+      final docRef = firestore
+          .collection('conversation_quests')
+          .doc('conversation_${data['level']}');
+      batch.set(
+        docRef,
+        ConversationQuestModel(
+          id: 'conversation_${data['level']}',
+          difficulty: data['level'] as int,
+          instruction: 'Respond to the ${data['role']} naturally.',
+          roleName: data['role'] as String,
+          aiPrompt: data['prompt'] as String,
+          targetKeyPhrases: data['keys'] as List<String>,
+        ).toJson(),
+      );
+    }
+
+    // ==========================================
+    // 6. Pronunciation Master Quests
+    // ==========================================
+    final pronunciationData = [
+      {'level': 1, 'word': 'Schedule', 'phonetic': '/ˈʃɛdjuːl/'},
+      {'level': 2, 'word': 'Entrepreneur', 'phonetic': '/ˌɒntrəprəˈnɜːr/'},
+      {'level': 3, 'word': 'Rural', 'phonetic': '/ˈrʊərəl/'},
+    ];
+
+    for (var data in pronunciationData) {
+      final docRef = firestore
+          .collection('pronunciation_quests')
+          .doc('pronunciation_${data['level']}');
+      batch.set(
+        docRef,
+        PronunciationQuestModel(
+          id: 'pronunciation_${data['level']}',
+          difficulty: data['level'] as int,
+          instruction: 'Pronounce the word correctly.',
+          word: data['word'] as String,
+          phonetic: data['phonetic'] as String,
         ).toJson(),
       );
     }

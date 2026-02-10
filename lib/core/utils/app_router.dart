@@ -85,7 +85,13 @@ class AppRouter {
         builder: (context, state) => const VerifyEmailPage(),
       ),
       GoRoute(path: homeRoute, builder: (context, state) => const MainScreen()),
-      GoRoute(path: gameRoute, builder: (context, state) => const GameScreen()),
+      GoRoute(
+        path: gameRoute,
+        builder: (context, state) {
+          final category = state.uri.queryParameters['category'];
+          return GameScreen(category: category);
+        },
+      ),
       GoRoute(
         path: premiumRoute,
         builder: (context, state) => const PremiumScreen(),
