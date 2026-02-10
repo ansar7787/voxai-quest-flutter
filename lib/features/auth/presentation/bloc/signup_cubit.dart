@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:voxai_quest/features/auth/domain/usecases/sign_up.dart';
+import 'package:voxai_quest/core/utils/auth_error_handler.dart';
 
 class SignUpState extends Equatable {
   final String name;
@@ -76,7 +77,10 @@ class SignUpCubit extends Cubit<SignUpState> {
     );
     result.fold(
       (failure) => emit(
-        state.copyWith(isSubmitting: false, errorMessage: failure.message),
+        state.copyWith(
+          isSubmitting: false,
+          errorMessage: AuthErrorHandler.getMessage(failure.message),
+        ),
       ),
       (_) => emit(state.copyWith(isSubmitting: false, isSuccess: true)),
     );

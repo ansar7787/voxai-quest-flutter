@@ -4,6 +4,7 @@ import 'package:voxai_quest/features/auth/domain/usecases/log_in_with_email.dart
 import 'package:voxai_quest/features/auth/domain/usecases/log_in_with_google.dart';
 import 'package:voxai_quest/features/auth/domain/usecases/forgot_password.dart';
 import 'package:voxai_quest/core/usecases/usecase.dart';
+import 'package:voxai_quest/core/utils/auth_error_handler.dart';
 
 class LoginState extends Equatable {
   final String email;
@@ -82,7 +83,10 @@ class LoginCubit extends Cubit<LoginState> {
     );
     result.fold(
       (failure) => emit(
-        state.copyWith(isSubmitting: false, errorMessage: failure.message),
+        state.copyWith(
+          isSubmitting: false,
+          errorMessage: AuthErrorHandler.getMessage(failure.message),
+        ),
       ),
       (_) => emit(state.copyWith(isSubmitting: false, isSuccess: true)),
     );
@@ -93,27 +97,30 @@ class LoginCubit extends Cubit<LoginState> {
     final result = await _logInWithGoogle(NoParams());
     result.fold(
       (failure) => emit(
-        state.copyWith(isSubmitting: false, errorMessage: failure.message),
+        state.copyWith(
+          isSubmitting: false,
+          errorMessage: AuthErrorHandler.getMessage(failure.message),
+        ),
       ),
       (_) => emit(state.copyWith(isSubmitting: false, isSuccess: true)),
     );
   }
 
   Future<void> forgotPassword(String email) async {
-    if (email.isEmpty) {
-      emit(state.copyWith(errorMessage: 'Please enter your email address.'));
-      return;
-    }
+    if (state.isSubmitting) return;
     emit(state.copyWith(isSubmitting: true));
     final result = await _forgotPassword(email);
     result.fold(
       (failure) => emit(
-        state.copyWith(isSubmitting: false, errorMessage: failure.message),
+        state.copyWith(
+          isSubmitting: false,
+          errorMessage: AuthErrorHandler.getMessage(failure.message),
+        ),
       ),
       (_) => emit(
         state.copyWith(
           isSubmitting: false,
-          successMessage: 'Password reset link sent to your email.',
+          successMessage: 'Password reset link sent! Check your email.',
         ),
       ),
     );
