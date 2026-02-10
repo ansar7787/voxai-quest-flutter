@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:voxai_quest/core/presentation/widgets/shimmer_loading.dart';
 import 'package:voxai_quest/core/presentation/widgets/connectivity_wrapper.dart';
+
 import 'package:voxai_quest/core/theme/app_theme.dart';
 import 'package:voxai_quest/core/theme/theme_cubit.dart';
 import 'package:voxai_quest/core/utils/app_router.dart';
@@ -11,8 +11,6 @@ import 'package:voxai_quest/core/utils/ad_service.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart' as di;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:voxai_quest/features/auth/presentation/pages/login_page.dart';
-import 'package:voxai_quest/features/game/presentation/pages/main_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -20,9 +18,12 @@ void main() async {
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await di.init();
-  await di.sl<AdService>().init();
-  di.sl<AdService>().loadInterstitialAd();
   runApp(const MyApp());
+
+  // Non-blocking initializations
+  di.sl<AdService>().init().then((_) {
+    di.sl<AdService>().loadInterstitialAd();
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(375, 812), // Standard iPhone X design size
+      designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
@@ -42,38 +43,19 @@ class MyApp extends StatelessWidget {
           ],
           child: BlocBuilder<ThemeCubit, ThemeMode>(
             builder: (context, themeMode) {
-              return MaterialApp(
+              return MaterialApp.router(
                 title: 'VoxAI Quest',
                 debugShowCheckedModeBanner: false,
                 theme: AppTheme.lightTheme,
                 darkTheme: AppTheme.darkTheme,
                 themeMode: themeMode,
-                onGenerateRoute: AppRouter.generateRoute,
-                initialRoute: AppRouter.initialRoute,
-                home: const ConnectivityWrapper(child: AuthGate()),
+                routerConfig: AppRouter.router,
+                builder: (context, child) {
+                  return ConnectivityWrapper(child: child!);
+                },
               );
             },
           ),
-        );
-      },
-    );
-  }
-}
-
-class AuthGate extends StatelessWidget {
-  const AuthGate({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, state) {
-        if (state.status == AuthStatus.authenticated) {
-          return const MainScreen();
-        } else if (state.status == AuthStatus.unauthenticated) {
-          return const LoginPage();
-        }
-        return const Scaffold(
-          body: Center(child: ShimmerLoading.circular(width: 50, height: 50)),
         );
       },
     );

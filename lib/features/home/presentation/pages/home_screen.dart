@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:voxai_quest/core/utils/app_router.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:voxai_quest/features/game/presentation/pages/game_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -21,7 +22,7 @@ class HomeScreen extends StatelessWidget {
                 end: Alignment.bottomRight,
                 colors: [
                   Theme.of(context).primaryColor,
-                  Theme.of(context).primaryColor.withOpacity(0.7),
+                  Theme.of(context).primaryColor.withValues(alpha: 0.7),
                 ],
               ),
             ),
@@ -53,8 +54,7 @@ class HomeScreen extends StatelessWidget {
                         if (!user.isPremium) ...[
                           const SizedBox(height: 12),
                           InkWell(
-                            onTap: () =>
-                                Navigator.pushNamed(context, '/premium'),
+                            onTap: () => context.push(AppRouter.premiumRoute),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 12,
@@ -198,12 +198,7 @@ class HomeScreen extends StatelessWidget {
       width: double.infinity,
       height: 60,
       child: ElevatedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const GameScreen()),
-          );
-        },
+        onPressed: () => context.push(AppRouter.gameRoute),
         style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).primaryColor,
           foregroundColor: Colors.white,

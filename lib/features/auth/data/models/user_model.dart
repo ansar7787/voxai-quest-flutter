@@ -15,6 +15,8 @@ class UserModel extends UserEntity {
     super.lastLoginDate,
     super.isPremium,
     super.premiumExpiryDate,
+    super.categoryStats,
+    super.badges,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
@@ -33,8 +35,12 @@ class UserModel extends UserEntity {
           : null,
       isPremium: map['isPremium'] ?? false,
       premiumExpiryDate: map['premiumExpiryDate'] != null
-          ? (map['premiumExpiryDate'] as dynamic).toDate()
+          ? (map['premiumExpiryDate'] as Timestamp).toDate()
           : null,
+      categoryStats: map['categoryStats'] != null
+          ? Map<String, int>.from(map['categoryStats'])
+          : {},
+      badges: map['badges'] != null ? List<String>.from(map['badges']) : [],
     );
   }
 
@@ -56,6 +62,8 @@ class UserModel extends UserEntity {
       'premiumExpiryDate': premiumExpiryDate != null
           ? Timestamp.fromDate(premiumExpiryDate!)
           : null,
+      'categoryStats': categoryStats,
+      'badges': badges,
     };
   }
 }

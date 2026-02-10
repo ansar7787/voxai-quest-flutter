@@ -45,8 +45,11 @@ class AdService {
     );
   }
 
-  void showInterstitialAd({required VoidCallback onDismissed}) {
-    if (_interstitialAd == null) {
+  void showInterstitialAd({
+    required VoidCallback onDismissed,
+    required bool isPremium,
+  }) {
+    if (isPremium || _interstitialAd == null) {
       onDismissed();
       return;
     }

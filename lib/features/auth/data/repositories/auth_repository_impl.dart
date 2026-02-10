@@ -93,17 +93,43 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<Failure, UserEntity>> signUp({
+    required String name,
     required String email,
     required String password,
   }) async {
     try {
-      final userModel = await _remoteDataSource.signUp(
+      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return Right(userModel);
+
+      final firebaseUser = userCredential.user;
+
+      if (firebaseUser != null) {
+        // Update Display Name
+        await firebaseUser.updateDisplayName(name);
+
+        final newUser = UserModel(
+          id: firebaseUser.uid,
+          email: email,
+          displayName: name,
+          photoUrl: firebaseUser.photoURL,
+          lastLoginDate: DateTime.now(),
+          currentStreak: 1,
+        );
+
+        // Save to Firestore
+        await _firestore
+            .collection('users')
+            .doc(newUser.id)
+            .set(newUser.toMap());
+
+        return Right(newUser);
+      } else {
+        return Left(ServerFailure('User creation failed'));
+      }
     } on firebase_auth.FirebaseAuthException catch (e) {
-      return Left(AuthFailure(e.message ?? 'Sign up failed.'));
+      return Left(AuthFailure(_mapFirebaseError(e)));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -121,7 +147,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
       return Right(userModel);
     } on firebase_auth.FirebaseAuthException catch (e) {
-      return Left(AuthFailure(e.message ?? 'Login failed.'));
+      return Left(AuthFailure(_mapFirebaseError(e)));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -133,9 +159,32 @@ class AuthRepositoryImpl implements AuthRepository {
       await _remoteDataSource.logInWithGoogle();
       return const Right(null);
     } on firebase_auth.FirebaseAuthException catch (e) {
-      return Left(AuthFailure(e.message ?? 'Google Login failed.'));
+      return Left(AuthFailure(_mapFirebaseError(e)));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  String _mapFirebaseError(firebase_auth.FirebaseAuthException e) {
+    switch (e.code) {
+      case 'user-not-found':
+        return 'No user found for that email.';
+      case 'wrong-password':
+        return 'Wrong password provided.';
+      case 'email-already-in-use':
+        return 'An account already exists with this email.';
+      case 'invalid-email':
+        return 'The email address is invalid.';
+      case 'weak-password':
+        return 'The password is too weak.';
+      case 'aborted-by-user':
+        return 'Sign in was canceled.';
+      case 'network-request-failed':
+        return 'Network error. Please check your connection.';
+      case 'account-exists-with-different-credential':
+        return 'An account already exists with a different credential.';
+      default:
+        return e.message ?? 'Authentication failed.';
     }
   }
 
@@ -154,8 +203,10 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
       return const Right(null);
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      return Left(AuthFailure(_mapFirebaseError(e)));
     } catch (e) {
-      return Left(AuthFailure(e.toString()));
+      return Left(ServerFailure(e.toString()));
     }
   }
 
@@ -164,8 +215,10 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await _firebaseAuth.currentUser?.sendEmailVerification();
       return const Right(null);
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      return Left(AuthFailure(_mapFirebaseError(e)));
     } catch (e) {
-      return Left(AuthFailure(e.toString()));
+      return Left(ServerFailure(e.toString()));
     }
   }
 
@@ -183,6 +236,56 @@ class AuthRepositoryImpl implements AuthRepository {
       }
     } catch (e) {
       return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateCategoryStats(
+    String categoryId,
+    bool isCorrect,
+  ) async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user != null) {
+        final docRef = _firestore.collection('users').doc(user.uid);
+        final doc = await docRef.get();
+
+        Map<String, int> currentStats = {};
+        if (doc.exists && doc.data() != null) {
+          final data = doc.data()!;
+          if (data['categoryStats'] != null) {
+            currentStats = Map<String, int>.from(data['categoryStats']);
+          }
+        }
+
+        int currentScore = currentStats[categoryId] ?? 50;
+        int newScore = isCorrect ? currentScore + 10 : currentScore - 10;
+        if (newScore > 100) newScore = 100;
+        if (newScore < 0) newScore = 0;
+
+        currentStats[categoryId] = newScore;
+
+        await docRef.update({'categoryStats': currentStats});
+        return const Right(null);
+      } else {
+        return Left(AuthFailure('User not logged in'));
+      }
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<void> awardBadge(String badgeId) async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user != null) {
+        await _firestore.collection('users').doc(user.uid).update({
+          'badges': FieldValue.arrayUnion([badgeId]),
+        });
+      }
+    } catch (e) {
+      // Log error or handle as needed
     }
   }
 }

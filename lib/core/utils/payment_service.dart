@@ -42,8 +42,17 @@ class PaymentService {
     try {
       _razorpay.open(options);
     } catch (e) {
-      debugPrint('Error: e');
+      debugPrint('Error: $e');
     }
+  }
+
+  void purchaseSubscription({required String contact, required String email}) {
+    openCheckout(
+      amount: 99, // 99 INR
+      contact: contact,
+      email: email,
+      description: 'VoxAI Quest Premium - 1 Month',
+    );
   }
 
   Future<void> upgradeToPremium(String userId) async {

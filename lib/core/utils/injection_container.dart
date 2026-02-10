@@ -7,6 +7,7 @@ import 'package:voxai_quest/core/network/network_info.dart';
 import 'package:voxai_quest/core/utils/seeding_service.dart';
 import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/core/utils/haptic_service.dart';
+import 'package:voxai_quest/core/utils/local_smart_tutor.dart';
 import 'package:voxai_quest/core/utils/ad_service.dart';
 import 'package:voxai_quest/core/utils/payment_service.dart';
 import 'package:voxai_quest/core/theme/theme_cubit.dart';
@@ -40,6 +41,10 @@ import 'package:voxai_quest/features/auth/domain/usecases/log_in_with_google.dar
 import 'package:voxai_quest/features/auth/domain/usecases/log_out.dart';
 import 'package:voxai_quest/features/auth/domain/usecases/get_user_stream.dart';
 import 'package:voxai_quest/features/auth/domain/usecases/update_user_coins.dart';
+import 'package:voxai_quest/features/auth/domain/usecases/update_category_stats.dart';
+import 'package:voxai_quest/features/game/domain/usecases/get_smart_category.dart';
+import 'package:voxai_quest/features/auth/domain/usecases/award_badge.dart'; // New
+import 'package:voxai_quest/features/auth/domain/usecases/forgot_password.dart';
 
 import 'package:voxai_quest/features/leaderboard/domain/repositories/leaderboard_repository.dart';
 import 'package:voxai_quest/features/leaderboard/data/repositories/leaderboard_repository_impl.dart';
@@ -62,6 +67,7 @@ Future<void> init() async {
   sl.registerLazySingleton<SeedingService>(() => SeedingService(sl()));
   sl.registerLazySingleton(() => SoundService());
   sl.registerLazySingleton(() => HapticService());
+  sl.registerLazySingleton(() => LocalSmartTutor());
   sl.registerLazySingleton(() => AdService());
   sl.registerLazySingleton(
     () => PaymentService(authRepository: sl(), firestore: sl()),
@@ -92,9 +98,15 @@ Future<void> init() async {
   sl.registerLazySingleton(() => SignUp(sl()));
   sl.registerLazySingleton(() => LogInWithEmail(sl()));
   sl.registerLazySingleton(() => LogInWithGoogle(sl()));
+  sl.registerLazySingleton(() => ForgotPassword(sl()));
   sl.registerLazySingleton(() => LogOut(sl()));
   sl.registerLazySingleton(() => GetUserStream(sl()));
   sl.registerLazySingleton(() => UpdateUserCoins(sl()));
+  sl.registerLazySingleton(() => UpdateCategoryStats(sl()));
+  sl.registerLazySingleton(() => AwardBadge(sl())); // New
+  sl.registerLazySingleton(
+    () => GetSmartCategory(authRepository: sl(), smartTutor: sl()),
+  );
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(
@@ -119,7 +131,11 @@ Future<void> init() async {
   // Blocs
   sl.registerFactory(() => AuthBloc(getUserStream: sl(), logOut: sl()));
   sl.registerFactory(
-    () => LoginCubit(logInWithEmail: sl(), logInWithGoogle: sl()),
+    () => LoginCubit(
+      logInWithEmail: sl(),
+      logInWithGoogle: sl(),
+      forgotPassword: sl(),
+    ),
   );
   sl.registerFactory(() => SignUpCubit(signUp: sl()));
   sl.registerFactory(
@@ -129,6 +145,9 @@ Future<void> init() async {
       getSpeakingQuest: sl(),
       getGrammarQuest: sl(),
       updateUserCoins: sl(),
+      updateCategoryStats: sl(), // New
+      getSmartCategory: sl(), // New
+      awardBadge: sl(), // New
       soundService: sl(),
       hapticService: sl(),
     ),

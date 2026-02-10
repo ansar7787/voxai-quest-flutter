@@ -27,6 +27,8 @@ class UserEntity extends Equatable {
     this.lastLoginDate,
     this.isPremium = false,
     this.premiumExpiryDate,
+    this.categoryStats = const {},
+    this.badges = const [],
   });
 
   @override
@@ -43,7 +45,12 @@ class UserEntity extends Equatable {
     lastLoginDate,
     isPremium,
     premiumExpiryDate,
+    categoryStats,
+    badges,
   ];
+
+  final Map<String, int> categoryStats;
+  final List<String> badges;
 
   UserEntity copyWith({
     String? displayName,
@@ -56,6 +63,8 @@ class UserEntity extends Equatable {
     DateTime? lastLoginDate,
     bool? isPremium,
     DateTime? premiumExpiryDate,
+    Map<String, int>? categoryStats,
+    List<String>? badges,
   }) {
     return UserEntity(
       id: id,
@@ -70,6 +79,8 @@ class UserEntity extends Equatable {
       lastLoginDate: lastLoginDate ?? this.lastLoginDate,
       isPremium: isPremium ?? this.isPremium,
       premiumExpiryDate: premiumExpiryDate ?? this.premiumExpiryDate,
+      categoryStats: categoryStats ?? this.categoryStats,
+      badges: badges ?? this.badges,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AdminAddQuestScreen extends StatefulWidget {
   const AdminAddQuestScreen({super.key});
@@ -120,7 +121,7 @@ class _AdminAddQuestScreenState extends State<AdminAddQuestScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Quest added successfully!')),
           );
-          Navigator.pop(context);
+          context.pop();
         }
       } catch (e) {
         if (mounted) {
@@ -144,7 +145,7 @@ class _AdminAddQuestScreenState extends State<AdminAddQuestScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               DropdownButtonFormField<String>(
-                value: _selectedType,
+                initialValue: _selectedType,
                 items: ['reading', 'writing', 'speaking', 'grammar']
                     .map(
                       (e) => DropdownMenuItem(
@@ -262,7 +263,7 @@ class _AdminAddQuestScreenState extends State<AdminAddQuestScreen> {
         ),
         const SizedBox(height: 16),
         DropdownButtonFormField<int>(
-          value: _correctOptionIndex,
+          initialValue: _correctOptionIndex,
           items: List.generate(
             4,
             (index) => DropdownMenuItem(

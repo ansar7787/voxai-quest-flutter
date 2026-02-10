@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:voxai_quest/core/utils/app_router.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:voxai_quest/features/auth/presentation/pages/login_page.dart';
 import 'package:voxai_quest/core/theme/theme_cubit.dart';
 import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart' as di;
@@ -75,10 +76,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: const Text('Logout', style: TextStyle(color: Colors.red)),
             onTap: () {
               context.read<AuthBloc>().add(AuthLogoutRequested());
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (_) => const LoginPage()),
-                (route) => false,
-              );
+              context.go(AppRouter.loginRoute);
             },
           ),
         ],

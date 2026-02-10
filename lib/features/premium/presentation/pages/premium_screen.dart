@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/core/utils/payment_service.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart' as di;
@@ -36,7 +37,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.pop(context);
+        context.pop();
       }
     }
   }
@@ -132,9 +133,8 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     onPressed: () {
                       final user = context.read<AuthBloc>().state.user;
                       if (user != null) {
-                        _paymentService.openCheckout(
-                          amount: 99,
-                          contact: '', // User could provide this
+                        _paymentService.purchaseSubscription(
+                          contact: '',
                           email: user.email,
                         );
                       }
@@ -212,9 +212,9 @@ class _PremiumScreenState extends State<PremiumScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 24),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.amber.withOpacity(0.3)),
+        border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
       ),
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

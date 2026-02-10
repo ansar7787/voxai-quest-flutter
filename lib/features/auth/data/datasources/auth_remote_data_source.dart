@@ -66,35 +66,38 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<void> logInWithGoogle() async {
     final googleUser = await _googleSignIn.signIn();
-    if (googleUser != null) {
-      final googleAuth = await googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+    if (googleUser == null) {
+      throw FirebaseAuthException(
+        code: 'aborted-by-user',
+        message: 'Google sign in was canceled',
       );
-      final userCredential = await _firebaseAuth.signInWithCredential(
-        credential,
-      );
-      final user = userCredential.user;
+    }
 
-      if (user != null) {
-        final userDoc = await FirebaseFirestore.instance
+    final googleAuth = await googleUser.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    final userCredential = await _firebaseAuth.signInWithCredential(credential);
+    final user = userCredential.user;
+
+    if (user != null) {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+      if (!userDoc.exists) {
+        final newUser = UserModel(
+          id: user.uid,
+          email: user.email ?? '',
+          displayName: user.displayName,
+          photoUrl: user.photoURL,
+          isAdmin: false,
+        );
+        await FirebaseFirestore.instance
             .collection('users')
             .doc(user.uid)
-            .get();
-        if (!userDoc.exists) {
-          final newUser = UserModel(
-            id: user.uid,
-            email: user.email ?? '',
-            displayName: user.displayName,
-            photoUrl: user.photoURL,
-            isAdmin: false,
-          );
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(user.uid)
-              .set(newUser.toMap());
-        }
+            .set(newUser.toMap());
       }
     }
   }

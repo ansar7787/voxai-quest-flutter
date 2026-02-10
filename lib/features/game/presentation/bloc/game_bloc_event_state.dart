@@ -18,6 +18,12 @@ class SubmitAnswer extends GameEvent {
 
 class NextQuest extends GameEvent {}
 
+class LoadDailyQuest extends GameEvent {}
+
+class StartTimeAttack extends GameEvent {}
+
+class EndTimeAttack extends GameEvent {} // New
+
 abstract class GameState extends Equatable {
   @override
   List<Object?> get props => [];
@@ -37,16 +43,29 @@ class GameInProgress extends GameState {
 
   final int lives;
 
+  final bool isTimeAttack;
+  final DateTime? endTime;
+
   GameInProgress({
     required this.currentQuest,
     required this.level,
     required this.score,
     required this.lives,
     this.status = SubmissionStatus.none,
+    this.isTimeAttack = false,
+    this.endTime,
   });
 
   @override
-  List<Object?> get props => [currentQuest, level, score, lives, status];
+  List<Object?> get props => [
+    currentQuest,
+    level,
+    score,
+    lives,
+    status,
+    isTimeAttack,
+    endTime,
+  ];
 
   GameInProgress copyWith({
     GameQuest? currentQuest,
@@ -54,6 +73,8 @@ class GameInProgress extends GameState {
     int? score,
     int? lives,
     SubmissionStatus? status,
+    bool? isTimeAttack,
+    DateTime? endTime,
   }) {
     return GameInProgress(
       currentQuest: currentQuest ?? this.currentQuest,
@@ -61,6 +82,8 @@ class GameInProgress extends GameState {
       score: score ?? this.score,
       lives: lives ?? this.lives,
       status: status ?? this.status,
+      isTimeAttack: isTimeAttack ?? this.isTimeAttack,
+      endTime: endTime ?? this.endTime,
     );
   }
 }

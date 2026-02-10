@@ -13,7 +13,7 @@ class AppTheme {
       seedColor: primaryColor,
       primary: primaryColor,
       secondary: secondaryColor,
-      background: scaffoldBackgroundColor,
+      surface: scaffoldBackgroundColor,
       error: errorColor,
     ),
     scaffoldBackgroundColor: scaffoldBackgroundColor,

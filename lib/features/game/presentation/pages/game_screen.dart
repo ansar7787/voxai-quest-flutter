@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:confetti/confetti.dart';
+import 'package:go_router/go_router.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/game/domain/entities/game_quest.dart';
 import 'package:voxai_quest/features/reading/domain/entities/reading_quest.dart';
@@ -79,7 +80,7 @@ class _GameScreenState extends State<GameScreen> {
             title: _buildAppBarTitle(state),
             leading: IconButton(
               icon: const Icon(Icons.close),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => context.pop(),
             ),
             actions: [
               if (state is GameInProgress) _buildHearts(state.lives),
@@ -217,6 +218,7 @@ class _GameScreenState extends State<GameScreen> {
               final user = context.read<AuthBloc>().state.user;
               if (user != null && !user.isPremium) {
                 di.sl<AdService>().showInterstitialAd(
+                  isPremium: user.isPremium,
                   onDismissed: () => context.read<GameBloc>().add(NextQuest()),
                 );
               } else {
@@ -254,7 +256,7 @@ class _GameScreenState extends State<GameScreen> {
             child: const Text('Try Again'),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.pop(),
             child: const Text('Go Home', style: TextStyle(color: Colors.grey)),
           ),
         ],

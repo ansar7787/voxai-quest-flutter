@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:voxai_quest/features/auth/domain/usecases/log_in_with_email.dart';
 import 'package:voxai_quest/features/auth/domain/usecases/log_in_with_google.dart';
+import 'package:voxai_quest/features/auth/domain/usecases/forgot_password.dart';
 import 'package:voxai_quest/core/usecases/usecase.dart';
 
 class LoginState extends Equatable {
@@ -10,6 +11,9 @@ class LoginState extends Equatable {
   final bool isSubmitting;
   final bool isSuccess;
   final String? errorMessage;
+  final String? successMessage;
+
+  final bool isPasswordVisible;
 
   const LoginState({
     this.email = '',
@@ -17,6 +21,8 @@ class LoginState extends Equatable {
     this.isSubmitting = false,
     this.isSuccess = false,
     this.errorMessage,
+    this.successMessage,
+    this.isPasswordVisible = false,
   });
 
   LoginState copyWith({
@@ -25,6 +31,8 @@ class LoginState extends Equatable {
     bool? isSubmitting,
     bool? isSuccess,
     String? errorMessage,
+    String? successMessage,
+    bool? isPasswordVisible,
   }) {
     return LoginState(
       email: email ?? this.email,
@@ -32,6 +40,8 @@ class LoginState extends Equatable {
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
       errorMessage: errorMessage,
+      successMessage: successMessage,
+      isPasswordVisible: isPasswordVisible ?? this.isPasswordVisible,
     );
   }
 
@@ -42,18 +52,23 @@ class LoginState extends Equatable {
     isSubmitting,
     isSuccess,
     errorMessage,
+    successMessage,
+    isPasswordVisible,
   ];
 }
 
 class LoginCubit extends Cubit<LoginState> {
   final LogInWithEmail _logInWithEmail;
   final LogInWithGoogle _logInWithGoogle;
+  final ForgotPassword _forgotPassword;
 
   LoginCubit({
     required LogInWithEmail logInWithEmail,
     required LogInWithGoogle logInWithGoogle,
+    required ForgotPassword forgotPassword,
   }) : _logInWithEmail = logInWithEmail,
        _logInWithGoogle = logInWithGoogle,
+       _forgotPassword = forgotPassword,
        super(const LoginState());
 
   void emailChanged(String value) => emit(state.copyWith(email: value));
@@ -82,5 +97,29 @@ class LoginCubit extends Cubit<LoginState> {
       ),
       (_) => emit(state.copyWith(isSubmitting: false, isSuccess: true)),
     );
+  }
+
+  Future<void> forgotPassword(String email) async {
+    if (email.isEmpty) {
+      emit(state.copyWith(errorMessage: 'Please enter your email address.'));
+      return;
+    }
+    emit(state.copyWith(isSubmitting: true));
+    final result = await _forgotPassword(email);
+    result.fold(
+      (failure) => emit(
+        state.copyWith(isSubmitting: false, errorMessage: failure.message),
+      ),
+      (_) => emit(
+        state.copyWith(
+          isSubmitting: false,
+          successMessage: 'Password reset link sent to your email.',
+        ),
+      ),
+    );
+  }
+
+  void togglePasswordVisibility() {
+    emit(state.copyWith(isPasswordVisible: !state.isPasswordVisible));
   }
 }
