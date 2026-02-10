@@ -12,6 +12,7 @@ class UserEntity extends Equatable {
   final int currentStreak;
   final DateTime? lastLoginDate;
   final bool isPremium;
+  final bool isEmailVerified;
   final DateTime? premiumExpiryDate;
 
   const UserEntity({
@@ -25,6 +26,7 @@ class UserEntity extends Equatable {
     this.isAdmin = false,
     this.currentStreak = 0,
     this.lastLoginDate,
+    this.isEmailVerified = false,
     this.isPremium = false,
     this.premiumExpiryDate,
     this.categoryStats = const {},
@@ -43,6 +45,7 @@ class UserEntity extends Equatable {
     isAdmin,
     currentStreak,
     lastLoginDate,
+    isEmailVerified,
     isPremium,
     premiumExpiryDate,
     categoryStats,
@@ -61,6 +64,7 @@ class UserEntity extends Equatable {
     bool? isAdmin,
     int? currentStreak,
     DateTime? lastLoginDate,
+    bool? isEmailVerified,
     bool? isPremium,
     DateTime? premiumExpiryDate,
     Map<String, int>? categoryStats,
@@ -77,6 +81,7 @@ class UserEntity extends Equatable {
       isAdmin: isAdmin ?? this.isAdmin,
       currentStreak: currentStreak ?? this.currentStreak,
       lastLoginDate: lastLoginDate ?? this.lastLoginDate,
+      isEmailVerified: isEmailVerified ?? this.isEmailVerified,
       isPremium: isPremium ?? this.isPremium,
       premiumExpiryDate: premiumExpiryDate ?? this.premiumExpiryDate,
       categoryStats: categoryStats ?? this.categoryStats,

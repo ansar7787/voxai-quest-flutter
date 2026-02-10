@@ -1,98 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:voxai_quest/features/reading/domain/entities/reading_quest.dart';
-import 'package:voxai_quest/features/writing/domain/entities/writing_quest.dart';
 import 'package:voxai_quest/features/speaking/domain/entities/speaking_quest.dart';
-import 'package:voxai_quest/features/grammar/domain/entities/grammar_quest.dart';
 import 'package:voxai_quest/core/utils/speech_service.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart';
-
-class ReadingQuestWidget extends StatelessWidget {
-  final ReadingQuest quest;
-  final Function(int) onOptionSelected;
-
-  const ReadingQuestWidget({
-    super.key,
-    required this.quest,
-    required this.onOptionSelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(
-            color: Colors.blue.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: Colors.blue.withValues(alpha: 0.3)),
-          ),
-          child: Text(
-            quest.passage,
-            style: TextStyle(fontSize: 16.sp, height: 1.5),
-          ),
-        ),
-        SizedBox(height: 24.h),
-        ...quest.options.asMap().entries.map((entry) {
-          return Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
-            child: QuestOptionButton(
-              label: entry.value,
-              onPressed: () => onOptionSelected(entry.key),
-            ),
-          );
-        }),
-      ],
-    );
-  }
-}
-
-class WritingQuestWidget extends StatelessWidget {
-  final WritingQuest quest;
-  final Function(String) onSubmit;
-
-  const WritingQuestWidget({
-    super.key,
-    required this.quest,
-    required this.onSubmit,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = TextEditingController();
-    return Column(
-      children: [
-        Text(
-          quest.prompt,
-          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 24.h),
-        TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            hintText: 'Type your answer...',
-            filled: true,
-            fillColor: Colors.grey.withValues(alpha: 0.1),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide.none,
-            ),
-          ),
-        ),
-        SizedBox(height: 24.h),
-        ElevatedButton(
-          onPressed: () => onSubmit(controller.text),
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(double.infinity, 50.h),
-          ),
-          child: const Text('SUBMIT'),
-        ),
-      ],
-    );
-  }
-}
 
 class SpeakingQuestWidget extends StatefulWidget {
   final SpeakingQuest quest;
@@ -123,11 +33,9 @@ class _SpeakingQuestWidgetState extends State<SpeakingQuestWidget> {
 
     bool initialized = await _speechService.initializeStt();
     if (!initialized) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Microphone permission denied')),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Microphone permission denied')),
+      );
       return;
     }
 
@@ -138,44 +46,39 @@ class _SpeakingQuestWidgetState extends State<SpeakingQuestWidget> {
 
     _speechService.listen(
       onResult: (text) {
-        if (mounted) {
-          setState(() {
-            _recognizedText = text;
-            _calculateAccuracy(text);
-          });
-        }
+        setState(() {
+          _recognizedText = text;
+          _calculateAccuracy(text);
+        });
       },
       onDone: () {
-        if (mounted) {
-          setState(() => _isListening = false);
-        }
+        setState(() => _isListening = false);
       },
     );
   }
 
   void _calculateAccuracy(String spoken) {
-    String target = widget.quest.textToSpeak.toLowerCase().replaceAll(
-      RegExp(r'[^\w\s]'),
-      '',
-    );
+    // Simple accuracy calculation: compare words
+    String target = widget.quest.textToSpeak.toLowerCase().replaceAll(RegExp(r'[^\w\s]'), '');
     String input = spoken.toLowerCase().replaceAll(RegExp(r'[^\w\s]'), '');
-
+    
     if (input.isEmpty) return;
 
     List<String> targetWords = target.split(' ');
     List<String> inputWords = input.split(' ');
-
+    
     int matches = 0;
     for (var word in inputWords) {
       if (targetWords.contains(word)) {
         matches++;
       }
     }
-
+    
     setState(() {
       _accuracy = matches / targetWords.length;
     });
 
+    // Auto-submit if accuracy is high enough
     if (_accuracy >= 0.8) {
       widget.onSubmit(spoken);
     }
@@ -185,6 +88,7 @@ class _SpeakingQuestWidgetState extends State<SpeakingQuestWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // Instruction and Phrase Card
         Container(
           padding: EdgeInsets.all(24.w),
           decoration: BoxDecoration(
@@ -232,7 +136,9 @@ class _SpeakingQuestWidgetState extends State<SpeakingQuestWidget> {
             ],
           ),
         ),
-        SizedBox(height: 32.h),
+        SizedBox(height: 40.h),
+        
+        // Recognized Text Display
         if (_recognizedText.isNotEmpty)
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
@@ -269,36 +175,48 @@ class _SpeakingQuestWidgetState extends State<SpeakingQuestWidget> {
               ],
             ),
           ),
-        SizedBox(height: 32.h),
+        
+        SizedBox(height: 48.h),
+
+        // Record Button
         GestureDetector(
           onTap: _listen,
           child: Stack(
             alignment: Alignment.center,
             children: [
               if (_isListening)
-                const CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-                ), // Simplified animation for logic safety
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0.0, end: 1.0),
+                  duration: const Duration(seconds: 1),
+                  builder: (context, value, child) {
+                    return Container(
+                      width: (100 + 40 * value).r,
+                      height: (100 + 40 * value).r,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.blue.withValues(alpha: 0.2 * (1 - value)),
+                      ),
+                    );
+                  },
+                ),
               Container(
-                width: 80.r,
-                height: 80.r,
+                width: 100.r,
+                height: 100.r,
                 decoration: BoxDecoration(
                   color: _isListening ? Colors.red : Colors.blue,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: (_isListening ? Colors.red : Colors.blue)
-                          .withValues(alpha: 0.4),
-                      blurRadius: 15,
-                      spreadRadius: 2,
+                      color: (_isListening ? Colors.red : Colors.blue).withValues(alpha: 0.4),
+                      blurRadius: 20,
+                      spreadRadius: 5,
                     ),
                   ],
                 ),
                 child: Icon(
                   _isListening ? Icons.stop : Icons.mic,
                   color: Colors.white,
-                  size: 32.r,
+                  size: 40.r,
                 ),
               ),
             ],
@@ -312,21 +230,22 @@ class _SpeakingQuestWidgetState extends State<SpeakingQuestWidget> {
             fontWeight: _isListening ? FontWeight.bold : FontWeight.normal,
           ),
         ),
-        if (_recognizedText.isNotEmpty && !_isListening) ...[
-          SizedBox(height: 24.h),
+
+        const Spacer(),
+        
+        if (_recognizedText.isNotEmpty && !_isListening)
           ElevatedButton(
             onPressed: () => widget.onSubmit(_recognizedText),
             style: ElevatedButton.styleFrom(
-              minimumSize: Size(double.infinity, 50.h),
+              minimumSize: Size(double.infinity, 56.h),
               backgroundColor: _accuracy >= 0.8 ? Colors.green : Colors.blue,
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
+                borderRadius: BorderRadius.circular(16.r),
               ),
             ),
             child: const Text('SUBMIT ATTEMPT'),
           ),
-        ],
       ],
     );
   }
@@ -335,76 +254,5 @@ class _SpeakingQuestWidgetState extends State<SpeakingQuestWidget> {
   void dispose() {
     _speechService.stop();
     super.dispose();
-  }
-}
-
-class GrammarQuestWidget extends StatelessWidget {
-  final GrammarQuest quest;
-  final Function(int) onOptionSelected;
-
-  const GrammarQuestWidget({
-    super.key,
-    required this.quest,
-    required this.onOptionSelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          quest.question,
-          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 24.h),
-        ...quest.options.asMap().entries.map((entry) {
-          return Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
-            child: QuestOptionButton(
-              label: entry.value,
-              onPressed: () => onOptionSelected(entry.key),
-            ),
-          );
-        }),
-      ],
-    );
-  }
-}
-
-class QuestOptionButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onPressed;
-
-  const QuestOptionButton({
-    super.key,
-    required this.label,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPressed,
-      borderRadius: BorderRadius.circular(12.r),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                label,
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
-              ),
-            ),
-            Icon(Icons.arrow_forward_ios, size: 14.r, color: Colors.grey),
-          ],
-        ),
-      ),
-    );
   }
 }

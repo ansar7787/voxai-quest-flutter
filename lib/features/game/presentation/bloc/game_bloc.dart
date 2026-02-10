@@ -73,7 +73,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     _totalScore = 0;
     _lives = 3;
     emit(GameLoading());
-    final result = await _generateQuest(_currentLevel);
+    final result = await _generateQuest(
+      _currentLevel,
+      forcedCategory: event.category,
+    );
     result.fold(
       (failure) => emit(GameError(failure.message)),
       (quest) => emit(
@@ -116,26 +119,25 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       }
 
       if (isCorrect) {
-        _totalScore += 10;
+        final currentStreak = (currentState.streak) + 1;
+        final multiplier = currentStreak >= 3 ? 2 : 1;
+        final coinsToAward = 10 * multiplier;
+
+        _totalScore += coinsToAward;
         await _soundService.playCorrect();
         await _hapticService.success();
 
         // Update Stats
         try {
-          await _updateUserCoins(10);
+          await _updateUserCoins(coinsToAward);
           await _updateCategoryStats(
             UpdateCategoryStatsParams(categoryId: categoryId, isCorrect: true),
           );
 
-          // Badge: First Win
-          if (_totalScore == 10) {
-            // First correct answer in session? No, maybe check user stats?
-            // Checking user stats requires reading user entity.
-            // For now, let's just try to award it. If they have it, it won't duplicate (arrayUnion).
+          if (_totalScore >= 10) {
             await _awardBadge('first_win');
           }
 
-          // Badge: Scholar (Level 5)
           if (_currentLevel >= 5) {
             await _awardBadge('scholar');
           }
@@ -145,10 +147,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           currentState.copyWith(
             score: _totalScore,
             status: SubmissionStatus.correct,
+            streak: currentStreak,
           ),
         );
       } else {
         _lives--;
+        // Reset streak on wrong answer
         await _soundService.playWrong();
         await _hapticService.error();
 
@@ -166,6 +170,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             currentState.copyWith(
               status: SubmissionStatus.incorrect,
               lives: _lives,
+              streak: 0,
             ),
           );
         }
@@ -239,24 +244,33 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     );
   }
 
-  Future<Either<Failure, GameQuest>> _generateQuest(int level) async {
-    // Smart Path Logic via UseCase
-    final categoryResult = await _getSmartCategory(NoParams());
+  Future<Either<Failure, GameQuest>> _generateQuest(
+    int level, {
+    String? forcedCategory,
+  }) async {
+    String category;
 
-    // Default to rotation if Smart Path fails or returns error
-    String category = categoryResult.getOrElse(() {
-      int remainder = level % 4;
-      switch (remainder) {
-        case 1:
-          return 'reading';
-        case 2:
-          return 'writing';
-        case 3:
-          return 'speaking';
-        default:
-          return 'grammar';
-      }
-    });
+    if (forcedCategory != null) {
+      category = forcedCategory;
+    } else {
+      // Smart Path Logic via UseCase
+      final categoryResult = await _getSmartCategory(NoParams());
+
+      // Default to rotation if Smart Path fails or returns error
+      category = categoryResult.getOrElse(() {
+        int remainder = level % 4;
+        switch (remainder) {
+          case 1:
+            return 'reading';
+          case 2:
+            return 'writing';
+          case 3:
+            return 'speaking';
+          default:
+            return 'grammar';
+        }
+      });
+    }
 
     switch (category) {
       case 'reading':

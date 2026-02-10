@@ -43,8 +43,10 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final category = GoRouterState.of(context).uri.queryParameters['category'];
     return BlocProvider(
-      create: (context) => di.sl<GameBloc>()..add(StartGame()),
+      create: (context) =>
+          di.sl<GameBloc>()..add(StartGame(category: category)),
       child: Stack(
         alignment: Alignment.topCenter,
         children: [
@@ -102,9 +104,53 @@ class _GameScreenState extends State<GameScreen> {
 
   Widget _buildAppBarTitle(GameState state) {
     if (state is GameInProgress) {
-      return Text(
-        'Level ${state.level}',
-        style: TextStyle(fontWeight: FontWeight.bold),
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Level ${state.level}',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          if (state.streak > 0) ...[
+            SizedBox(width: 8.w),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+              decoration: BoxDecoration(
+                color: state.streak >= 3 ? Colors.orange : Colors.blue[100],
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.local_fire_department_rounded,
+                    size: 14.r,
+                    color: state.streak >= 3 ? Colors.white : Colors.blue,
+                  ),
+                  SizedBox(width: 4.w),
+                  Text(
+                    '${state.streak}',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.bold,
+                      color: state.streak >= 3 ? Colors.white : Colors.blue,
+                    ),
+                  ),
+                  if (state.streak >= 3) ...[
+                    SizedBox(width: 4.w),
+                    Text(
+                      'X2',
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ],
       );
     }
     return const Text('VoxAI Quest');
@@ -181,8 +227,7 @@ class _GameScreenState extends State<GameScreen> {
     } else if (quest is SpeakingQuest) {
       return SpeakingQuestWidget(
         quest: quest,
-        onStartRecording: () =>
-            context.read<GameBloc>().add(SubmitAnswer('voice')),
+        onSubmit: (text) => context.read<GameBloc>().add(SubmitAnswer(text)),
       );
     } else if (quest is GrammarQuest) {
       return GrammarQuestWidget(

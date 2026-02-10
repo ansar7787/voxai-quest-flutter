@@ -23,4 +23,6 @@ abstract class AuthRepository {
     bool isCorrect,
   );
   Future<void> awardBadge(String badgeId);
+  Future<Either<Failure, void>> reloadUser();
+  Future<Either<Failure, UserEntity?>> getCurrentUser();
 }

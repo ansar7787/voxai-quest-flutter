@@ -18,16 +18,18 @@ class ReadingRemoteDataSourceImpl implements ReadingRemoteDataSource {
       var doc = await firestore.collection('reading_quests').doc(docId).get();
 
       if (!doc.exists) {
-        final fallbackId = 'reading_${((level - 1) % 5) + 1}';
-        doc = await firestore
-            .collection('reading_quests')
-            .doc(fallbackId)
-            .get();
+        // Fallback: Fetch a random quest from the collection to ensure "unlimited" feel
+        final snapshot = await firestore.collection('reading_quests').get();
+        if (snapshot.docs.isNotEmpty) {
+          final randomIndex =
+              (level - 1) % snapshot.docs.length; // Deterministic random
+          doc = snapshot.docs[randomIndex];
+        }
       }
 
       if (doc.exists) {
         final data = doc.data()!;
-        data['id'] = docId;
+        data['id'] = doc.id;
         data['difficulty'] = level;
         return ReadingQuestModel.fromJson(data);
       } else {

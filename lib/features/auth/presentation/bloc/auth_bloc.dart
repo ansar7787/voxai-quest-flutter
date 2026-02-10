@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:voxai_quest/features/auth/domain/entities/user_entity.dart';
 import 'package:voxai_quest/features/auth/domain/usecases/get_user_stream.dart';
 import 'package:voxai_quest/features/auth/domain/usecases/log_out.dart';
+import 'package:voxai_quest/features/auth/domain/usecases/reload_user.dart';
+import 'package:voxai_quest/features/auth/domain/usecases/get_current_user.dart';
 import 'package:voxai_quest/core/usecases/usecase.dart';
 
 // Events
@@ -21,6 +23,8 @@ class AuthUserChanged extends AuthEvent {
 }
 
 class AuthLogoutRequested extends AuthEvent {}
+
+class AuthReloadUser extends AuthEvent {}
 
 // States
 enum AuthStatus { authenticated, unauthenticated, unknown }
@@ -47,14 +51,23 @@ class AuthState extends Equatable {
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final GetUserStream _getUserStream;
   final LogOut _logOut;
+  final ReloadUser _reloadUser;
+  final GetCurrentUser _getCurrentUser;
   late StreamSubscription<UserEntity?> _userSubscription;
 
-  AuthBloc({required GetUserStream getUserStream, required LogOut logOut})
-    : _getUserStream = getUserStream,
-      _logOut = logOut,
-      super(const AuthState.unknown()) {
+  AuthBloc({
+    required GetUserStream getUserStream,
+    required LogOut logOut,
+    required ReloadUser reloadUser,
+    required GetCurrentUser getCurrentUser,
+  }) : _getUserStream = getUserStream,
+       _logOut = logOut,
+       _reloadUser = reloadUser,
+       _getCurrentUser = getCurrentUser,
+       super(const AuthState.unknown()) {
     on<AuthUserChanged>(_onUserChanged);
     on<AuthLogoutRequested>(_onLogoutRequested);
+    on<AuthReloadUser>(_onReloadUser);
 
     _userSubscription = _getUserStream().listen(
       (user) => add(AuthUserChanged(user)),
@@ -71,6 +84,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onLogoutRequested(AuthLogoutRequested event, Emitter<AuthState> emit) {
     unawaited(_logOut(NoParams()));
+  }
+
+  Future<void> _onReloadUser(
+    AuthReloadUser event,
+    Emitter<AuthState> emit,
+  ) async {
+    await _reloadUser(NoParams());
+    final result = await _getCurrentUser(NoParams());
+    result.fold(
+      (failure) => null, // Ignore or handle as needed
+      (user) {
+        if (user != null) {
+          emit(AuthState.authenticated(user));
+        }
+      },
+    );
   }
 
   @override

@@ -18,16 +18,16 @@ class WritingRemoteDataSourceImpl implements WritingRemoteDataSource {
       var doc = await firestore.collection('writing_quests').doc(docId).get();
 
       if (!doc.exists) {
-        final fallbackId = 'writing_${((level - 1) % 5) + 1}';
-        doc = await firestore
-            .collection('writing_quests')
-            .doc(fallbackId)
-            .get();
+        final snapshot = await firestore.collection('writing_quests').get();
+        if (snapshot.docs.isNotEmpty) {
+          final randomIndex = (level - 1) % snapshot.docs.length;
+          doc = snapshot.docs[randomIndex];
+        }
       }
 
       if (doc.exists) {
         final data = doc.data()!;
-        data['id'] = docId;
+        data['id'] = doc.id;
         data['difficulty'] = level;
         return WritingQuestModel.fromJson(data);
       } else {

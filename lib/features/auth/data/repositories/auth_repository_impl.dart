@@ -22,26 +22,51 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Stream<UserEntity?> get user {
-    return _firebaseAuth.authStateChanges().asyncMap((firebaseUser) async {
-      if (firebaseUser == null) return null;
+    return _firebaseAuth.userChanges().asyncMap((firebaseUser) async {
+      return _mapFirebaseUserToUserEntity(firebaseUser);
+    });
+  }
 
-      try {
-        final doc = await _firestore
-            .collection('users')
-            .doc(firebaseUser.uid)
-            .get();
-        if (doc.exists) {
-          final user = UserModel.fromMap(doc.data()!);
-          // Streak Logic
-          final now = DateTime.now();
-          final today = DateTime(now.year, now.month, now.day);
-          final lastLogin = user.lastLoginDate;
-          final lastLoginDay = lastLogin != null
-              ? DateTime(lastLogin.year, lastLogin.month, lastLogin.day)
-              : null;
+  @override
+  Future<Either<Failure, UserEntity?>> getCurrentUser() async {
+    try {
+      final firebaseUser = _firebaseAuth.currentUser;
+      final user = await _mapFirebaseUserToUserEntity(firebaseUser);
+      return Right(user);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 
+  Future<UserEntity?> _mapFirebaseUserToUserEntity(
+    firebase_auth.User? firebaseUser,
+  ) async {
+    if (firebaseUser == null) return null;
+
+    try {
+      final doc = await _firestore
+          .collection('users')
+          .doc(firebaseUser.uid)
+          .get();
+      if (doc.exists) {
+        final user = UserModel.fromMap(doc.data()!);
+        // Streak Logic
+        final now = DateTime.now();
+        final today = DateTime(now.year, now.month, now.day);
+        final lastLogin = user.lastLoginDate;
+        final lastLoginDay = lastLogin != null
+            ? DateTime(lastLogin.year, lastLogin.month, lastLogin.day)
+            : null;
+
+        // Always update isEmailVerified from Firebase Auth
+        final isVerified = firebaseUser.emailVerified;
+
+        if (lastLoginDay == null ||
+            lastLoginDay.isBefore(today) ||
+            user.isEmailVerified != isVerified) {
+          int newStreak = user.currentStreak;
+          // Only update streak if it's a new day
           if (lastLoginDay == null || lastLoginDay.isBefore(today)) {
-            int newStreak = user.currentStreak;
             if (lastLoginDay != null &&
                 today.difference(lastLoginDay).inDays == 1) {
               newStreak++;
@@ -51,44 +76,47 @@ class AuthRepositoryImpl implements AuthRepository {
             } else if (lastLoginDay == null) {
               newStreak = 1;
             }
-
-            final updatedUser = user.copyWith(
-              lastLoginDate: now,
-              currentStreak: newStreak,
-            );
-
-            // Update FireStore
-            await _firestore
-                .collection('users')
-                .doc(user.id)
-                .update((updatedUser as UserModel).toMap());
-            return updatedUser;
           }
-          return user;
-        } else {
-          final newUser = UserModel(
-            id: firebaseUser.uid,
-            email: firebaseUser.email ?? '',
-            displayName: firebaseUser.displayName,
-            photoUrl: firebaseUser.photoURL,
-            lastLoginDate: DateTime.now(),
-            currentStreak: 1,
+
+          final updatedUser = user.copyWith(
+            lastLoginDate: now,
+            currentStreak: newStreak,
+            isEmailVerified: isVerified,
           );
+
+          // Update FireStore
           await _firestore
               .collection('users')
-              .doc(newUser.id)
-              .set(newUser.toMap());
-          return newUser;
+              .doc(user.id)
+              .update((updatedUser as UserModel).toMap());
+          return updatedUser;
         }
-      } catch (e) {
-        return UserModel(
+        return user.copyWith(isEmailVerified: isVerified);
+      } else {
+        final newUser = UserModel(
           id: firebaseUser.uid,
           email: firebaseUser.email ?? '',
           displayName: firebaseUser.displayName,
           photoUrl: firebaseUser.photoURL,
+          lastLoginDate: DateTime.now(),
+          currentStreak: 1,
+          isEmailVerified: firebaseUser.emailVerified,
         );
+        await _firestore
+            .collection('users')
+            .doc(newUser.id)
+            .set(newUser.toMap());
+        return newUser;
       }
-    });
+    } catch (e) {
+      return UserModel(
+        id: firebaseUser.uid,
+        email: firebaseUser.email ?? '',
+        displayName: firebaseUser.displayName,
+        photoUrl: firebaseUser.photoURL,
+        isEmailVerified: firebaseUser.emailVerified,
+      );
+    }
   }
 
   @override
@@ -129,7 +157,7 @@ class AuthRepositoryImpl implements AuthRepository {
         return Left(ServerFailure('User creation failed'));
       }
     } on firebase_auth.FirebaseAuthException catch (e) {
-      return Left(AuthFailure(_mapFirebaseError(e)));
+      return Left(AuthFailure(e.code));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -147,7 +175,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
       return Right(userModel);
     } on firebase_auth.FirebaseAuthException catch (e) {
-      return Left(AuthFailure(_mapFirebaseError(e)));
+      return Left(AuthFailure(e.code));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -159,32 +187,9 @@ class AuthRepositoryImpl implements AuthRepository {
       await _remoteDataSource.logInWithGoogle();
       return const Right(null);
     } on firebase_auth.FirebaseAuthException catch (e) {
-      return Left(AuthFailure(_mapFirebaseError(e)));
+      return Left(AuthFailure(e.code));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
-    }
-  }
-
-  String _mapFirebaseError(firebase_auth.FirebaseAuthException e) {
-    switch (e.code) {
-      case 'user-not-found':
-        return 'No user found for that email.';
-      case 'wrong-password':
-        return 'Wrong password provided.';
-      case 'email-already-in-use':
-        return 'An account already exists with this email.';
-      case 'invalid-email':
-        return 'The email address is invalid.';
-      case 'weak-password':
-        return 'The password is too weak.';
-      case 'aborted-by-user':
-        return 'Sign in was canceled.';
-      case 'network-request-failed':
-        return 'Network error. Please check your connection.';
-      case 'account-exists-with-different-credential':
-        return 'An account already exists with a different credential.';
-      default:
-        return e.message ?? 'Authentication failed.';
     }
   }
 
@@ -204,7 +209,7 @@ class AuthRepositoryImpl implements AuthRepository {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
       return const Right(null);
     } on firebase_auth.FirebaseAuthException catch (e) {
-      return Left(AuthFailure(_mapFirebaseError(e)));
+      return Left(AuthFailure(e.code));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -216,7 +221,7 @@ class AuthRepositoryImpl implements AuthRepository {
       await _firebaseAuth.currentUser?.sendEmailVerification();
       return const Right(null);
     } on firebase_auth.FirebaseAuthException catch (e) {
-      return Left(AuthFailure(_mapFirebaseError(e)));
+      return Left(AuthFailure(e.code));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -286,6 +291,22 @@ class AuthRepositoryImpl implements AuthRepository {
       }
     } catch (e) {
       // Log error or handle as needed
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> reloadUser() async {
+    try {
+      await _firebaseAuth.currentUser?.reload();
+      // Force a stream update?
+      // userChanges() handles it, but authStateChanges() might not.
+      // We rely on the stream listener to pick up changes.
+      // If we are using authStateChanges, we might need to manual emit or switch to userChanges.
+      return const Right(null);
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      return Left(AuthFailure(e.code));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
     }
   }
 }

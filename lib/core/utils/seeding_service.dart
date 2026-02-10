@@ -186,16 +186,60 @@ class SeedingService {
     // 3. Speaking Quests (Beginner -> Advanced)
     // ==========================================
     final speakingData = [
-      {'level': 1, 'text': 'Hello'},
-      {'level': 2, 'text': 'How are you?'},
-      {'level': 3, 'text': 'Good morning'},
-      {'level': 4, 'text': 'I would like a coffee please.'},
-      {'level': 5, 'text': 'The weather is very nice today.'},
-      {'level': 6, 'text': 'Can you tell me the way to the station?'},
-      {'level': 7, 'text': 'I have been learning Flutter for three months.'},
-      {'level': 8, 'text': 'She sells sea shells by the sea shore.'},
-      {'level': 9, 'text': 'The quick brown fox jumps over the lazy dog.'},
-      {'level': 10, 'text': 'Peter Piper picked a peck of pickled peppers.'},
+      {'level': 1, 'text': 'Hello, nice to meet you!'},
+      {'level': 2, 'text': 'How has your day been so far?'},
+      {'level': 3, 'text': 'Good morning, I would like to order a breakfast.'},
+      {
+        'level': 4,
+        'text': 'Could you please tell me where the nearest pharmacy is?',
+      },
+      {'level': 5, 'text': 'I am looking for a gift for my friend’s birthday.'},
+      {
+        'level': 6,
+        'text': 'The project deadline is approaching, we need to hurry.',
+      },
+      {
+        'level': 7,
+        'text': 'I completely agree with the points you raised in the meeting.',
+      },
+      {
+        'level': 8,
+        'text': 'Can we reschedule our appointment for tomorrow afternoon?',
+      },
+      {
+        'level': 9,
+        'text': 'It is essential to maintain a healthy work-life balance.',
+      },
+      {
+        'level': 10,
+        'text': 'Could you please explain this concept in more detail?',
+      },
+      // Advanced Levels
+      {
+        'level': 11,
+        'text':
+            'Implementing sustainable practices is crucial for the environment.',
+      },
+      {
+        'level': 12,
+        'text':
+            'Artificial intelligence is revolutionizing the way we live and work.',
+      },
+      {
+        'level': 13,
+        'text':
+            'The economic fluctuations have a significant impact on global trade.',
+      },
+      {
+        'level': 14,
+        'text':
+            'Persistence and hard work are the keys to achieving long-term goals.',
+      },
+      {
+        'level': 15,
+        'text':
+            'Cultural diversity enriched our society and broadens our perspectives.',
+      },
     ];
 
     for (var i = 0; i < speakingData.length; i++) {

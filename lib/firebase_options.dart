@@ -70,6 +70,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '979122525797',
     projectId: 'voxai-quest',
     storageBucket: 'voxai-quest.firebasestorage.app',
+    androidClientId: '979122525797-mtsk50uopobsq7lpm0pq2bajceea878e.apps.googleusercontent.com',
+    iosClientId: '979122525797-c6id3b5rvl068de8e70rh6ovo5sp84vd.apps.googleusercontent.com',
     iosBundleId: 'com.example.voxaiQuest',
   );
+
 }

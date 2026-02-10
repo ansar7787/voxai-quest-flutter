@@ -13,6 +13,7 @@ class UserModel extends UserEntity {
     super.isAdmin,
     super.currentStreak,
     super.lastLoginDate,
+    super.isEmailVerified,
     super.isPremium,
     super.premiumExpiryDate,
     super.categoryStats,
@@ -33,6 +34,7 @@ class UserModel extends UserEntity {
       lastLoginDate: map['lastLoginDate'] != null
           ? (map['lastLoginDate'] as dynamic).toDate()
           : null,
+      isEmailVerified: map['isEmailVerified'] ?? false,
       isPremium: map['isPremium'] ?? false,
       premiumExpiryDate: map['premiumExpiryDate'] != null
           ? (map['premiumExpiryDate'] as Timestamp).toDate()
@@ -58,6 +60,7 @@ class UserModel extends UserEntity {
       'lastLoginDate': lastLoginDate != null
           ? Timestamp.fromDate(lastLoginDate!)
           : null,
+      'isEmailVerified': isEmailVerified,
       'isPremium': isPremium,
       'premiumExpiryDate': premiumExpiryDate != null
           ? Timestamp.fromDate(premiumExpiryDate!)

@@ -6,7 +6,13 @@ abstract class GameEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class StartGame extends GameEvent {}
+class StartGame extends GameEvent {
+  final String? category;
+  StartGame({this.category});
+
+  @override
+  List<Object?> get props => [category];
+}
 
 class SubmitAnswer extends GameEvent {
   final dynamic answer;
@@ -42,9 +48,9 @@ class GameInProgress extends GameState {
   final SubmissionStatus status;
 
   final int lives;
-
   final bool isTimeAttack;
   final DateTime? endTime;
+  final int streak;
 
   GameInProgress({
     required this.currentQuest,
@@ -54,6 +60,7 @@ class GameInProgress extends GameState {
     this.status = SubmissionStatus.none,
     this.isTimeAttack = false,
     this.endTime,
+    this.streak = 0,
   });
 
   @override
@@ -65,6 +72,7 @@ class GameInProgress extends GameState {
     status,
     isTimeAttack,
     endTime,
+    streak,
   ];
 
   GameInProgress copyWith({
@@ -75,6 +83,7 @@ class GameInProgress extends GameState {
     SubmissionStatus? status,
     bool? isTimeAttack,
     DateTime? endTime,
+    int? streak,
   }) {
     return GameInProgress(
       currentQuest: currentQuest ?? this.currentQuest,
@@ -84,6 +93,7 @@ class GameInProgress extends GameState {
       status: status ?? this.status,
       isTimeAttack: isTimeAttack ?? this.isTimeAttack,
       endTime: endTime ?? this.endTime,
+      streak: streak ?? this.streak,
     );
   }
 }

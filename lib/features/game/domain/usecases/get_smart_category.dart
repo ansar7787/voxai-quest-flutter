@@ -16,19 +16,17 @@ class GetSmartCategory implements UseCase<String, NoParams> {
 
   @override
   Future<Either<Failure, String>> call(NoParams params) async {
-    // 1. Get current user entity from repository stream (or separate method).
-    // The repository exposes a Stream<UserEntity?>. We can grab the latest value.
-    // However, Streams are async. Ideally we have a 'getCurrentUser' method that returns Future<UserEntity?>.
-    // But AuthRepository only has `get user` stream.
-    // Let's optimize: We can just listen to the first element of the stream.
     try {
-      final user = await _authRepository.user.first;
-      if (user == null) {
-        return const Right('reading'); // Default for unauthenticated/loading
-      }
+      final result = await _authRepository.getCurrentUser();
 
-      final category = _smartTutor.suggestNextQuestCategory(user);
-      return Right(category);
+      return result.fold(
+        (failure) => const Right('reading'), // Default on failure
+        (user) {
+          if (user == null) return const Right('reading');
+          final category = _smartTutor.suggestNextQuestCategory(user);
+          return Right(category);
+        },
+      );
     } catch (e) {
       return Left(CacheFailure(e.toString()));
     }

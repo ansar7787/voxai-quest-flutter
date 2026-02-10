@@ -18,16 +18,16 @@ class GrammarRemoteDataSourceImpl implements GrammarRemoteDataSource {
       var doc = await firestore.collection('grammar_quests').doc(docId).get();
 
       if (!doc.exists) {
-        final fallbackId = 'grammar_${((level - 1) % 5) + 1}';
-        doc = await firestore
-            .collection('grammar_quests')
-            .doc(fallbackId)
-            .get();
+        final snapshot = await firestore.collection('grammar_quests').get();
+        if (snapshot.docs.isNotEmpty) {
+          final randomIndex = (level - 1) % snapshot.docs.length;
+          doc = snapshot.docs[randomIndex];
+        }
       }
 
       if (doc.exists) {
         final data = doc.data()!;
-        data['id'] = docId;
+        data['id'] = doc.id;
         data['difficulty'] = level;
         return GrammarQuestModel.fromJson(data);
       } else {

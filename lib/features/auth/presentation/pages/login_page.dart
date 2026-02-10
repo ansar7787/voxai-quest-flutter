@@ -38,8 +38,12 @@ class _LoginViewState extends State<LoginView> {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state.isSuccess) {
-          _showSnackBar(context, 'Login successful!', Colors.green);
-          context.go(AppRouter.homeRoute);
+          _showSnackBar(
+            context,
+            'Login successful! Redirecting...',
+            Colors.green,
+          );
+          // Do not manually navigate. AppRouter will handle redirect when AuthBloc updates.
         }
         if (state.errorMessage != null) {
           final isWarning = state.errorMessage!.contains('canceled');
@@ -280,11 +284,7 @@ class _PasswordInput extends StatelessWidget {
           },
           obscureText: !state.isPasswordVisible,
           textInputAction: TextInputAction.done,
-          onFieldSubmitted: (_) {
-            if (formKey.currentState!.validate()) {
-              context.read<LoginCubit>().logInWithCredentials();
-            }
-          },
+          // onFieldSubmitted removed to prevent auto-login
           style: const TextStyle(color: Color(0xFF1F2937)),
           decoration: InputDecoration(
             hintText: 'Password',

@@ -25,10 +25,13 @@ class AuthErrorHandler {
         return 'This account is already linked with another user.';
       case 'sign_in_canceled':
       case 'canceled':
+      case 'aborted-by-user':
         return 'Sign in cancelled.';
       default:
         if (errorCode.contains('canceled')) return 'Sign in cancelled.';
-        return 'An undefined error occurred. Please try again.';
+        // Log the unknown error code for debugging purposes
+        // debugPrint('Unknown Auth Error Code: $errorCode');
+        return 'Authentication failed: $errorCode';
     }
   }
 }

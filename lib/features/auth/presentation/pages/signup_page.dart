@@ -38,8 +38,12 @@ class _SignUpViewState extends State<SignUpView> {
     return BlocListener<SignUpCubit, SignUpState>(
       listener: (context, state) {
         if (state.isSuccess) {
-          _showSnackBar(context, 'Account created successfully!', Colors.green);
-          context.go(AppRouter.homeRoute);
+          _showSnackBar(
+            context,
+            'Account created successfully! Redirecting...',
+            Colors.green,
+          );
+          // Do not manually navigate. AppRouter will handle redirect when AuthBloc updates.
         }
         if (state.errorMessage != null) {
           _showSnackBar(context, state.errorMessage!, Colors.red);
@@ -314,11 +318,7 @@ class _PasswordInput extends StatelessWidget {
             return null;
           },
           textInputAction: TextInputAction.done,
-          onFieldSubmitted: (_) {
-            if (formKey.currentState!.validate()) {
-              context.read<SignUpCubit>().signUp();
-            }
-          },
+          // onFieldSubmitted removed to prevent auto-login
           obscureText: !state.isPasswordVisible,
           style: const TextStyle(color: Color(0xFF1F2937)),
           decoration: InputDecoration(
