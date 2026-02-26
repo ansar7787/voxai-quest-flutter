@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_sign_in/google_sign_in.dart' as gsignin;
 import 'package:voxai_quest/features/auth/data/models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
@@ -15,13 +15,13 @@ abstract class AuthRemoteDataSource {
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirebaseAuth _firebaseAuth;
-  final GoogleSignIn _googleSignIn;
+  final gsignin.GoogleSignIn _googleSignIn;
 
   AuthRemoteDataSourceImpl({
     FirebaseAuth? firebaseAuth,
-    GoogleSignIn? googleSignIn,
+    gsignin.GoogleSignIn? googleSignIn,
   }) : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-       _googleSignIn = googleSignIn ?? GoogleSignIn();
+       _googleSignIn = googleSignIn ?? gsignin.GoogleSignIn();
 
   @override
   Future<UserModel> signUp({
@@ -37,6 +37,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       id: credential.user!.uid,
       email: credential.user!.email ?? '',
       isAdmin: false, // Default false
+      dailyXpHistory: const {},
+      recentActivities: const [],
     );
 
     // Create Firestore document
@@ -60,6 +62,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return UserModel(
       id: credential.user!.uid,
       email: credential.user!.email ?? '',
+      dailyXpHistory: const {},
+      recentActivities: const [],
     );
   }
 
@@ -93,6 +97,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           displayName: user.displayName,
           photoUrl: user.photoURL,
           isAdmin: false,
+          dailyXpHistory: const {},
+          recentActivities: const [],
         );
         await FirebaseFirestore.instance
             .collection('users')

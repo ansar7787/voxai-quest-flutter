@@ -24,4 +24,10 @@ class HapticService {
       await Haptics.vibrate(HapticsType.light);
     }
   }
+
+  Future<void> warning() async {
+    if (await Haptics.canVibrate()) {
+      await Haptics.vibrate(HapticsType.warning);
+    }
+  }
 }

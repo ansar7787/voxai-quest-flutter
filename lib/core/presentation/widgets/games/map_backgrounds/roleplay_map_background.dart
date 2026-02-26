@@ -1,0 +1,55 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+
+class RoleplayMapBackground extends StatelessWidget {
+  const RoleplayMapBackground({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // Base Gradient
+        Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF0F172A), Color(0xFF1C1917)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+        ),
+        // Cinema Light Beams
+        ...List.generate(6, (i) {
+          return Positioned(
+            top: -100.h,
+            left: (i * 100).w,
+            child:
+                Opacity(
+                      opacity: 0.05,
+                      child: Transform.rotate(
+                        angle: 0.2,
+                        child: Container(
+                          width: 80.w,
+                          height: 1.sh,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                const Color(0xFFF59E0B),
+                                Colors.transparent,
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                    .animate(onPlay: (c) => c.repeat(reverse: true))
+                    .shimmer(duration: (3 + i).seconds, color: Colors.white12),
+          );
+        }),
+      ],
+    );
+  }
+}

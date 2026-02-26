@@ -1,0 +1,30 @@
+Analyzing voxai_quest...                                        
+
+warning - Unused import: '../../../../features/auth/domain/usecases/update_user_rewards.dart' - lib\core\presentation\bloc\base_game_bloc.dart:2:8 - unused_import
+   info - Statements in an if should be enclosed in a block - lib\core\presentation\pages\quest_sequence_page.dart:58:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\core\presentation\pages\quest_sequence_page.dart:60:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\core\presentation\pages\quest_sequence_page.dart:62:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\core\presentation\pages\quest_sequence_page.dart:64:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\core\presentation\pages\quest_sequence_page.dart:66:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\core\presentation\pages\quest_sequence_page.dart:68:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\core\presentation\pages\quest_sequence_page.dart:70:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\core\presentation\pages\quest_sequence_page.dart:72:9 - curly_braces_in_flow_control_structures
+   info - Constructors in '@immutable' classes should be declared as 'const' - lib\features\accent\data\models\accent_quest_model.dart:5:3 - prefer_const_constructors_in_immutables
+warning - Duplicate import - lib\features\accent\presentation\bloc\accent_bloc.dart:5:8 - duplicate_import
+warning - Unused import: '../../../../features/auth/domain/usecases/update_user_rewards.dart' - lib\features\auth\presentation\bloc\auth_bloc.dart:4:8 - unused_import
+   info - Constructors in '@immutable' classes should be declared as 'const' - lib\features\grammar\data\models\grammar_quest_model.dart:5:3 - prefer_const_constructors_in_immutables
+warning - Unused import: '../../../../features/auth/domain/usecases/update_user_rewards.dart' - lib\features\grammar\presentation\bloc\grammar_bloc.dart:5:8 - unused_import
+warning - Unused import: '../../../../features/auth/domain/usecases/update_user_rewards.dart' - lib\features\leaderboard\presentation\bloc\leaderboard_bloc.dart:2:8 - unused_import
+   info - Constructors in '@immutable' classes should be declared as 'const' - lib\features\listening\data\models\listening_quest_model.dart:5:3 - prefer_const_constructors_in_immutables
+warning - Unused import: '../../../../features/auth/domain/usecases/update_user_rewards.dart' - lib\features\listening\presentation\bloc\listening_bloc.dart:4:8 - unused_import
+   info - Constructors in '@immutable' classes should be declared as 'const' - lib\features\reading\data\models\reading_quest_model.dart:5:3 - prefer_const_constructors_in_immutables
+warning - Unused import: '../../../../features/auth/domain/usecases/update_user_rewards.dart' - lib\features\reading\presentation\bloc\reading_bloc.dart:4:8 - unused_import
+   info - Constructors in '@immutable' classes should be declared as 'const' - lib\features\roleplay\data\models\roleplay_quest_model.dart:5:3 - prefer_const_constructors_in_immutables
+warning - Duplicate import - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:5:8 - duplicate_import
+   info - Constructors in '@immutable' classes should be declared as 'const' - lib\features\speaking\domain\entities\speaking_quest.dart:17:3 - prefer_const_constructors_in_immutables
+  error - 2 positional arguments expected by 'fromJson', but 1 found - lib\features\vocabulary\data\datasources\vocabulary_remote_data_source.dart:31:60 - not_enough_positional_arguments
+   info - Constructors in '@immutable' classes should be declared as 'const' - lib\features\vocabulary\data\models\vocabulary_quest_model.dart:5:3 - prefer_const_constructors_in_immutables
+   info - Constructors in '@immutable' classes should be declared as 'const' - lib\features\writing\data\models\writing_quest_model.dart:5:3 - prefer_const_constructors_in_immutables
+warning - Unused import: '../../../../features/auth/domain/usecases/update_user_rewards.dart' - lib\features\writing\presentation\bloc\writing_bloc.dart:2:8 - unused_import
+
+26 issues found. (ran in 12.2s)

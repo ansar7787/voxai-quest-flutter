@@ -7,7 +7,8 @@ import 'package:voxai_quest/core/utils/app_router.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/login_cubit.dart';
 import 'package:voxai_quest/core/presentation/widgets/loading_overlay.dart';
-import 'package:voxai_quest/core/presentation/widgets/auth_background.dart';
+import 'package:voxai_quest/core/presentation/widgets/mesh_gradient_background.dart';
+import 'package:voxai_quest/core/presentation/widgets/glass_tile.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -33,8 +34,6 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
-
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state.isSuccess) {
@@ -59,35 +58,30 @@ class _LoginViewState extends State<LoginView> {
       },
       child: BlocBuilder<LoginCubit, LoginState>(
         builder: (context, state) {
+          final isDark = Theme.of(context).brightness == Brightness.dark;
           return LoadingOverlay(
             isLoading: state.isSubmitting,
             child: Scaffold(
               resizeToAvoidBottomInset: true,
-              body: AuthBackground(
-                child: SafeArea(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return SingleChildScrollView(
-                        physics: isKeyboardOpen
-                            ? const ClampingScrollPhysics()
-                            : const NeverScrollableScrollPhysics(),
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minHeight: isKeyboardOpen
-                                ? MediaQuery.of(context).size.height
-                                : constraints.maxHeight,
-                          ),
-                          child: IntrinsicHeight(
+              body: Stack(
+                children: [
+                  const MeshGradientBackground(),
+                  SafeArea(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minHeight: constraints.maxHeight,
+                            ),
                             child: Padding(
                               padding: EdgeInsets.symmetric(horizontal: 24.w),
                               child: Form(
                                 key: _formKey,
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Spacer(),
+                                    SizedBox(height: 60.h),
                                     Hero(
                                       tag: 'auth_title',
                                       child: Material(
@@ -95,65 +89,83 @@ class _LoginViewState extends State<LoginView> {
                                         child: Text(
                                           'VoxAI Quest',
                                           style: GoogleFonts.outfit(
-                                            fontSize: 42.sp,
-                                            fontWeight: FontWeight.bold,
-                                            color: const Color(0xFF1F2937),
+                                            fontSize: 48.sp,
+                                            fontWeight: FontWeight.w900,
+                                            color: const Color(0xFF2563EB),
+                                            letterSpacing: -1.5,
                                           ),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 8.h),
                                     Text(
                                       'Your English Learning Adventure',
                                       style: GoogleFonts.outfit(
-                                        fontSize: 18.sp,
-                                        color: const Color(0xFF6B7280),
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: isDark
+                                            ? Colors.white54
+                                            : const Color(0xFF6B7280),
                                       ),
                                       textAlign: TextAlign.center,
                                     ),
                                     SizedBox(height: 48.h),
-                                    _EmailInput(),
-                                    SizedBox(height: 16.h),
-                                    _PasswordInput(formKey: _formKey),
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: TextButton(
-                                        onPressed: () => context.go(
-                                          AppRouter.forgotPasswordRoute,
-                                        ),
-                                        child: const Text(
-                                          'Forgot Password?',
-                                          style: TextStyle(
-                                            color: Color(0xFF2563EB),
-                                            fontWeight: FontWeight.w600,
+                                    GlassTile(
+                                      padding: EdgeInsets.all(24.r),
+                                      borderRadius: BorderRadius.circular(40.r),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          _EmailInput(),
+                                          SizedBox(height: 16.h),
+                                          _PasswordInput(formKey: _formKey),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: TextButton(
+                                              onPressed: () => context.go(
+                                                AppRouter.forgotPasswordRoute,
+                                              ),
+                                              child: Text(
+                                                'Forgot Password?',
+                                                style: GoogleFonts.outfit(
+                                                  color: const Color(
+                                                    0xFF2563EB,
+                                                  ),
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                          SizedBox(height: 8.h),
+                                          _LoginButton(formKey: _formKey),
+                                          SizedBox(height: 16.h),
+                                          _GoogleLoginButton(),
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(height: 24.h),
-                                    _LoginButton(formKey: _formKey),
-                                    SizedBox(height: 16.h),
-                                    _GoogleLoginButton(),
-                                    Spacer(),
+                                    SizedBox(height: 32.h),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        const Text(
+                                        Text(
                                           "Don't have an account? ",
-                                          style: TextStyle(
-                                            color: Color(0xFF6B7280),
+                                          style: GoogleFonts.outfit(
+                                            color: isDark
+                                                ? Colors.white54
+                                                : const Color(0xFF6B7280),
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                         TextButton(
                                           onPressed: () =>
                                               context.go(AppRouter.signupRoute),
-                                          child: const Text(
+                                          child: Text(
                                             'Sign Up',
-                                            style: TextStyle(
-                                              color: Color(0xFF2563EB),
-                                              fontWeight: FontWeight.bold,
+                                            style: GoogleFonts.outfit(
+                                              color: const Color(0xFF2563EB),
+                                              fontWeight: FontWeight.w900,
                                             ),
                                           ),
                                         ),
@@ -165,11 +177,11 @@ class _LoginViewState extends State<LoginView> {
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           );

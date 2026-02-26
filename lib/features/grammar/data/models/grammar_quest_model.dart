@@ -1,39 +1,79 @@
-import 'package:voxai_quest/features/grammar/domain/entities/grammar_quest.dart';
+import '../../domain/entities/grammar_quest.dart';
+import '../../../../core/domain/entities/game_quest.dart';
 
 class GrammarQuestModel extends GrammarQuest {
-  GrammarQuestModel({
+  const GrammarQuestModel({
     required super.id,
+    super.type,
     required super.instruction,
     required super.difficulty,
-    required super.question,
-    required super.options,
-    required super.correctOptionIndex,
-    required super.explanation,
+    super.subtype,
+    super.interactionType = InteractionType.choice,
+    super.xpReward,
+    super.coinReward,
+    super.livesAllowed,
+    super.options,
+    super.correctAnswerIndex,
+    super.correctAnswer,
+    super.hint,
+    super.sentence,
+    super.verb,
+    super.word,
+    super.targetTense,
+    super.secondarySentence,
   });
 
-  factory GrammarQuestModel.fromJson(Map<String, dynamic> json) {
+  factory GrammarQuestModel.fromJson(Map<String, dynamic> map, String id) {
+    final subtype = GameSubtype.values.firstWhere(
+      (s) => s.name == map['subtype'],
+      orElse: () => GameSubtype.grammarQuest,
+    );
     return GrammarQuestModel(
-      id: json['id'] ?? '',
-      instruction: json['instruction'] ?? '',
-      difficulty: json['difficulty'] ?? 1,
-      question: json['question'] ?? '',
-      options: List<String>.from(json['options'] ?? []),
-      correctOptionIndex: json['correctOptionIndex'] ?? 0,
-      explanation: json['explanation'] ?? '',
+      id: id,
+      type: subtype.category,
+      subtype: subtype,
+      instruction: map['instruction'] ?? 'Solve the grammar puzzle.',
+      difficulty: map['difficulty'] ?? 1,
+      interactionType: InteractionType.values.firstWhere(
+        (i) => i.name == (map['interactionType'] ?? 'choice'),
+        orElse: () => InteractionType.choice,
+      ),
+      xpReward: map['xpReward'] ?? 10,
+      coinReward: map['coinReward'] ?? 5,
+      livesAllowed: map['livesAllowed'],
+      options: map['options'] != null
+          ? List<String>.from(map['options'])
+          : null,
+      correctAnswerIndex:
+          map['correctAnswerIndex'] ?? map['correctAnswerIndex'],
+      correctAnswer: map['correctAnswer'],
+      hint: map['hint'],
+      sentence: map['sentence'],
+      verb: map['verb'],
+      word: map['word'],
+      targetTense: map['targetTense'],
+      secondarySentence: map['secondarySentence'],
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'instruction': instruction,
       'difficulty': difficulty,
-      'question': question,
+      'subtype': subtype?.name,
+      'interactionType': interactionType.name,
+      'xpReward': xpReward,
+      'coinReward': coinReward,
+      'livesAllowed': livesAllowed,
       'options': options,
-      'correctOptionIndex': correctOptionIndex,
-      'explanation': explanation,
-      'type': 'grammar',
-      'level': difficulty, // Add level explicitly for query ease
+      'correctAnswerIndex': correctAnswerIndex,
+      'correctAnswer': correctAnswer,
+      'hint': hint,
+      'sentence': sentence,
+      'verb': verb,
+      'word': word,
+      'targetTense': targetTense,
+      'secondarySentence': secondarySentence,
     };
   }
 }

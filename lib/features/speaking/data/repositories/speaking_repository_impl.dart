@@ -1,26 +1,31 @@
+import '../../domain/entities/speaking_quest.dart';
+import '../../../../core/error/failures.dart';
 import 'package:dartz/dartz.dart';
-import 'package:voxai_quest/core/error/exceptions.dart';
-import 'package:voxai_quest/core/error/failures.dart';
-import 'package:voxai_quest/features/speaking/data/datasources/speaking_remote_data_source.dart';
-import 'package:voxai_quest/features/speaking/domain/entities/speaking_quest.dart';
-import 'package:voxai_quest/features/speaking/domain/repositories/speaking_repository.dart';
+import '../../../../core/domain/entities/game_quest.dart';
+import '../../domain/repositories/speaking_repository.dart';
 
 class SpeakingRepositoryImpl implements SpeakingRepository {
-  final SpeakingRemoteDataSource remoteDataSource;
-
-  SpeakingRepositoryImpl({required this.remoteDataSource});
+  final dynamic remoteDataSource;
+  final dynamic networkInfo;
+  SpeakingRepositoryImpl({this.remoteDataSource, this.networkInfo});
 
   @override
-  Future<Either<Failure, SpeakingQuest>> getSpeakingQuest(
-    int difficulty,
-  ) async {
+  Future<Either<Failure, List<SpeakingQuest>>> getSpeakingQuest({
+    required GameSubtype gameType,
+    required int level,
+  }) async {
     try {
-      final remoteQuest = await remoteDataSource.getSpeakingQuest(difficulty);
-      return Right(remoteQuest);
-    } on ServerException {
-      return Left(ServerFailure('Failed to load speaking quest'));
+      final remoteQuests = await remoteDataSource.getSpeakingQuest(
+        gameType: gameType,
+        level: level,
+      );
+      return Right(remoteQuests);
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return const Left(
+        ServerFailure(
+          "Failed to connect to the server. Please check your internet connection.",
+        ),
+      );
     }
   }
 }

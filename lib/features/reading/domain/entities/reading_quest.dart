@@ -1,16 +1,46 @@
-import 'package:voxai_quest/features/game/domain/entities/game_quest.dart';
+import 'package:voxai_quest/core/domain/entities/game_quest.dart';
 
 class ReadingQuest extends GameQuest {
-  final String passage;
-  final List<String> options;
-  final int correctOptionIndex;
+  final String? passage;
+  final String? question;
+  final String? highlightedWord;
+  final String? statement;
+  final List<String>? shuffledSentences;
+  final List<int>? correctOrder;
+  final List<Map<String, String>>? pairs;
+  final String? phoneticHint;
+  final String? targetWord;
+  final String? explanation;
+  final String? textToSpeak;
+  final String? prompt;
 
-  ReadingQuest({
+  const ReadingQuest({
     required super.id,
+    super.type,
     required super.instruction,
     required super.difficulty,
-    required this.passage,
-    required this.options,
-    required this.correctOptionIndex,
-  }) : super(type: QuestType.reading);
+    super.subtype,
+    super.interactionType = InteractionType.choice,
+    super.xpReward,
+    super.coinReward,
+    super.livesAllowed,
+    super.options,
+    super.correctAnswerIndex,
+    super.correctAnswer,
+    super.hint,
+    this.passage,
+    this.question,
+    this.highlightedWord,
+    this.statement,
+    this.shuffledSentences,
+    this.correctOrder,
+    this.pairs,
+    this.phoneticHint,
+    this.targetWord,
+    this.explanation,
+    this.textToSpeak,
+    this.prompt,
+  });
+
+  String? get word => targetWord ?? highlightedWord;
 }

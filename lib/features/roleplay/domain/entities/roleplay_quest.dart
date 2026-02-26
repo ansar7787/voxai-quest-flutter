@@ -1,0 +1,41 @@
+import 'package:voxai_quest/core/domain/entities/game_quest.dart';
+
+class RoleplayQuest extends GameQuest {
+  final String? scenario;
+  final String? persona;
+  final String? prompt;
+  final String? sampleAnswer;
+  final String? textToSpeak;
+  final dynamic nodes;
+  final String? situation;
+  final List<String>? keywords;
+  final List<Map<String, String>>? conversationHistory;
+
+  const RoleplayQuest({
+    required super.id,
+    super.type,
+    required super.instruction,
+    required super.difficulty,
+    super.subtype,
+    super.interactionType = InteractionType.speech,
+    super.xpReward,
+    super.coinReward,
+    super.livesAllowed,
+    super.options,
+    super.correctAnswerIndex,
+    super.correctAnswer,
+    super.hint,
+    this.scenario,
+    this.persona,
+    this.prompt,
+    this.sampleAnswer,
+    this.textToSpeak,
+    this.nodes,
+    this.situation,
+    this.keywords,
+    this.conversationHistory,
+  });
+
+  String? get roleName => persona;
+  String? get explanation => scenario;
+}

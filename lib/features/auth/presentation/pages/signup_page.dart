@@ -7,7 +7,8 @@ import 'package:voxai_quest/core/utils/app_router.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/signup_cubit.dart';
 import 'package:voxai_quest/core/presentation/widgets/loading_overlay.dart';
-import 'package:voxai_quest/core/presentation/widgets/auth_background.dart';
+import 'package:voxai_quest/core/presentation/widgets/mesh_gradient_background.dart';
+import 'package:voxai_quest/core/presentation/widgets/glass_tile.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({super.key});
@@ -33,8 +34,6 @@ class _SignUpViewState extends State<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
-    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
-
     return BlocListener<SignUpCubit, SignUpState>(
       listener: (context, state) {
         if (state.isSuccess) {
@@ -43,7 +42,6 @@ class _SignUpViewState extends State<SignUpView> {
             'Account created successfully! Redirecting...',
             Colors.green,
           );
-          // Do not manually navigate. AppRouter will handle redirect when AuthBloc updates.
         }
         if (state.errorMessage != null) {
           _showSnackBar(context, state.errorMessage!, Colors.red);
@@ -51,98 +49,113 @@ class _SignUpViewState extends State<SignUpView> {
       },
       child: BlocBuilder<SignUpCubit, SignUpState>(
         builder: (context, state) {
+          final isDark = Theme.of(context).brightness == Brightness.dark;
           return LoadingOverlay(
             isLoading: state.isSubmitting,
             child: Scaffold(
               resizeToAvoidBottomInset: true,
-              body: AuthBackground(
-                child: SafeArea(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return SingleChildScrollView(
-                        padding: EdgeInsets.symmetric(horizontal: 24.w),
-                        physics: isKeyboardOpen
-                            ? const ClampingScrollPhysics()
-                            : const NeverScrollableScrollPhysics(),
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minHeight: isKeyboardOpen
-                                ? MediaQuery.of(context).size.height
-                                : constraints.maxHeight,
-                          ),
-                          child: IntrinsicHeight(
-                            child: Form(
-                              key: _formKey,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Spacer(),
-                                  Hero(
-                                    tag: 'auth_title',
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: Text(
-                                        'Create Account',
-                                        style: GoogleFonts.outfit(
-                                          fontSize: 36.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF1F2937),
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 8.h),
-                                  Text(
-                                    'Begin your journey to fluency',
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 18.sp,
-                                      color: const Color(0xFF6B7280),
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(height: 48.h),
-                                  _NameInput(),
-                                  SizedBox(height: 16.h),
-                                  _EmailInput(),
-                                  SizedBox(height: 16.h),
-                                  _PasswordInput(formKey: _formKey),
-                                  SizedBox(height: 32.h),
-                                  _SignUpButton(formKey: _formKey),
-                                  Spacer(),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text(
-                                        "Already have an account? ",
-                                        style: TextStyle(
-                                          color: Color(0xFF6B7280),
+              body: Stack(
+                children: [
+                  const MeshGradientBackground(),
+                  SafeArea(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minHeight: constraints.maxHeight,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 24.w),
+                              child: Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 60.h),
+                                    Hero(
+                                      tag: 'auth_title',
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: Text(
+                                          'VoxAI Quest',
+                                          style: GoogleFonts.outfit(
+                                            fontSize: 48.sp,
+                                            fontWeight: FontWeight.w900,
+                                            color: const Color(0xFF2563EB),
+                                            letterSpacing: -1.5,
+                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
-                                      TextButton(
-                                        onPressed: () =>
-                                            context.go(AppRouter.loginRoute),
-                                        child: const Text(
-                                          'Login',
-                                          style: TextStyle(
-                                            color: Color(0xFF2563EB),
-                                            fontWeight: FontWeight.bold,
+                                    ),
+                                    Text(
+                                      'Begin your journey to fluency',
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: isDark
+                                            ? Colors.white54
+                                            : const Color(0xFF6B7280),
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: 48.h),
+                                    GlassTile(
+                                      padding: EdgeInsets.all(24.r),
+                                      borderRadius: BorderRadius.circular(40.r),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          _NameInput(),
+                                          SizedBox(height: 16.h),
+                                          _EmailInput(),
+                                          SizedBox(height: 16.h),
+                                          _PasswordInput(formKey: _formKey),
+                                          SizedBox(height: 32.h),
+                                          _SignUpButton(formKey: _formKey),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 32.h),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Already have an account? ",
+                                          style: GoogleFonts.outfit(
+                                            color: isDark
+                                                ? Colors.white54
+                                                : const Color(0xFF6B7280),
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 24.h),
-                                ],
+                                        TextButton(
+                                          onPressed: () =>
+                                              context.go(AppRouter.loginRoute),
+                                          child: Text(
+                                            'Login',
+                                            style: GoogleFonts.outfit(
+                                              color: const Color(0xFF2563EB),
+                                              fontWeight: FontWeight.w900,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 24.h),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           );

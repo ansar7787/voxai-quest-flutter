@@ -1,0 +1,49 @@
+﻿Analyzing voxai_quest...                                        
+
+warning - Unused import: '../../domain/entities/game_quest.dart' - lib\core\presentation\themes\level_theme_helper.dart:2:8 - unused_import
+warning - The method doesn't override an inherited method - lib\features\accent\data\repositories\accent_repository_impl.dart:10:19 - override_on_non_overriding_member
+warning - The value of the local variable 'result' isn't used - lib\features\accent\presentation\bloc\accent_bloc.dart:104:17 - unused_local_variable
+warning - Dead code - lib\features\accent\presentation\bloc\accent_bloc.dart:173:83 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\accent\presentation\bloc\accent_bloc.dart:173:86 - dead_null_aware_expression
+warning - Dead code - lib\features\accent\presentation\bloc\accent_bloc.dart:174:88 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\accent\presentation\bloc\accent_bloc.dart:174:91 - dead_null_aware_expression
+  error - 'GrammarRepositoryImpl.getGrammarQuest' ('Future<dynamic> Function({required GameSubtype gameType, required int level})') isn't a valid override of 'GrammarRepository.getGrammarQuest' ('Future<Either<Failure, List<GrammarQuest>>> Function({required GameSubtype gameType, required int level})') - lib\features\grammar\data\repositories\grammar_repository_impl.dart:10:19 - invalid_override
+warning - The value of the local variable 'result' isn't used - lib\features\grammar\presentation\bloc\grammar_bloc.dart:104:17 - unused_local_variable
+warning - Dead code - lib\features\grammar\presentation\bloc\grammar_bloc.dart:173:83 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\grammar\presentation\bloc\grammar_bloc.dart:173:86 - dead_null_aware_expression
+warning - Dead code - lib\features\grammar\presentation\bloc\grammar_bloc.dart:174:88 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\grammar\presentation\bloc\grammar_bloc.dart:174:91 - dead_null_aware_expression
+warning - The method doesn't override an inherited method - lib\features\listening\data\repositories\listening_repository_impl.dart:10:19 - override_on_non_overriding_member
+warning - The value of the local variable 'result' isn't used - lib\features\listening\presentation\bloc\listening_bloc.dart:104:17 - unused_local_variable
+warning - Dead code - lib\features\listening\presentation\bloc\listening_bloc.dart:173:83 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\listening\presentation\bloc\listening_bloc.dart:173:86 - dead_null_aware_expression
+warning - Dead code - lib\features\listening\presentation\bloc\listening_bloc.dart:174:88 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\listening\presentation\bloc\listening_bloc.dart:174:91 - dead_null_aware_expression
+  error - 'ReadingRepositoryImpl.getReadingQuest' ('Future<dynamic> Function({required GameSubtype gameType, required int level})') isn't a valid override of 'ReadingRepository.getReadingQuest' ('Future<Either<Failure, List<ReadingQuest>>> Function({required GameSubtype gameType, required int level})') - lib\features\reading\data\repositories\reading_repository_impl.dart:10:19 - invalid_override
+warning - The value of the local variable 'result' isn't used - lib\features\reading\presentation\bloc\reading_bloc.dart:104:17 - unused_local_variable
+warning - Dead code - lib\features\reading\presentation\bloc\reading_bloc.dart:173:83 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\reading\presentation\bloc\reading_bloc.dart:173:86 - dead_null_aware_expression
+warning - Dead code - lib\features\reading\presentation\bloc\reading_bloc.dart:174:88 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\reading\presentation\bloc\reading_bloc.dart:174:91 - dead_null_aware_expression
+warning - The method doesn't override an inherited method - lib\features\roleplay\data\repositories\roleplay_repository_impl.dart:10:19 - override_on_non_overriding_member
+warning - The value of the local variable 'result' isn't used - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:104:17 - unused_local_variable
+warning - Dead code - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:173:83 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:173:86 - dead_null_aware_expression
+warning - Dead code - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:174:88 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:174:91 - dead_null_aware_expression
+  error - 'SpeakingRepositoryImpl.getSpeakingQuest' ('Future<dynamic> Function({required GameSubtype gameType, required int level})') isn't a valid override of 'SpeakingRepository.getSpeakingQuest' ('Future<Either<Failure, List<SpeakingQuest>>> Function({required GameSubtype gameType, required int level})') - lib\features\speaking\data\repositories\speaking_repository_impl.dart:10:19 - invalid_override
+warning - The value of the local variable 'result' isn't used - lib\features\speaking\presentation\bloc\speaking_bloc.dart:104:17 - unused_local_variable
+warning - Dead code - lib\features\speaking\presentation\bloc\speaking_bloc.dart:173:83 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\speaking\presentation\bloc\speaking_bloc.dart:173:86 - dead_null_aware_expression
+warning - Dead code - lib\features\speaking\presentation\bloc\speaking_bloc.dart:174:88 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\speaking\presentation\bloc\speaking_bloc.dart:174:91 - dead_null_aware_expression
+  error - 'WritingRepositoryImpl.getWritingQuest' ('Future<dynamic> Function({required GameSubtype gameType, required int level})') isn't a valid override of 'WritingRepository.getWritingQuest' ('Future<Either<Failure, List<WritingQuest>>> Function({required GameSubtype gameType, required int level})') - lib\features\writing\data\repositories\writing_repository_impl.dart:10:19 - invalid_override
+warning - The value of the local variable 'result' isn't used - lib\features\writing\presentation\bloc\writing_bloc.dart:104:17 - unused_local_variable
+warning - Dead code - lib\features\writing\presentation\bloc\writing_bloc.dart:173:83 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\writing\presentation\bloc\writing_bloc.dart:173:86 - dead_null_aware_expression
+warning - Dead code - lib\features\writing\presentation\bloc\writing_bloc.dart:174:88 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\writing\presentation\bloc\writing_bloc.dart:174:91 - dead_null_aware_expression
+warning - The asset directory 'assets/images/' doesn't exist - pubspec.yaml:124:7 - asset_directory_does_not_exist
+warning - The asset directory 'assets/images/textures/' doesn't exist - pubspec.yaml:125:7 - asset_directory_does_not_exist
+warning - The asset directory 'assets/sounds/' doesn't exist - pubspec.yaml:126:7 - asset_directory_does_not_exist
+

@@ -1,0 +1,102 @@
+﻿Analyzing voxai_quest...                                        
+
+warning - Unused import: '../../domain/entities/game_quest.dart' - lib\core\presentation\themes\level_theme_helper.dart:2:8 - unused_import
+  error - The named parameter 'authRepository' isn't defined - lib\core\utils\injection_container.dart:168:28 - undefined_named_parameter
+  error - The named parameter 'smartTutor' isn't defined - lib\core\utils\injection_container.dart:168:50 - undefined_named_parameter
+  error - The named parameter 'getReadingQuest' isn't defined - lib\core\utils\injection_container.dart:240:7 - undefined_named_parameter
+  error - The named parameter 'getWritingQuest' isn't defined - lib\core\utils\injection_container.dart:253:7 - undefined_named_parameter
+  error - The named parameter 'getSpeakingQuest' isn't defined - lib\core\utils\injection_container.dart:266:7 - undefined_named_parameter
+  error - The named parameter 'getGrammarQuest' isn't defined - lib\core\utils\injection_container.dart:279:7 - undefined_named_parameter
+  error - The named parameter 'getRoleplayQuest' isn't defined - lib\core\utils\injection_container.dart:292:7 - undefined_named_parameter
+  error - The named parameter 'getAccentQuest' isn't defined - lib\core\utils\injection_container.dart:305:7 - undefined_named_parameter
+  error - The named parameter 'getListeningQuests' isn't defined - lib\core\utils\injection_container.dart:318:7 - undefined_named_parameter
+warning - The method doesn't override an inherited method - lib\features\accent\data\repositories\accent_repository_impl.dart:9:19 - override_on_non_overriding_member
+  error - Target of URI doesn't exist: '../../../core/domain/entities/game_quest.dart' - lib\features\accent\presentation\bloc\accent_bloc.dart:3:8 - uri_does_not_exist
+warning - The value of the local variable 'result' isn't used - lib\features\accent\presentation\bloc\accent_bloc.dart:104:23 - unused_local_variable
+  error - The final variable 'result' can only be set once - lib\features\accent\presentation\bloc\accent_bloc.dart:112:12 - assignment_to_final_local
+  error - The name 'GameSubtype' isn't defined, so it can't be used in an 'is' expression - lib\features\accent\presentation\bloc\accent_bloc.dart:124:38 - type_test_with_undefined_name
+warning - Dead code - lib\features\accent\presentation\bloc\accent_bloc.dart:124:69 - dead_code
+  error - Undefined name 'GameSubtype' - lib\features\accent\presentation\bloc\accent_bloc.dart:124:69 - undefined_identifier
+warning - Dead code - lib\features\accent\presentation\bloc\accent_bloc.dart:173:83 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\accent\presentation\bloc\accent_bloc.dart:173:86 - dead_null_aware_expression
+warning - Dead code - lib\features\accent\presentation\bloc\accent_bloc.dart:174:88 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\accent\presentation\bloc\accent_bloc.dart:174:91 - dead_null_aware_expression
+  error - 'GrammarRepositoryImpl.getGrammarQuest' ('Future<dynamic> Function({required dynamic gameType, required int level})') isn't a valid override of 'GrammarRepository.getGrammarQuest' ('Future<Either<Failure, List<GrammarQuest>>> Function({required GameSubtype gameType, required int level})') - lib\features\grammar\data\repositories\grammar_repository_impl.dart:9:19 - invalid_override
+  error - Target of URI doesn't exist: '../../../core/domain/entities/game_quest.dart' - lib\features\grammar\presentation\bloc\grammar_bloc.dart:3:8 - uri_does_not_exist
+warning - The value of the local variable 'result' isn't used - lib\features\grammar\presentation\bloc\grammar_bloc.dart:104:23 - unused_local_variable
+  error - The final variable 'result' can only be set once - lib\features\grammar\presentation\bloc\grammar_bloc.dart:112:12 - assignment_to_final_local
+  error - The name 'GameSubtype' isn't defined, so it can't be used in an 'is' expression - lib\features\grammar\presentation\bloc\grammar_bloc.dart:124:38 - type_test_with_undefined_name
+warning - Dead code - lib\features\grammar\presentation\bloc\grammar_bloc.dart:124:69 - dead_code
+  error - Undefined name 'GameSubtype' - lib\features\grammar\presentation\bloc\grammar_bloc.dart:124:69 - undefined_identifier
+warning - Dead code - lib\features\grammar\presentation\bloc\grammar_bloc.dart:173:83 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\grammar\presentation\bloc\grammar_bloc.dart:173:86 - dead_null_aware_expression
+warning - Dead code - lib\features\grammar\presentation\bloc\grammar_bloc.dart:174:88 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\grammar\presentation\bloc\grammar_bloc.dart:174:91 - dead_null_aware_expression
+  error - The operator '<=' can't be unconditionally invoked because the receiver can be 'null' - lib\features\home\presentation\pages\home_screen.dart:1049:34 - unchecked_use_of_nullable_value
+warning - The method doesn't override an inherited method - lib\features\listening\data\repositories\listening_repository_impl.dart:9:19 - override_on_non_overriding_member
+  error - Target of URI doesn't exist: '../../../core/domain/entities/game_quest.dart' - lib\features\listening\presentation\bloc\listening_bloc.dart:3:8 - uri_does_not_exist
+warning - The value of the local variable 'result' isn't used - lib\features\listening\presentation\bloc\listening_bloc.dart:104:23 - unused_local_variable
+  error - The final variable 'result' can only be set once - lib\features\listening\presentation\bloc\listening_bloc.dart:112:12 - assignment_to_final_local
+  error - The name 'GameSubtype' isn't defined, so it can't be used in an 'is' expression - lib\features\listening\presentation\bloc\listening_bloc.dart:124:38 - type_test_with_undefined_name
+warning - Dead code - lib\features\listening\presentation\bloc\listening_bloc.dart:124:69 - dead_code
+  error - Undefined name 'GameSubtype' - lib\features\listening\presentation\bloc\listening_bloc.dart:124:69 - undefined_identifier
+warning - Dead code - lib\features\listening\presentation\bloc\listening_bloc.dart:173:83 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\listening\presentation\bloc\listening_bloc.dart:173:86 - dead_null_aware_expression
+warning - Dead code - lib\features\listening\presentation\bloc\listening_bloc.dart:174:88 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\listening\presentation\bloc\listening_bloc.dart:174:91 - dead_null_aware_expression
+  error - The argument type 'int?' can't be assigned to the parameter type 'num'.  - lib\features\profile\presentation\pages\profile_screen.dart:492:37 - argument_type_not_assignable
+  error - The argument type 'GameSubtype?' can't be assigned to the parameter type 'GameSubtype'.  - lib\features\reading\data\models\reading_quest_model.dart:80:36 - argument_type_not_assignable
+warning - The '!' will have no effect because the receiver can't be null - lib\features\reading\data\models\reading_quest_model.dart:126:25 - unnecessary_non_null_assertion
+  error - 'ReadingRepositoryImpl.getReadingQuest' ('Future<dynamic> Function({required dynamic gameType, required int level})') isn't a valid override of 'ReadingRepository.getReadingQuest' ('Future<Either<Failure, List<ReadingQuest>>> Function({required GameSubtype gameType, required int level})') - lib\features\reading\data\repositories\reading_repository_impl.dart:9:19 - invalid_override
+  error - Target of URI doesn't exist: '../../../core/domain/entities/game_quest.dart' - lib\features\reading\presentation\bloc\reading_bloc.dart:3:8 - uri_does_not_exist
+warning - The value of the local variable 'result' isn't used - lib\features\reading\presentation\bloc\reading_bloc.dart:104:23 - unused_local_variable
+  error - The final variable 'result' can only be set once - lib\features\reading\presentation\bloc\reading_bloc.dart:112:12 - assignment_to_final_local
+  error - The name 'GameSubtype' isn't defined, so it can't be used in an 'is' expression - lib\features\reading\presentation\bloc\reading_bloc.dart:124:38 - type_test_with_undefined_name
+warning - Dead code - lib\features\reading\presentation\bloc\reading_bloc.dart:124:69 - dead_code
+  error - Undefined name 'GameSubtype' - lib\features\reading\presentation\bloc\reading_bloc.dart:124:69 - undefined_identifier
+warning - Dead code - lib\features\reading\presentation\bloc\reading_bloc.dart:173:83 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\reading\presentation\bloc\reading_bloc.dart:173:86 - dead_null_aware_expression
+warning - Dead code - lib\features\reading\presentation\bloc\reading_bloc.dart:174:88 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\reading\presentation\bloc\reading_bloc.dart:174:91 - dead_null_aware_expression
+warning - The method doesn't override an inherited method - lib\features\roleplay\data\repositories\roleplay_repository_impl.dart:9:19 - override_on_non_overriding_member
+  error - Target of URI doesn't exist: '../../../core/domain/entities/game_quest.dart' - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:3:8 - uri_does_not_exist
+warning - The value of the local variable 'result' isn't used - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:104:23 - unused_local_variable
+  error - The final variable 'result' can only be set once - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:112:12 - assignment_to_final_local
+  error - The name 'GameSubtype' isn't defined, so it can't be used in an 'is' expression - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:124:38 - type_test_with_undefined_name
+warning - Dead code - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:124:69 - dead_code
+  error - Undefined name 'GameSubtype' - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:124:69 - undefined_identifier
+warning - Dead code - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:173:83 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:173:86 - dead_null_aware_expression
+warning - Dead code - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:174:88 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\roleplay\presentation\bloc\roleplay_bloc.dart:174:91 - dead_null_aware_expression
+  error - Instance member 'getSpecificInstructions' can't be accessed using static access - lib\features\settings\presentation\pages\admin_dashboard.dart:118:37 - static_access_to_instance_member
+  error - The argument type 'GameSubtype?' can't be assigned to the parameter type 'GameSubtype'.  - lib\features\speaking\data\models\speaking_quest_model.dart:82:36 - argument_type_not_assignable
+warning - The '!' will have no effect because the receiver can't be null - lib\features\speaking\data\models\speaking_quest_model.dart:104:25 - unnecessary_non_null_assertion
+  error - 'SpeakingRepositoryImpl.getSpeakingQuest' ('Future<dynamic> Function({required dynamic gameType, required int level})') isn't a valid override of 'SpeakingRepository.getSpeakingQuest' ('Future<Either<Failure, List<SpeakingQuest>>> Function({required GameSubtype gameType, required int level})') - lib\features\speaking\data\repositories\speaking_repository_impl.dart:9:19 - invalid_override
+  error - Target of URI doesn't exist: '../../../core/domain/entities/game_quest.dart' - lib\features\speaking\presentation\bloc\speaking_bloc.dart:3:8 - uri_does_not_exist
+warning - The value of the local variable 'result' isn't used - lib\features\speaking\presentation\bloc\speaking_bloc.dart:104:23 - unused_local_variable
+  error - The final variable 'result' can only be set once - lib\features\speaking\presentation\bloc\speaking_bloc.dart:112:12 - assignment_to_final_local
+  error - The name 'GameSubtype' isn't defined, so it can't be used in an 'is' expression - lib\features\speaking\presentation\bloc\speaking_bloc.dart:124:38 - type_test_with_undefined_name
+warning - Dead code - lib\features\speaking\presentation\bloc\speaking_bloc.dart:124:69 - dead_code
+  error - Undefined name 'GameSubtype' - lib\features\speaking\presentation\bloc\speaking_bloc.dart:124:69 - undefined_identifier
+warning - Dead code - lib\features\speaking\presentation\bloc\speaking_bloc.dart:173:83 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\speaking\presentation\bloc\speaking_bloc.dart:173:86 - dead_null_aware_expression
+warning - Dead code - lib\features\speaking\presentation\bloc\speaking_bloc.dart:174:88 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\speaking\presentation\bloc\speaking_bloc.dart:174:91 - dead_null_aware_expression
+  error - The argument type 'GameSubtype?' can't be assigned to the parameter type 'GameSubtype'.  - lib\features\writing\data\models\writing_quest_model.dart:70:36 - argument_type_not_assignable
+warning - The '!' will have no effect because the receiver can't be null - lib\features\writing\data\models\writing_quest_model.dart:105:25 - unnecessary_non_null_assertion
+  error - 'WritingRepositoryImpl.getWritingQuest' ('Future<dynamic> Function({required dynamic gameType, required int level})') isn't a valid override of 'WritingRepository.getWritingQuest' ('Future<Either<Failure, List<WritingQuest>>> Function({required GameSubtype gameType, required int level})') - lib\features\writing\data\repositories\writing_repository_impl.dart:9:19 - invalid_override
+  error - Target of URI doesn't exist: '../../../core/domain/entities/game_quest.dart' - lib\features\writing\presentation\bloc\writing_bloc.dart:3:8 - uri_does_not_exist
+warning - The value of the local variable 'result' isn't used - lib\features\writing\presentation\bloc\writing_bloc.dart:104:23 - unused_local_variable
+  error - The final variable 'result' can only be set once - lib\features\writing\presentation\bloc\writing_bloc.dart:112:12 - assignment_to_final_local
+  error - The name 'GameSubtype' isn't defined, so it can't be used in an 'is' expression - lib\features\writing\presentation\bloc\writing_bloc.dart:124:38 - type_test_with_undefined_name
+warning - Dead code - lib\features\writing\presentation\bloc\writing_bloc.dart:124:69 - dead_code
+  error - Undefined name 'GameSubtype' - lib\features\writing\presentation\bloc\writing_bloc.dart:124:69 - undefined_identifier
+warning - Dead code - lib\features\writing\presentation\bloc\writing_bloc.dart:173:83 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\writing\presentation\bloc\writing_bloc.dart:173:86 - dead_null_aware_expression
+warning - Dead code - lib\features\writing\presentation\bloc\writing_bloc.dart:174:88 - dead_code
+warning - The left operand can't be null, so the right operand is never executed - lib\features\writing\presentation\bloc\writing_bloc.dart:174:91 - dead_null_aware_expression
+warning - The asset directory 'assets/images/' doesn't exist - pubspec.yaml:124:7 - asset_directory_does_not_exist
+warning - The asset directory 'assets/images/textures/' doesn't exist - pubspec.yaml:125:7 - asset_directory_does_not_exist
+warning - The asset directory 'assets/sounds/' doesn't exist - pubspec.yaml:126:7 - asset_directory_does_not_exist
+

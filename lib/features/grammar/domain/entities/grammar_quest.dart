@@ -1,18 +1,49 @@
-import 'package:voxai_quest/features/game/domain/entities/game_quest.dart';
+import 'package:voxai_quest/core/domain/entities/game_quest.dart';
 
 class GrammarQuest extends GameQuest {
-  final String question;
-  final List<String> options;
-  final int correctOptionIndex;
-  final String explanation;
+  final String? sentence;
+  final String? missingWord;
+  final String? incorrectPart;
+  final String? correctedPart;
+  final List<String>? shuffledWords;
+  final List<int>? correctOrder;
+  final String? explanation;
+  final String? prompt;
+  final String? textToSpeak;
+  final String? verb;
+  final String? word;
+  final String? targetTense;
+  final String? secondarySentence;
 
-  GrammarQuest({
+  const GrammarQuest({
     required super.id,
+    super.type,
     required super.instruction,
     required super.difficulty,
-    required this.question,
-    required this.options,
-    required this.correctOptionIndex,
-    required this.explanation,
-  }) : super(type: QuestType.grammar);
+    super.subtype,
+    super.interactionType = InteractionType.choice,
+    super.xpReward,
+    super.coinReward,
+    super.livesAllowed,
+    super.options,
+    super.correctAnswerIndex,
+    super.correctAnswer,
+    super.hint,
+    this.sentence,
+    this.missingWord,
+    this.incorrectPart,
+    this.correctedPart,
+    this.shuffledWords,
+    this.correctOrder,
+    this.explanation,
+    this.prompt,
+    this.textToSpeak,
+    this.verb,
+    this.word,
+    this.targetTense,
+    this.secondarySentence,
+  });
+
+  String? get question => sentence;
+  String? get correctSentence => correctAnswer;
 }

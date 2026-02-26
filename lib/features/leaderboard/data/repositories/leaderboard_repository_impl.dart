@@ -12,11 +12,12 @@ class LeaderboardRepositoryImpl implements LeaderboardRepository {
 
   @override
   Future<Either<Failure, List<UserEntity>>> getTopUsers({
-    int limit = 10,
+    int limit = 100,
   }) async {
     try {
       final snapshot = await firestore
           .collection('users')
+          .orderBy('totalExp', descending: true)
           .orderBy('coins', descending: true)
           .limit(limit)
           .get();

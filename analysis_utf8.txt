@@ -1,0 +1,40 @@
+﻿Analyzing voxai_quest...                                        
+
+   info - Statements in an if should be enclosed in a block - lib\features\grammar\article_insertion\presentation\pages\article_insertion_screen.dart:337:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\grammar\article_insertion\presentation\pages\article_insertion_screen.dart:339:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\grammar\clause_connector\presentation\pages\clause_connector_screen.dart:327:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\grammar\clause_connector\presentation\pages\clause_connector_screen.dart:329:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\grammar\parts_of_speech\presentation\pages\parts_of_speech_screen.dart:364:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\grammar\parts_of_speech\presentation\pages\parts_of_speech_screen.dart:366:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\grammar\question_formatter\presentation\pages\question_formatter_screen.dart:325:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\grammar\question_formatter\presentation\pages\question_formatter_screen.dart:327:9 - curly_braces_in_flow_control_structures
+   info - Use a 'SizedBox' to add whitespace to a layout - lib\features\grammar\question_formatter\presentation\pages\question_formatter_screen.dart:343:15 - sized_box_for_whitespace
+   info - Statements in an if should be enclosed in a block - lib\features\grammar\subject_verb_agreement\presentation\pages\subject_verb_agreement_screen.dart:343:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\grammar\subject_verb_agreement\presentation\pages\subject_verb_agreement_screen.dart:345:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\grammar\tense_mastery\presentation\pages\tense_mastery_screen.dart:326:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\grammar\tense_mastery\presentation\pages\tense_mastery_screen.dart:328:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\grammar\voice_swap\presentation\pages\voice_swap_screen.dart:324:9 - curly_braces_in_flow_control_structures
+   info - Statements in an if should be enclosed in a block - lib\features\grammar\voice_swap\presentation\pages\voice_swap_screen.dart:326:9 - curly_braces_in_flow_control_structures
+   info - Use of 'return' in a 'finally' clause - lib\features\settings\presentation\pages\admin_dashboard.dart:219:21 - control_flow_in_finally
+   info - Use of 'return' in a 'finally' clause - lib\features\settings\presentation\pages\admin_dashboard.dart:255:21 - control_flow_in_finally
+   info - Use a 'SizedBox' to add whitespace to a layout - lib\features\writing\complete_sentence\presentation\pages\write_missing_word_map.dart:187:20 - sized_box_for_whitespace
+   info - Use a 'SizedBox' to add whitespace to a layout - lib\features\writing\writing_email\presentation\pages\writing_email_map.dart:145:20 - sized_box_for_whitespace
+
+flutter : 19 issues 
+found. (ran in 12.3s)
+At line:1 char:1
++ flutter analyze 
+--no-pub > 
+analysis_output.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~
+    + CategoryInfo        
+      : NotSpecified: (1  
+  9 issues found. (ran    
+ in 12.3s):String) [],    
+ RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 

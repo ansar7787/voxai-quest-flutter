@@ -11,18 +11,26 @@ import 'package:voxai_quest/core/utils/ad_service.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart' as di;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'firebase_options.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await di.init();
+
   runApp(const MyApp());
+
+  // Remove splash after app runs
+  FlutterNativeSplash.remove();
 
   // Non-blocking initializations
   di.sl<AdService>().init().then((_) {
     di.sl<AdService>().loadInterstitialAd();
+    di.sl<AdService>().loadRewardedAd();
   });
 }
 

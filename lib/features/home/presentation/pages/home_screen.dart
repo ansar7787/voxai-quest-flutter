@@ -1,345 +1,406 @@
+import 'dart:math';
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:haptic_feedback/haptic_feedback.dart';
+import 'package:voxai_quest/core/domain/entities/game_quest.dart';
+import 'package:voxai_quest/core/presentation/widgets/mesh_gradient_background.dart';
+import 'package:voxai_quest/core/presentation/widgets/shimmer_loading.dart';
 import 'package:voxai_quest/core/utils/app_router.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:voxai_quest/core/presentation/widgets/scale_button.dart';
+import 'package:voxai_quest/features/home/presentation/widgets/bento_arena.dart';
+import 'package:voxai_quest/features/home/presentation/widgets/category_shelf.dart';
+import 'package:voxai_quest/features/home/presentation/widgets/command_pod.dart';
+import 'package:voxai_quest/features/home/presentation/widgets/discovery_deck.dart';
+import 'package:voxai_quest/features/home/presentation/widgets/motivational_quote.dart';
+import 'package:voxai_quest/features/home/presentation/widgets/mystery_chest_overlay.dart';
+import 'package:voxai_quest/core/presentation/widgets/ad_reward_card.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  bool _showChest = true;
+  bool _chestOpened = false;
+  int _rewardAmount = 0;
+  late ConfettiController _confettiController;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkDailyChest();
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 3),
+    );
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _checkDailyChest() async {
+    if (!mounted) return;
+    final user = context.read<AuthBloc>().state.user;
+    if (user == null) return;
+
+    final lastReward = user.lastDailyRewardDate;
+    if (lastReward != null) {
+      final now = DateTime.now();
+      final isSameDay =
+          now.year == lastReward.year &&
+          now.month == lastReward.month &&
+          now.day == lastReward.day;
+
+      if (isSameDay) {
+        if (mounted) {
+          setState(() => _showChest = false);
+        }
+      }
+    }
+  }
+
+  Future<void> _openChest() async {
+    Haptics.vibrate(HapticsType.heavy);
+    if (!mounted) return;
+    final user = context.read<AuthBloc>().state.user;
+    if (user != null) {
+      // 1 to 50 coins as requested
+      final int totalCoins = Random().nextInt(50) + 1;
+
+      setState(() {
+        _chestOpened = true;
+        _rewardAmount = totalCoins;
+      });
+      _confettiController.play();
+
+      context.read<AuthBloc>().add(AuthClaimDailyChestRequested(totalCoins));
+
+      // Store the collected amount for the UI (can be passed to MysteryChestOverlay if needed)
+      // For now, let's just use it in the confetti delay
+
+      Future.delayed(const Duration(milliseconds: 2500), () {
+        if (mounted) {
+          setState(() => _showChest = false);
+        }
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
+      backgroundColor: isDark
+          ? const Color(0xFF0F172A)
+          : const Color(0xFFF8FAFC),
       body: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           final user = state.user;
-          if (user == null) return const SizedBox.shrink();
+          if (user == null) return const HomeShimmerLoading();
 
-          return Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  const Color(0xFF2563EB),
-                  const Color(0xFF2563EB).withValues(alpha: 0.8),
-                ],
-              ),
-            ),
-            child: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildHeader(context, user),
-                  Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(32.r),
-                          topRight: Radius.circular(32.r),
-                        ),
+          return Stack(
+            children: [
+              const MeshGradientBackground(),
+              RefreshIndicator(
+                onRefresh: () async {
+                  context.read<AuthBloc>().add(AuthReloadUser());
+                  await Future.delayed(const Duration(milliseconds: 400));
+                },
+                color: const Color(0xFF2563EB),
+                displacement: 40.h,
+                child: CustomScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  slivers: [
+                    // Adaptive Command Pod
+                    SliverToBoxAdapter(child: CommandPod(user: user)),
+
+                    // Discovery Hub
+                    _buildSliverSectionHeader(
+                      context,
+                      'Discovery Hub',
+                      '10 immersive audio experiences',
+                    ),
+                    SliverToBoxAdapter(
+                      child: DiscoveryDeck(
+                        user: user,
+                        onLaunchQuest: (id) => _launchThemedQuest(context, id),
                       ),
-                      child: SingleChildScrollView(
-                        padding: EdgeInsets.all(24.w),
+                    ),
+
+                    // Study Shelves - Area 1: Production
+                    _buildSliverSectionHeader(
+                      context,
+                      'Speaking Mastery',
+                      '10 vocal challenges for fluency',
+                      onSeeAll: () => context.push(
+                        '${AppRouter.categoryGamesRoute}?category=speaking',
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: CategoryShelf(
+                        user: user,
+                        subtypes: QuestType.speaking.subtypes
+                            .where((s) => !s.isLegacy)
+                            .toList(),
+                      ),
+                    ),
+
+                    _buildSliverSectionHeader(
+                      context,
+                      'Writing Studio',
+                      '10 ways to craft perfect text',
+                      onSeeAll: () => context.push(
+                        '${AppRouter.categoryGamesRoute}?category=writing',
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: CategoryShelf(
+                        user: user,
+                        subtypes: QuestType.writing.subtypes
+                            .where((s) => !s.isLegacy)
+                            .toList(),
+                      ),
+                    ),
+
+                    // Study Shelves - Area 2: Comprehension
+                    _buildSliverSectionHeader(
+                      context,
+                      'Reading Foundations',
+                      '10 quests for speed & insight',
+                      onSeeAll: () => context.push(
+                        '${AppRouter.categoryGamesRoute}?category=reading',
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: CategoryShelf(
+                        user: user,
+                        subtypes: QuestType.reading.subtypes
+                            .where((s) => !s.isLegacy)
+                            .toList(),
+                      ),
+                    ),
+
+                    _buildSliverSectionHeader(
+                      context,
+                      'Listening Lab',
+                      '10 scenarios for real-world practice',
+                      onSeeAll: () => context.push(
+                        '${AppRouter.categoryGamesRoute}?category=listening',
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: CategoryShelf(
+                        user: user,
+                        subtypes: QuestType.listening.subtypes
+                            .where((s) => !s.isLegacy)
+                            .toList(),
+                      ),
+                    ),
+
+                    // Study Shelves - Area 3: Knowledge
+                    _buildSliverSectionHeader(
+                      context,
+                      'Vocabulary Vault',
+                      '10 games to expand your lexicon',
+                      onSeeAll: () => context.push(
+                        '${AppRouter.categoryGamesRoute}?category=vocabulary',
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: CategoryShelf(
+                        user: user,
+                        subtypes: QuestType.vocabulary.subtypes
+                            .where((s) => !s.isLegacy)
+                            .toList(),
+                      ),
+                    ),
+
+                    _buildSliverSectionHeader(
+                      context,
+                      'Grammar Hub',
+                      '10 rules for structural mastery',
+                      onSeeAll: () => context.push(
+                        '${AppRouter.categoryGamesRoute}?category=grammar',
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: CategoryShelf(
+                        user: user,
+                        subtypes: QuestType.grammar.subtypes
+                            .where((s) => !s.isLegacy)
+                            .toList(),
+                      ),
+                    ),
+
+                    // Study Shelves - Area 4: Nuance
+                    _buildSliverSectionHeader(
+                      context,
+                      'Accent Academy',
+                      '10 drills for natural pronunciation',
+                      onSeeAll: () => context.push(
+                        '${AppRouter.categoryGamesRoute}?category=accent',
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: CategoryShelf(
+                        user: user,
+                        subtypes: QuestType.accent.subtypes
+                            .where((s) => !s.isLegacy)
+                            .toList(),
+                      ),
+                    ),
+
+                    _buildSliverSectionHeader(
+                      context,
+                      'Roleplay Realm',
+                      '10 immersive situational scenarios',
+                      onSeeAll: () => context.push(
+                        '${AppRouter.categoryGamesRoute}?category=roleplay',
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: CategoryShelf(
+                        user: user,
+                        subtypes: QuestType.roleplay.subtypes
+                            .where((s) => !s.isLegacy)
+                            .toList(),
+                      ),
+                    ),
+
+                    // Quest Arena (Bento)
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(horizontal: 24.w),
+                      sliver: SliverToBoxAdapter(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildQuickStats(user),
-                            SizedBox(height: 32.h),
-                            Text(
-                              'Daily Challenge',
-                              style: GoogleFonts.outfit(
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF1F2937),
-                              ),
-                            ),
-                            SizedBox(height: 16.h),
-                            _buildDailyQuestCard(context),
-                            SizedBox(height: 32.h),
-                            Text(
-                              'Training Hub',
-                              style: GoogleFonts.outfit(
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF1F2937),
-                              ),
-                            ),
-                            SizedBox(height: 16.h),
-                            GridView.count(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 16.w,
-                              crossAxisSpacing: 16.w,
-                              childAspectRatio: 1.1,
-                              children: [
-                                _categoryCard(
-                                  context,
-                                  title: 'Reading',
-                                  icon: Icons.menu_book_rounded,
-                                  color: const Color(0xFF3B82F6),
-                                  categoryId: 'reading',
-                                ),
-                                _categoryCard(
-                                  context,
-                                  title: 'Writing',
-                                  icon: Icons.edit_note_rounded,
-                                  color: const Color(0xFFF59E0B),
-                                  categoryId: 'writing',
-                                ),
-                                _categoryCard(
-                                  context,
-                                  title: 'Speaking',
-                                  icon: Icons.mic_external_on_rounded,
-                                  color: const Color(0xFF8B5CF6),
-                                  categoryId: 'speaking',
-                                ),
-                                _categoryCard(
-                                  context,
-                                  title: 'Grammar',
-                                  icon: Icons.spellcheck_rounded,
-                                  color: const Color(0xFF10B981),
-                                  categoryId: 'grammar',
-                                ),
-                                _categoryCard(
-                                  context,
-                                  title: 'Roleplay',
-                                  icon: Icons.forum_rounded,
-                                  color: const Color(0xFF6366F1),
-                                  categoryId: 'conversation',
-                                ),
-                                _categoryCard(
-                                  context,
-                                  title: 'Accent',
-                                  icon: Icons.record_voice_over_rounded,
-                                  color: const Color(0xFFF43F5E),
-                                  categoryId: 'pronunciation',
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 32.h),
+                            SizedBox(height: 48.h),
+                            BentoArena(user: user),
                           ],
                         ),
                       ),
                     ),
-                  ),
-                ],
+
+                    // Mastery Stats & Quote
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(horizontal: 24.w),
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate([
+                          SizedBox(height: 48.h),
+                          const MotivationalQuote(),
+                          SizedBox(height: 48.h),
+                          const AdRewardCard(margin: EdgeInsets.zero),
+                          SizedBox(height: 120.h),
+                        ]),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+              if (_showChest)
+                MysteryChestOverlay(
+                  isOpened: _chestOpened,
+                  rewardAmount: _rewardAmount,
+                  onOpen: _openChest,
+                  confettiController: _confettiController,
+                ),
+            ],
           );
         },
       ),
     );
   }
 
-  Widget _buildHeader(BuildContext context, dynamic user) {
-    return Padding(
-      padding: EdgeInsets.all(24.w),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GestureDetector(
-                onLongPress: () {
-                  context.push(AppRouter.adminRoute);
-                },
-                child: Text(
-                  'Welcome back,',
-                  style: GoogleFonts.outfit(
-                    fontSize: 16.sp,
-                    color: Colors.white70,
-                  ),
-                ),
-              ),
-              Text(
-                '${user.displayName ?? 'Learner'}! 👋',
-                style: GoogleFonts.outfit(
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-          if (!user.isPremium)
-            InkWell(
-              onTap: () => context.push(AppRouter.premiumRoute),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                decoration: BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: BorderRadius.circular(20.r),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.workspace_premium, size: 16.sp),
-                    SizedBox(width: 4.w),
-                    Text(
-                      'PRO',
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildQuickStats(dynamic user) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _statItem('Streak', '${user.currentStreak} 🔥', Colors.orange),
-        _statItem('Coins', '${user.coins} 🪙', Colors.amber),
-        _statItem('Level', '${user.level}', Colors.blue),
-      ],
-    );
-  }
-
-  Widget _statItem(String label, String value, Color color) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: GoogleFonts.outfit(
-            fontSize: 20.sp,
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
-        ),
-        Text(
-          label,
-          style: GoogleFonts.outfit(color: Colors.grey, fontSize: 12.sp),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDailyQuestCard(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF4F46E5), Color(0xFF7C3AED)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(24.r),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF4F46E5).withValues(alpha: 0.3),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.all(8.w),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.flash_on_rounded,
-                  color: Colors.amber,
-                  size: 24.sp,
-                ),
-              ),
-              SizedBox(width: 12.w),
-              Text(
-                'Smart Quest',
-                style: GoogleFonts.outfit(
-                  color: Colors.white,
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 16.h),
-          Text(
-            'Keep your streak alive! The AI has prepared a special path for you today.',
-            style: GoogleFonts.outfit(
-              color: Colors.white.withValues(alpha: 0.9),
-              fontSize: 14.sp,
-            ),
-          ),
-          SizedBox(height: 20.h),
-          ElevatedButton(
-            onPressed: () => context.push(AppRouter.gameRoute),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: const Color(0xFF4F46E5),
-              minimumSize: Size(double.infinity, 50.h),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.r),
-              ),
-              elevation: 0,
-            ),
-            child: Text(
-              'START QUEST',
-              style: GoogleFonts.outfit(
-                fontWeight: FontWeight.bold,
-                fontSize: 16.sp,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _categoryCard(
-    BuildContext context, {
-    required String title,
-    required IconData icon,
-    required Color color,
-    required String categoryId,
+  Widget _buildSliverSectionHeader(
+    BuildContext context,
+    String title,
+    String subtitle, {
+    VoidCallback? onSeeAll,
   }) {
-    return InkWell(
-      onTap: () {
-        context.push('${AppRouter.gameRoute}?category=$categoryId');
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(24.r),
-          border: Border.all(color: color.withValues(alpha: 0.2), width: 2),
-        ),
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      sliver: SliverToBoxAdapter(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 40.sp, color: color),
-            SizedBox(height: 12.h),
-            Text(
-              title,
-              style: GoogleFonts.outfit(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
-            ),
+            SizedBox(height: 32.h),
+            _buildSectionHeader(context, title, subtitle, onSeeAll: onSeeAll),
+            SizedBox(height: 16.h),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildSectionHeader(
+    BuildContext context,
+    String title,
+    String subtitle, {
+    VoidCallback? onSeeAll,
+  }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title.toUpperCase(),
+                style: GoogleFonts.outfit(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w900,
+                  color: isDark ? Colors.white : const Color(0xFF0F172A),
+                  letterSpacing: 1.2,
+                ),
+              ),
+              Text(
+                subtitle,
+                style: GoogleFonts.outfit(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w600,
+                  color: isDark ? Colors.white38 : const Color(0xFF64748B),
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (onSeeAll != null)
+          ScaleButton(
+            onTap: onSeeAll,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+              decoration: BoxDecoration(
+                color: const Color(0xFF2563EB).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              child: Text(
+                'SEE ALL',
+                style: GoogleFonts.outfit(
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.w900,
+                  color: const Color(0xFF2563EB),
+                  letterSpacing: 1.0,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  void _launchThemedQuest(BuildContext context, String questId) {
+    Haptics.vibrate(HapticsType.medium);
+    context.push('${AppRouter.questSequenceRoute}?id=$questId');
   }
 }

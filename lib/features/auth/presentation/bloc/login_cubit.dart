@@ -5,6 +5,7 @@ import 'package:voxai_quest/features/auth/domain/usecases/log_in_with_google.dar
 import 'package:voxai_quest/features/auth/domain/usecases/forgot_password.dart';
 import 'package:voxai_quest/core/usecases/usecase.dart';
 import 'package:voxai_quest/core/utils/auth_error_handler.dart';
+import 'package:voxai_quest/core/network/network_info.dart';
 
 class LoginState extends Equatable {
   final String email;
@@ -62,14 +63,17 @@ class LoginCubit extends Cubit<LoginState> {
   final LogInWithEmail _logInWithEmail;
   final LogInWithGoogle _logInWithGoogle;
   final ForgotPassword _forgotPassword;
+  final NetworkInfo? _networkInfo;
 
   LoginCubit({
     required LogInWithEmail logInWithEmail,
     required LogInWithGoogle logInWithGoogle,
     required ForgotPassword forgotPassword,
+    NetworkInfo? networkInfo,
   }) : _logInWithEmail = logInWithEmail,
        _logInWithGoogle = logInWithGoogle,
        _forgotPassword = forgotPassword,
+       _networkInfo = networkInfo,
        super(const LoginState());
 
   void emailChanged(String value) => emit(state.copyWith(email: value));
@@ -77,6 +81,16 @@ class LoginCubit extends Cubit<LoginState> {
 
   Future<void> logInWithCredentials() async {
     if (state.isSubmitting) return;
+
+    if (_networkInfo != null && !(await _networkInfo.isConnected)) {
+      emit(
+        state.copyWith(
+          errorMessage: "No internet connection. Please check your network.",
+        ),
+      );
+      return;
+    }
+
     emit(state.copyWith(isSubmitting: true));
     final result = await _logInWithEmail(
       LogInParams(email: state.email, password: state.password),
@@ -93,6 +107,17 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> logInWithGoogle() async {
+    if (state.isSubmitting) return;
+
+    if (_networkInfo != null && !(await _networkInfo.isConnected)) {
+      emit(
+        state.copyWith(
+          errorMessage: "No internet connection. Please check your network.",
+        ),
+      );
+      return;
+    }
+
     emit(state.copyWith(isSubmitting: true));
     final result = await _logInWithGoogle(NoParams());
     result.fold(
@@ -108,6 +133,16 @@ class LoginCubit extends Cubit<LoginState> {
 
   Future<void> forgotPassword(String email) async {
     if (state.isSubmitting) return;
+
+    if (_networkInfo != null && !(await _networkInfo.isConnected)) {
+      emit(
+        state.copyWith(
+          errorMessage: "No internet connection. Please check your network.",
+        ),
+      );
+      return;
+    }
+
     emit(state.copyWith(isSubmitting: true));
     final result = await _forgotPassword(email);
     result.fold(

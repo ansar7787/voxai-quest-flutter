@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:voxai_quest/core/presentation/widgets/shimmer_loading.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/auth/presentation/pages/login_page.dart';
-import 'package:voxai_quest/features/game/presentation/pages/main_screen.dart';
+import 'package:voxai_quest/features/home/presentation/pages/home_screen.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -13,7 +13,7 @@ class AuthGate extends StatelessWidget {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state.status == AuthStatus.authenticated) {
-          return const MainScreen();
+          return const HomeScreen();
         } else if (state.status == AuthStatus.unauthenticated) {
           return const LoginPage();
         }

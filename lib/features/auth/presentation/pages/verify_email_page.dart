@@ -8,6 +8,8 @@ import 'package:voxai_quest/core/utils/app_router.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/auth/domain/repositories/auth_repository.dart';
+import 'package:voxai_quest/core/presentation/widgets/mesh_gradient_background.dart';
+import 'package:voxai_quest/core/presentation/widgets/glass_tile.dart';
 
 class VerifyEmailPage extends StatefulWidget {
   const VerifyEmailPage({super.key});
@@ -26,17 +28,11 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
   @override
   void initState() {
     super.initState();
-
-    // Initial check
     _checkEmailVerified();
-
-    // Check every 3 seconds
     timer = Timer.periodic(
       const Duration(seconds: 3),
       (_) => _checkEmailVerified(),
     );
-
-    // Initial resend countdown
     _startResendTimer();
   }
 
@@ -52,41 +48,11 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
     result.fold(
       (failure) {
         if (!mounted) return;
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Check failed: ${failure.message}',
-              style: GoogleFonts.outfit(),
-            ),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            margin: EdgeInsets.all(16.w),
-          ),
-        );
+        _showSnackBar('Check failed: ${failure.message}', Colors.red);
       },
       (_) {
         if (!mounted) return;
         context.read<AuthBloc>().add(AuthReloadUser());
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Checking verification status...',
-              style: GoogleFonts.outfit(),
-            ),
-            backgroundColor: const Color(0xFF2563EB),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            margin: EdgeInsets.all(16.w),
-            duration: const Duration(seconds: 1),
-          ),
-        );
       },
     );
   }
@@ -112,19 +78,25 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
 
   Future<void> _sendVerificationEmail() async {
     final result = await sl<AuthRepository>().sendEmailVerification();
-    result.fold(
-      (failure) => ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(failure.message), backgroundColor: Colors.red),
+    result.fold((failure) => _showSnackBar(failure.message, Colors.red), (_) {
+      _showSnackBar('Verification email sent!', Colors.green);
+      _startResendTimer();
+    });
+  }
+
+  void _showSnackBar(String message, Color color) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: GoogleFonts.outfit(fontWeight: FontWeight.w500),
+        ),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        margin: EdgeInsets.all(16.w),
       ),
-      (_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Verification email sent!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        _startResendTimer();
-      },
     );
   }
 
@@ -138,117 +110,122 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
         }
       },
       child: Scaffold(
-        body: Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(24.w),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [const Color(0xFFF3F4F6), const Color(0xFFE5E7EB)],
+        body: Stack(
+          children: [
+            const MeshGradientBackground(),
+            SafeArea(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(24.w),
+                  child: GlassTile(
+                    padding: EdgeInsets.all(32.r),
+                    borderRadius: BorderRadius.circular(40.r),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(20.r),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(
+                              0xFF2563EB,
+                            ).withValues(alpha: 0.1),
+                          ),
+                          child: Icon(
+                            Icons.mark_email_unread_rounded,
+                            size: 64.r,
+                            color: const Color(0xFF2563EB),
+                          ),
+                        ),
+                        SizedBox(height: 32.h),
+                        Text(
+                          'Verify your email',
+                          style: GoogleFonts.outfit(
+                            fontSize: 28.sp,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF2563EB),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 16.h),
+                        Text(
+                          'We have sent a verification email to your address. Please check your inbox and click the link to verify your account.',
+                          style: GoogleFonts.outfit(
+                            fontSize: 15.sp,
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white70
+                                : const Color(0xFF4B5563),
+                            height: 1.5,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 40.h),
+                        ElevatedButton(
+                          onPressed: canResendEmail
+                              ? _sendVerificationEmail
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF2563EB),
+                            foregroundColor: Colors.white,
+                            minimumSize: Size(double.infinity, 56.h),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.r),
+                            ),
+                          ),
+                          child: Text(
+                            canResendEmail
+                                ? 'Resend Email'
+                                : 'Resend in $_secondsRemaining s',
+                            style: GoogleFonts.outfit(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16.h),
+                        OutlinedButton(
+                          onPressed: _checkEmailVerified,
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(
+                              color: Color(0xFF2563EB),
+                              width: 1.5,
+                            ),
+                            minimumSize: Size(double.infinity, 56.h),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.r),
+                            ),
+                          ),
+                          child: Text(
+                            "I've Verified",
+                            style: GoogleFonts.outfit(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF2563EB),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16.h),
+                        TextButton(
+                          onPressed: () {
+                            context.read<AuthBloc>().add(AuthLogoutRequested());
+                          },
+                          child: Text(
+                            'Cancel & Logout',
+                            style: GoogleFonts.outfit(
+                              fontSize: 16.sp,
+                              color: const Color(0xFF6B7280),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ),
-          child: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.mark_email_unread_outlined,
-                  size: 100.sp,
-                  color: const Color(0xFF2563EB),
-                ),
-                SizedBox(height: 32.h),
-                Text(
-                  'Verify your email',
-                  style: GoogleFonts.outfit(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF1F2937),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 16.h),
-                Text(
-                  'We have sent a verification email to your address. Please check your inbox and click the link to verify your account.',
-                  style: GoogleFonts.outfit(
-                    fontSize: 16.sp,
-                    color: const Color(0xFF6B7280),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 48.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: 56.h,
-                  child: ElevatedButton(
-                    onPressed: canResendEmail ? _sendVerificationEmail : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2563EB),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.r),
-                      ),
-                      elevation: 0,
-                    ),
-                    child: Text(
-                      canResendEmail
-                          ? 'Resend Email'
-                          : 'Resend in $_secondsRemaining s',
-                      style: GoogleFonts.outfit(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: 56.h,
-                  child: OutlinedButton(
-                    onPressed: _checkEmailVerified,
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Color(0xFF2563EB)),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.r),
-                      ),
-                    ),
-                    child: Text(
-                      "I've Verified",
-                      style: GoogleFonts.outfit(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF2563EB),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16.h),
-                TextButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(AuthLogoutRequested());
-                  },
-                  child: Text(
-                    'Cancel & Logout',
-                    style: GoogleFonts.outfit(
-                      fontSize: 16.sp,
-                      color: const Color(0xFF6B7280),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 24.h),
-                Text(
-                  'Already verified? It may take a few moments to update.',
-                  style: GoogleFonts.outfit(
-                    fontSize: 14.sp,
-                    color: const Color(0xFF9CA3AF),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          ),
+          ],
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:voxai_quest/features/auth/domain/usecases/sign_up.dart';
 import 'package:voxai_quest/features/auth/domain/usecases/send_email_verification.dart';
 import 'package:voxai_quest/core/utils/auth_error_handler.dart';
 import 'package:voxai_quest/core/usecases/usecase.dart';
+import 'package:voxai_quest/core/network/network_info.dart';
 
 class SignUpState extends Equatable {
   final String name;
@@ -59,12 +60,15 @@ class SignUpState extends Equatable {
 class SignUpCubit extends Cubit<SignUpState> {
   final SignUp _signUp;
   final SendEmailVerification _sendEmailVerification;
+  final NetworkInfo? _networkInfo;
 
   SignUpCubit({
     required SignUp signUp,
     required SendEmailVerification sendEmailVerification,
+    NetworkInfo? networkInfo,
   }) : _signUp = signUp,
        _sendEmailVerification = sendEmailVerification,
+       _networkInfo = networkInfo,
        super(const SignUpState());
 
   void nameChanged(String value) => emit(state.copyWith(name: value));
@@ -73,6 +77,16 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   Future<void> signUp() async {
     if (state.isSubmitting) return;
+
+    if (_networkInfo != null && !(await _networkInfo.isConnected)) {
+      emit(
+        state.copyWith(
+          errorMessage: "No internet connection. Please check your network.",
+        ),
+      );
+      return;
+    }
+
     emit(state.copyWith(isSubmitting: true));
     final result = await _signUp(
       SignUpParams(

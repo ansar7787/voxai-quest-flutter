@@ -1,24 +1,31 @@
+import '../../domain/entities/grammar_quest.dart';
+import '../../../../core/error/failures.dart';
 import 'package:dartz/dartz.dart';
-import 'package:voxai_quest/core/error/exceptions.dart';
-import 'package:voxai_quest/core/error/failures.dart';
-import 'package:voxai_quest/features/grammar/data/datasources/grammar_remote_data_source.dart';
-import 'package:voxai_quest/features/grammar/domain/entities/grammar_quest.dart';
-import 'package:voxai_quest/features/grammar/domain/repositories/grammar_repository.dart';
+import '../../../../core/domain/entities/game_quest.dart';
+import '../../domain/repositories/grammar_repository.dart';
 
 class GrammarRepositoryImpl implements GrammarRepository {
-  final GrammarRemoteDataSource remoteDataSource;
-
-  GrammarRepositoryImpl({required this.remoteDataSource});
+  final dynamic remoteDataSource;
+  final dynamic networkInfo;
+  GrammarRepositoryImpl({this.remoteDataSource, this.networkInfo});
 
   @override
-  Future<Either<Failure, GrammarQuest>> getGrammarQuest(int difficulty) async {
+  Future<Either<Failure, List<GrammarQuest>>> getGrammarQuest({
+    required GameSubtype gameType,
+    required int level,
+  }) async {
     try {
-      final remoteQuest = await remoteDataSource.getGrammarQuest(difficulty);
-      return Right(remoteQuest);
-    } on ServerException {
-      return Left(ServerFailure('Failed to load grammar quest'));
+      final remoteQuests = await remoteDataSource.getGrammarQuest(
+        gameType: gameType,
+        level: level,
+      );
+      return Right(remoteQuests);
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return const Left(
+        ServerFailure(
+          "Failed to connect to the server. Please check your internet connection.",
+        ),
+      );
     }
   }
 }

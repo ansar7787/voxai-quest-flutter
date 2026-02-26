@@ -15,13 +15,8 @@ class ConnectivityWrapper extends StatelessWidget {
         if (snapshot.hasData && snapshot.data == InternetStatus.disconnected) {
           return NoInternetPage(
             onRetry: () async {
-              // The stream will auto-update if connection is restored,
-              // but we can also force a check if needed.
-              // For now, simple visual feedback or re-check logic.
-              final hasNet = await InternetConnection().hasInternetAccess;
-              if (hasNet && context.mounted) {
-                // If connected, the stream builder will naturally rebuild with connected status
-              }
+              await Future.delayed(const Duration(seconds: 1)); // UX delay
+              await InternetConnection().hasInternetAccess;
             },
           );
         }

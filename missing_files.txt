@@ -1,0 +1,540 @@
+﻿Analyzing voxai_quest...                                        
+
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/home/presentation/pages/main_screen.dart' - lib\core\presentation\widgets\auth_gate.dart:6:8 - uri_does_not_exist
+  error - The name 'MainScreen' isn't a class - lib\core\presentation\widgets\auth_gate.dart:16:24 - creation_with_non_type
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\core\utils\app_router.dart:3:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/home/presentation/pages/main_screen.dart' - lib\core\utils\app_router.dart:7:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/reading/presentation/pages/reading_levels_page.dart' - lib\core\utils\app_router.dart:8:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/writing/presentation/pages/writing_levels_page.dart' - lib\core\utils\app_router.dart:9:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/speaking/presentation/pages/speaking_levels_page.dart' - lib\core\utils\app_router.dart:10:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/grammar/presentation/pages/grammar_levels_page.dart' - lib\core\utils\app_router.dart:11:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/roleplay/presentation/pages/roleplay_levels_page.dart' - lib\core\utils\app_router.dart:12:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/accent/presentation/pages/accent_levels_page.dart' - lib\core\utils\app_router.dart:13:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/listening/presentation/pages/listening_levels_page.dart' - lib\core\utils\app_router.dart:14:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/home/presentation/pages/category_games_page.dart' - lib\core\utils\app_router.dart:15:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/home/presentation/pages/quest_library_page.dart' - lib\core\utils\app_router.dart:16:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/home/presentation/pages/streak_screen.dart' - lib\core\utils\app_router.dart:17:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/reading/presentation/pages/read_and_answer_game_screen.dart' - lib\core\utils\app_router.dart:19:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/reading/presentation/pages/find_word_meaning_game_screen.dart' - lib\core\utils\app_router.dart:20:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/reading/presentation/pages/true_false_reading_game_screen.dart' - lib\core\utils\app_router.dart:21:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/reading/presentation/pages/sentence_order_reading_game_screen.dart' - lib\core\utils\app_router.dart:22:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/reading/presentation/pages/reading_speed_check_game_screen.dart' - lib\core\utils\app_router.dart:23:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/reading/presentation/pages/guess_title_game_screen.dart' - lib\core\utils\app_router.dart:24:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/reading/presentation/pages/read_and_match_game_screen.dart' - lib\core\utils\app_router.dart:25:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/reading/presentation/pages/paragraph_summary_game_screen.dart' - lib\core\utils\app_router.dart:26:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/writing/presentation/pages/sentence_builder_game_screen.dart' - lib\core\utils\app_router.dart:28:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/writing/presentation/pages/complete_sentence_game_screen.dart' - lib\core\utils\app_router.dart:29:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/writing/presentation/pages/describe_situation_writing_game_screen.dart' - lib\core\utils\app_router.dart:30:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/writing/presentation/pages/fix_the_sentence_game_screen.dart' - lib\core\utils\app_router.dart:31:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/writing/presentation/pages/short_answer_writing_game_screen.dart' - lib\core\utils\app_router.dart:32:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/writing/presentation/pages/opinion_writing_game_screen.dart' - lib\core\utils\app_router.dart:33:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/writing/presentation/pages/daily_journal_game_screen.dart' - lib\core\utils\app_router.dart:34:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/grammar/presentation/pages/grammar_quest_game_screen.dart' - lib\core\utils\app_router.dart:36:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/grammar/presentation/pages/sentence_correction_game_screen.dart' - lib\core\utils\app_router.dart:37:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/grammar/presentation/pages/word_reorder_game_screen.dart' - lib\core\utils\app_router.dart:38:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/listening/presentation/pages/audio_multiple_choice_game_screen.dart' - lib\core\utils\app_router.dart:40:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/listening/presentation/pages/audio_fill_blanks_game_screen.dart' - lib\core\utils\app_router.dart:41:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/accent/presentation/pages/minimal_pairs_game_screen.dart' - lib\core\utils\app_router.dart:43:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/accent/presentation/pages/intonation_mimic_game_screen.dart' - lib\core\utils\app_router.dart:44:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/roleplay/presentation/pages/branching_dialogue_game_screen.dart' - lib\core\utils\app_router.dart:46:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/roleplay/presentation/pages/situational_response_game_screen.dart' - lib\core\utils\app_router.dart:47:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/speaking/presentation/pages/repeat_sentence_game_screen.dart' - lib\core\utils\app_router.dart:48:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/speaking/presentation/pages/speak_missing_word_game_screen.dart' - lib\core\utils\app_router.dart:49:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/speaking/presentation/pages/situation_speaking_game_screen.dart' - lib\core\utils\app_router.dart:50:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/speaking/presentation/pages/scene_description_speaking_game_screen.dart' - lib\core\utils\app_router.dart:51:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/speaking/presentation/pages/yes_no_speaking_game_screen.dart' - lib\core\utils\app_router.dart:52:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/speaking/presentation/pages/speak_synonym_game_screen.dart' - lib\core\utils\app_router.dart:53:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/speaking/presentation/pages/dialogue_roleplay_game_screen.dart' - lib\core\utils\app_router.dart:54:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/speaking/presentation/pages/pronunciation_focus_game_screen.dart' - lib\core\utils\app_router.dart:55:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/speaking/presentation/pages/speak_opposite_game_screen.dart' - lib\core\utils\app_router.dart:56:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/speaking/presentation/pages/daily_expression_game_screen.dart' - lib\core\utils\app_router.dart:57:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/profile/presentation/pages/adventure_level_screen.dart' - lib\core\utils\app_router.dart:65:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/profile/presentation/pages/adventure_xp_screen.dart' - lib\core\utils\app_router.dart:66:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/profile/presentation/pages/quest_coins_screen.dart' - lib\core\utils\app_router.dart:67:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/splash/presentation/pages/splash_page.dart' - lib\core\utils\app_router.dart:69:8 - uri_does_not_exist
+  error - The name 'SplashPage' isn't a class - lib\core\utils\app_router.dart:140:44 - creation_with_non_type
+  error - The name 'MainScreen' isn't a class - lib\core\utils\app_router.dart:156:67 - creation_with_non_type
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:170:21 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:172:37 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:174:21 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:178:21 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:180:37 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:182:21 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:186:21 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:188:37 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:190:21 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:194:21 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:196:37 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:198:21 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:202:21 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:204:37 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:206:21 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:210:21 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:212:37 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:214:21 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:218:21 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:220:37 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:222:21 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:225:40 - undefined_identifier
+  error - The method 'ReadingLevelsPage' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:237:22 - undefined_method
+  error - The method 'WritingLevelsPage' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:239:22 - undefined_method
+  error - The method 'SpeakingLevelsPage' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:241:22 - undefined_method
+  error - The method 'GrammarLevelsPage' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:243:22 - undefined_method
+  error - The method 'RoleplayLevelsPage' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:245:22 - undefined_method
+  error - The method 'AccentLevelsPage' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:247:22 - undefined_method
+  error - The method 'ListeningLevelsPage' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:249:22 - undefined_method
+  error - The method 'ReadingLevelsPage' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:251:22 - undefined_method
+  error - The method 'CategoryGamesPage' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:260:18 - undefined_method
+  error - The name 'QuestLibraryPage' isn't a class - lib\core\utils\app_router.dart:265:44 - creation_with_non_type
+  error - The name 'StreakScreen' isn't a class - lib\core\utils\app_router.dart:285:44 - creation_with_non_type
+  error - The name 'AdventureLevelScreen' isn't a class - lib\core\utils\app_router.dart:293:44 - creation_with_non_type
+  error - The name 'AdventureXPScreen' isn't a class - lib\core\utils\app_router.dart:297:44 - creation_with_non_type
+  error - The name 'QuestCoinsScreen' isn't a class - lib\core\utils\app_router.dart:301:44 - creation_with_non_type
+  error - Undefined class 'GameSubtype' - lib\core\utils\app_router.dart:309:36 - undefined_class
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:311:12 - undefined_identifier
+  error - The method 'RepeatSentenceGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:312:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:313:12 - undefined_identifier
+  error - The method 'SpeakMissingWordGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:314:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:315:12 - undefined_identifier
+  error - The method 'SituationSpeakingGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:316:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:317:12 - undefined_identifier
+  error - The method 'SceneDescriptionSpeakingGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:318:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:319:12 - undefined_identifier
+  error - The method 'YesNoSpeakingGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:320:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:321:12 - undefined_identifier
+  error - The method 'SpeakSynonymGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:322:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:323:12 - undefined_identifier
+  error - The method 'DialogueRoleplayGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:324:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:325:12 - undefined_identifier
+  error - The method 'PronunciationFocusGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:326:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:327:12 - undefined_identifier
+  error - The method 'SpeakOppositeGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:328:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:329:12 - undefined_identifier
+  error - The method 'DailyExpressionGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:330:16 - undefined_method
+  error - The method 'RepeatSentenceGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:332:16 - undefined_method
+  error - Undefined class 'GameSubtype' - lib\core\utils\app_router.dart:336:35 - undefined_class
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:338:12 - undefined_identifier
+  error - The method 'ReadAndAnswerGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:339:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:340:12 - undefined_identifier
+  error - The method 'FindWordMeaningGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:341:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:342:12 - undefined_identifier
+  error - The method 'TrueFalseReadingGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:343:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:344:12 - undefined_identifier
+  error - The method 'SentenceOrderReadingGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:345:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:346:12 - undefined_identifier
+  error - The method 'ReadingSpeedCheckGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:347:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:348:12 - undefined_identifier
+  error - The method 'GuessTitleGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:349:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:350:12 - undefined_identifier
+  error - The method 'ReadAndMatchGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:351:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:352:12 - undefined_identifier
+  error - The method 'ParagraphSummaryGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:353:16 - undefined_method
+  error - The method 'ReadAndAnswerGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:355:16 - undefined_method
+  error - Undefined class 'GameSubtype' - lib\core\utils\app_router.dart:359:35 - undefined_class
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:361:12 - undefined_identifier
+  error - The method 'SentenceBuilderGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:362:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:363:12 - undefined_identifier
+  error - The method 'CompleteSentenceGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:364:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:365:12 - undefined_identifier
+  error - The method 'DescribeSituationWritingGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:366:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:367:12 - undefined_identifier
+  error - The method 'FixTheSentenceGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:368:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:369:12 - undefined_identifier
+  error - The method 'ShortAnswerWritingGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:370:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:371:12 - undefined_identifier
+  error - The method 'OpinionWritingGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:372:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:373:12 - undefined_identifier
+  error - The method 'DailyJournalGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:374:16 - undefined_method
+  error - The method 'SentenceBuilderGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:376:16 - undefined_method
+  error - Undefined class 'GameSubtype' - lib\core\utils\app_router.dart:380:35 - undefined_class
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:382:12 - undefined_identifier
+  error - The method 'GrammarQuestGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:383:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:384:12 - undefined_identifier
+  error - The method 'SentenceCorrectionGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:385:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:386:12 - undefined_identifier
+  error - The method 'WordReorderGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:387:16 - undefined_method
+  error - The method 'GrammarQuestGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:389:16 - undefined_method
+  error - Undefined class 'GameSubtype' - lib\core\utils\app_router.dart:393:37 - undefined_class
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:395:12 - undefined_identifier
+  error - The method 'AudioMultipleChoiceGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:396:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:397:12 - undefined_identifier
+  error - The method 'AudioFillBlanksGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:398:16 - undefined_method
+  error - The method 'AudioMultipleChoiceGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:400:16 - undefined_method
+  error - Undefined class 'GameSubtype' - lib\core\utils\app_router.dart:404:34 - undefined_class
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:406:12 - undefined_identifier
+  error - The method 'MinimalPairsGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:407:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:408:12 - undefined_identifier
+  error - The method 'IntonationMimicGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:409:16 - undefined_method
+  error - The method 'MinimalPairsGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:411:16 - undefined_method
+  error - Undefined class 'GameSubtype' - lib\core\utils\app_router.dart:415:36 - undefined_class
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:417:12 - undefined_identifier
+  error - The method 'BranchingDialogueGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:418:16 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\core\utils\app_router.dart:419:12 - undefined_identifier
+  error - The method 'SituationalResponseGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:420:16 - undefined_method
+  error - The method 'BranchingDialogueGameScreen' isn't defined for the type 'AppRouter' - lib\core\utils\app_router.dart:422:16 - undefined_method
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/utils/content_generation_service.dart' - lib\core\utils\injection_container.dart:13:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/utils/batch_content_upload_service.dart' - lib\core\utils\injection_container.dart:16:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/roleplay/domain/repositories/roleplay_repository.dart' - lib\core\utils\injection_container.dart:37:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/roleplay/data/repositories/roleplay_repository_impl.dart' - lib\core\utils\injection_container.dart:38:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/roleplay/data/datasources/roleplay_remote_data_source.dart' - lib\core\utils\injection_container.dart:39:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/roleplay/domain/usecases/get_roleplay_quest.dart' - lib\core\utils\injection_container.dart:40:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/accent/domain/repositories/accent_repository.dart' - lib\core\utils\injection_container.dart:42:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/accent/data/repositories/accent_repository_impl.dart' - lib\core\utils\injection_container.dart:43:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/accent/data/datasources/accent_remote_data_source.dart' - lib\core\utils\injection_container.dart:44:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/accent/domain/usecases/get_accent_quest.dart' - lib\core\utils\injection_container.dart:45:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/listening/domain/repositories/listening_repository.dart' - lib\core\utils\injection_container.dart:47:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/listening/data/repositories/listening_repository_impl.dart' - lib\core\utils\injection_container.dart:48:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/listening/data/datasources/listening_remote_data_source.dart' - lib\core\utils\injection_container.dart:49:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/listening/domain/usecases/get_listening_quests.dart' - lib\core\utils\injection_container.dart:50:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/home/domain/usecases/get_smart_category.dart' - lib\core\utils\injection_container.dart:64:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/auth/domain/usecases/update_user_rewards.dart' - lib\core\utils\injection_container.dart:70:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/auth/domain/usecases/update_user.dart' - lib\core\utils\injection_container.dart:71:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/auth/domain/usecases/claim_vip_gift.dart' - lib\core\utils\injection_container.dart:72:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/auth/domain/usecases/purchase_hint.dart' - lib\core\utils\injection_container.dart:73:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/auth/domain/usecases/use_hint.dart' - lib\core\utils\injection_container.dart:74:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/auth/domain/usecases/update_profile_picture.dart' - lib\core\utils\injection_container.dart:75:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/auth/domain/usecases/update_display_name.dart' - lib\core\utils\injection_container.dart:76:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/reading/presentation/bloc/reading_bloc.dart' - lib\core\utils\injection_container.dart:81:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/writing/presentation/bloc/writing_bloc.dart' - lib\core\utils\injection_container.dart:82:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/speaking/presentation/bloc/speaking_bloc.dart' - lib\core\utils\injection_container.dart:83:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/grammar/presentation/bloc/grammar_bloc.dart' - lib\core\utils\injection_container.dart:84:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/roleplay/presentation/bloc/roleplay_bloc.dart' - lib\core\utils\injection_container.dart:85:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/accent/presentation/bloc/accent_bloc.dart' - lib\core\utils\injection_container.dart:86:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/listening/presentation/bloc/listening_bloc.dart' - lib\core\utils\injection_container.dart:87:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/auth/domain/usecases/update_unlocked_level.dart' - lib\core\utils\injection_container.dart:92:8 - uri_does_not_exist
+  error - The function 'ContentGenerationService' isn't defined - lib\core\utils\injection_container.dart:115:34 - undefined_function
+  error - The function 'BatchContentUploadService' isn't defined - lib\core\utils\injection_container.dart:116:34 - undefined_function
+  error - The name 'RoleplayRemoteDataSource' isn't a type, so it can't be used as a type argument - lib\core\utils\injection_container.dart:134:28 - non_type_as_type_argument
+  error - The function 'RoleplayRemoteDataSourceImpl' isn't defined - lib\core\utils\injection_container.dart:135:11 - undefined_function
+  error - The name 'AccentRemoteDataSource' isn't a type, so it can't be used as a type argument - lib\core\utils\injection_container.dart:137:28 - non_type_as_type_argument
+  error - The function 'AccentRemoteDataSourceImpl' isn't defined - lib\core\utils\injection_container.dart:138:11 - undefined_function
+  error - The name 'ListeningRemoteDataSource' isn't a type, so it can't be used as a type argument - lib\core\utils\injection_container.dart:140:28 - non_type_as_type_argument
+  error - The function 'ListeningRemoteDataSourceImpl' isn't defined - lib\core\utils\injection_container.dart:141:11 - undefined_function
+  error - The function 'UpdateUnlockedLevel' isn't defined - lib\core\utils\injection_container.dart:158:34 - undefined_function
+  error - The function 'UpdateUser' isn't defined - lib\core\utils\injection_container.dart:162:34 - undefined_function
+  error - The function 'ClaimVipGift' isn't defined - lib\core\utils\injection_container.dart:163:34 - undefined_function
+  error - The function 'PurchaseHint' isn't defined - lib\core\utils\injection_container.dart:164:34 - undefined_function
+  error - The function 'UseHint' isn't defined - lib\core\utils\injection_container.dart:165:34 - undefined_function
+  error - The function 'UpdateUserRewards' isn't defined - lib\core\utils\injection_container.dart:166:34 - undefined_function
+  error - The function 'GetSmartCategory' isn't defined - lib\core\utils\injection_container.dart:168:11 - undefined_function
+  error - The function 'GetRoleplayQuest' isn't defined - lib\core\utils\injection_container.dart:170:34 - undefined_function
+  error - The function 'GetAccentQuest' isn't defined - lib\core\utils\injection_container.dart:171:34 - undefined_function
+  error - The function 'GetListeningQuests' isn't defined - lib\core\utils\injection_container.dart:172:34 - undefined_function
+  error - The function 'UpdateProfilePicture' isn't defined - lib\core\utils\injection_container.dart:173:34 - undefined_function
+  error - The function 'UpdateDisplayName' isn't defined - lib\core\utils\injection_container.dart:174:34 - undefined_function
+  error - The name 'RoleplayRepository' isn't a type, so it can't be used as a type argument - lib\core\utils\injection_container.dart:200:28 - non_type_as_type_argument
+  error - The function 'RoleplayRepositoryImpl' isn't defined - lib\core\utils\injection_container.dart:201:11 - undefined_function
+  error - The name 'AccentRepository' isn't a type, so it can't be used as a type argument - lib\core\utils\injection_container.dart:203:28 - non_type_as_type_argument
+  error - The function 'AccentRepositoryImpl' isn't defined - lib\core\utils\injection_container.dart:204:11 - undefined_function
+  error - The name 'ListeningRepository' isn't a type, so it can't be used as a type argument - lib\core\utils\injection_container.dart:206:28 - non_type_as_type_argument
+  error - The function 'ListeningRepositoryImpl' isn't defined - lib\core\utils\injection_container.dart:207:11 - undefined_function
+  error - The function 'ReadingBloc' isn't defined - lib\core\utils\injection_container.dart:239:11 - undefined_function
+  error - The function 'WritingBloc' isn't defined - lib\core\utils\injection_container.dart:252:11 - undefined_function
+  error - The function 'SpeakingBloc' isn't defined - lib\core\utils\injection_container.dart:265:11 - undefined_function
+  error - The function 'GrammarBloc' isn't defined - lib\core\utils\injection_container.dart:278:11 - undefined_function
+  error - The function 'RoleplayBloc' isn't defined - lib\core\utils\injection_container.dart:291:11 - undefined_function
+  error - The function 'AccentBloc' isn't defined - lib\core\utils\injection_container.dart:304:11 - undefined_function
+  error - The function 'ListeningBloc' isn't defined - lib\core\utils\injection_container.dart:317:11 - undefined_function
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/auth/domain/usecases/update_user.dart' - lib\features\auth\presentation\bloc\auth_bloc.dart:9:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/auth/domain/usecases/claim_vip_gift.dart' - lib\features\auth\presentation\bloc\auth_bloc.dart:10:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/auth/domain/usecases/purchase_hint.dart' - lib\features\auth\presentation\bloc\auth_bloc.dart:11:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/auth/domain/usecases/update_profile_picture.dart' - lib\features\auth\presentation\bloc\auth_bloc.dart:13:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/features/auth/domain/usecases/update_display_name.dart' - lib\features\auth\presentation\bloc\auth_bloc.dart:14:8 - uri_does_not_exist
+  error - Undefined class 'UpdateUser' - lib\features\auth\presentation\bloc\auth_bloc.dart:101:9 - undefined_class
+  error - Undefined class 'ClaimVipGift' - lib\features\auth\presentation\bloc\auth_bloc.dart:102:9 - undefined_class
+  error - Undefined class 'PurchaseHint' - lib\features\auth\presentation\bloc\auth_bloc.dart:103:9 - undefined_class
+  error - Undefined class 'UpdateProfilePicture' - lib\features\auth\presentation\bloc\auth_bloc.dart:105:9 - undefined_class
+  error - Undefined class 'UpdateDisplayName' - lib\features\auth\presentation\bloc\auth_bloc.dart:106:9 - undefined_class
+  error - Undefined class 'UpdateUser' - lib\features\auth\presentation\bloc\auth_bloc.dart:114:14 - undefined_class
+  error - Undefined class 'ClaimVipGift' - lib\features\auth\presentation\bloc\auth_bloc.dart:115:14 - undefined_class
+  error - Undefined class 'PurchaseHint' - lib\features\auth\presentation\bloc\auth_bloc.dart:116:14 - undefined_class
+  error - Undefined class 'UpdateProfilePicture' - lib\features\auth\presentation\bloc\auth_bloc.dart:118:14 - undefined_class
+  error - Undefined class 'UpdateDisplayName' - lib\features\auth\presentation\bloc\auth_bloc.dart:119:14 - undefined_class
+  error - The method 'UpdateUserParams' isn't defined for the type 'AuthBloc' - lib\features\auth\presentation\bloc\auth_bloc.dart:172:31 - undefined_method
+  error - The method 'UpdateUserParams' isn't defined for the type 'AuthBloc' - lib\features\auth\presentation\bloc\auth_bloc.dart:183:31 - undefined_method
+  error - The method 'UpdateUserParams' isn't defined for the type 'AuthBloc' - lib\features\auth\presentation\bloc\auth_bloc.dart:202:38 - undefined_method
+  error - The method 'UpdateUserParams' isn't defined for the type 'AuthBloc' - lib\features\auth\presentation\bloc\auth_bloc.dart:333:40 - undefined_method
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\grammar\data\datasources\grammar_remote_data_source.dart:3:8 - uri_does_not_exist
+  error - Undefined class 'GameSubtype' - lib\features\grammar\data\datasources\grammar_remote_data_source.dart:8:14 - undefined_class
+  error - Undefined class 'GameSubtype' - lib\features\grammar\data\datasources\grammar_remote_data_source.dart:20:14 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\grammar\data\models\grammar_quest_model.dart:2:8 - uri_does_not_exist
+  error - Undefined name 'GameSubtype' - lib\features\grammar\data\models\grammar_quest_model.dart:9:21 - undefined_identifier
+  error - Undefined class 'GameSubtype' - lib\features\grammar\data\models\grammar_quest_model.dart:50:10 - undefined_class
+  error - Undefined name 'GameSubtype' - lib\features\grammar\data\models\grammar_quest_model.dart:51:33 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\grammar\data\models\grammar_quest_model.dart:52:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\grammar\data\models\grammar_quest_model.dart:54:21 - undefined_identifier
+  error - Undefined name 'id' - lib\features\grammar\data\models\grammar_quest_model.dart:60:13 - undefined_identifier
+  error - Undefined name 'instruction' - lib\features\grammar\data\models\grammar_quest_model.dart:61:22 - undefined_identifier
+  error - Undefined name 'difficulty' - lib\features\grammar\data\models\grammar_quest_model.dart:62:21 - undefined_identifier
+  error - Undefined name 'subtype' - lib\features\grammar\data\models\grammar_quest_model.dart:63:18 - undefined_identifier
+  error - Undefined name 'xpReward' - lib\features\grammar\data\models\grammar_quest_model.dart:65:19 - undefined_identifier
+  error - Undefined name 'coinReward' - lib\features\grammar\data\models\grammar_quest_model.dart:66:21 - undefined_identifier
+  error - Undefined name 'livesAllowed' - lib\features\grammar\data\models\grammar_quest_model.dart:67:23 - undefined_identifier
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\grammar\data\repositories\grammar_repository_impl.dart:4:8 - uri_does_not_exist
+  error - Undefined class 'GameSubtype' - lib\features\grammar\data\repositories\grammar_repository_impl.dart:16:14 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\grammar\domain\entities\grammar_quest.dart:1:8 - uri_does_not_exist
+  error - Classes can only extend other classes - lib\features\grammar\domain\entities\grammar_quest.dart:3:28 - extends_non_class
+  error - No associated named super constructor parameter - lib\features\grammar\domain\entities\grammar_quest.dart:13:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\grammar\domain\entities\grammar_quest.dart:14:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\grammar\domain\entities\grammar_quest.dart:15:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\grammar\domain\entities\grammar_quest.dart:16:11 - super_formal_parameter_without_associated_named
+  error - Undefined name 'GameSubtype' - lib\features\grammar\domain\entities\grammar_quest.dart:16:21 - undefined_identifier
+  error - No associated named super constructor parameter - lib\features\grammar\domain\entities\grammar_quest.dart:17:11 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\grammar\domain\entities\grammar_quest.dart:18:11 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\grammar\domain\entities\grammar_quest.dart:19:11 - super_formal_parameter_without_associated_named
+  error - The named parameter 'type' isn't defined - lib\features\grammar\domain\entities\grammar_quest.dart:27:14 - undefined_named_parameter
+  error - Undefined name 'QuestType' - lib\features\grammar\domain\entities\grammar_quest.dart:27:20 - undefined_identifier
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\grammar\domain\repositories\grammar_repository.dart:3:8 - uri_does_not_exist
+  error - Undefined class 'GameSubtype' - lib\features\grammar\domain\repositories\grammar_repository.dart:8:14 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/presentation/widgets/scale_button.dart' - lib\features\home\presentation\pages\home_screen.dart:9:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/presentation/widgets/shimmer_image.dart' - lib\features\home\presentation\pages\home_screen.dart:11:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\home\presentation\pages\home_screen.dart:14:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/presentation/themes/level_theme_helper.dart' - lib\features\home\presentation\pages\home_screen.dart:15:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/constants/badge_constants.dart' - lib\features\home\presentation\pages\home_screen.dart:16:8 - uri_does_not_exist
+  error - The method 'ScaleButton' isn't defined for the type 'HomeScreen' - lib\features\home\presentation\pages\home_screen.dart:201:17 - undefined_method
+  error - The method 'ScaleButton' isn't defined for the type 'HomeScreen' - lib\features\home\presentation\pages\home_screen.dart:360:14 - undefined_method
+  error - The method 'ScaleButton' isn't defined for the type 'HomeScreen' - lib\features\home\presentation\pages\home_screen.dart:400:11 - undefined_method
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:417:25 - undefined_identifier
+  error - Undefined class 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:452:5 - undefined_class
+  error - The method 'ScaleButton' isn't defined for the type 'HomeScreen' - lib\features\home\presentation\pages\home_screen.dart:457:14 - undefined_method
+  error - Undefined name 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:532:17 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:545:21 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:554:21 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:571:17 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:582:17 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:597:17 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:608:17 - undefined_identifier
+  error - Undefined class 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:623:5 - undefined_class
+  error - The method 'ScaleButton' isn't defined for the type 'HomeScreen' - lib\features\home\presentation\pages\home_screen.dart:633:12 - undefined_method
+  error - The method 'ShimmerImage' isn't defined for the type 'HomeScreen' - lib\features\home\presentation\pages\home_screen.dart:790:19 - undefined_method
+  error - Undefined class 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:884:33 - undefined_class
+  error - The body might complete normally, causing 'null' to be returned, but the return type, 'IconData', is a potentially non-nullable type - lib\features\home\presentation\pages\home_screen.dart:923:12 - body_might_complete_normally
+  error - Undefined class 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:923:32 - undefined_class
+  error - Undefined name 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:925:12 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:927:12 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:929:12 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:931:12 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:933:12 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:935:12 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\home\presentation\pages\home_screen.dart:937:12 - undefined_identifier
+  error - Undefined class 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:942:34 - undefined_class
+  error - Undefined name 'LevelThemeHelper' - lib\features\home\presentation\pages\home_screen.dart:943:19 - undefined_identifier
+  error - The body might complete normally, causing 'null' to be returned, but the return type, 'IconData', is a potentially non-nullable type - lib\features\home\presentation\pages\home_screen.dart:952:12 - body_might_complete_normally
+  error - Undefined class 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:952:31 - undefined_class
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:954:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:956:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:958:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:960:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:962:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:964:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:966:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:968:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:970:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:972:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:974:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:976:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:978:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:980:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:982:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:984:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:986:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:988:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:990:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:992:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:994:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:996:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:998:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:1000:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:1002:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:1004:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:1006:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:1008:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:1010:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:1012:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:1014:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:1016:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:1018:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\home\presentation\pages\home_screen.dart:1020:12 - undefined_identifier
+  error - Undefined class 'BadgeData' - lib\features\home\presentation\pages\home_screen.dart:1025:3 - undefined_class
+  error - Undefined name 'BadgeConstants' - lib\features\home\presentation\pages\home_screen.dart:1037:18 - undefined_identifier
+  error - Undefined name 'BadgeConstants' - lib\features\home\presentation\pages\home_screen.dart:1048:26 - undefined_identifier
+  error - Undefined name 'BadgeConstants' - lib\features\home\presentation\pages\home_screen.dart:1057:12 - undefined_identifier
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/presentation/widgets/shimmer_image.dart' - lib\features\leaderboard\presentation\pages\leaderboard_screen.dart:12:8 - uri_does_not_exist
+  error - The method 'ShimmerImage' isn't defined for the type 'LeaderboardScreen' - lib\features\leaderboard\presentation\pages\leaderboard_screen.dart:255:27 - undefined_method
+  error - The method 'ShimmerImage' isn't defined for the type 'LeaderboardScreen' - lib\features\leaderboard\presentation\pages\leaderboard_screen.dart:412:21 - undefined_method
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/presentation/widgets/shimmer_image.dart' - lib\features\profile\presentation\pages\profile_screen.dart:9:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/constants/badge_constants.dart' - lib\features\profile\presentation\pages\profile_screen.dart:13:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/presentation/widgets/scale_button.dart' - lib\features\profile\presentation\pages\profile_screen.dart:16:8 - uri_does_not_exist
+  error - The method 'ShimmerImage' isn't defined for the type '_ProfileScreenState' - lib\features\profile\presentation\pages\profile_screen.dart:327:27 - undefined_method
+  error - The method 'ScaleButton' isn't defined for the type '_ProfileScreenState' - lib\features\profile\presentation\pages\profile_screen.dart:339:24 - undefined_method
+  error - The method 'ScaleButton' isn't defined for the type '_ProfileScreenState' - lib\features\profile\presentation\pages\profile_screen.dart:367:18 - undefined_method
+  error - Undefined name 'BadgeConstants' - lib\features\profile\presentation\pages\profile_screen.dart:491:30 - undefined_identifier
+  error - The method 'ScaleButton' isn't defined for the type '_ProfileScreenState' - lib\features\profile\presentation\pages\profile_screen.dart:665:12 - undefined_method
+  error - The method 'ScaleButton' isn't defined for the type '_ProfileScreenState' - lib\features\profile\presentation\pages\profile_screen.dart:769:12 - undefined_method
+  error - The method 'ScaleButton' isn't defined for the type '_ProfileScreenState' - lib\features\profile\presentation\pages\profile_screen.dart:937:12 - undefined_method
+  error - The method 'ScaleButton' isn't defined for the type '_ProfileScreenState' - lib\features\profile\presentation\pages\profile_screen.dart:1574:21 - undefined_method
+  error - The method 'ScaleButton' isn't defined for the type '_ProfileScreenState' - lib\features\profile\presentation\pages\profile_screen.dart:1742:12 - undefined_method
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\reading\data\datasources\reading_remote_data_source.dart:3:8 - uri_does_not_exist
+  error - Undefined class 'GameSubtype' - lib\features\reading\data\datasources\reading_remote_data_source.dart:8:14 - undefined_class
+  error - Undefined class 'GameSubtype' - lib\features\reading\data\datasources\reading_remote_data_source.dart:20:14 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\reading\data\models\reading_quest_model.dart:2:8 - uri_does_not_exist
+  error - Undefined name 'GameSubtype' - lib\features\reading\data\models\reading_quest_model.dart:9:21 - undefined_identifier
+  error - Undefined class 'GameSubtype' - lib\features\reading\data\models\reading_quest_model.dart:61:10 - undefined_class
+  error - Undefined name 'GameSubtype' - lib\features\reading\data\models\reading_quest_model.dart:62:33 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\reading\data\models\reading_quest_model.dart:67:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\reading\data\models\reading_quest_model.dart:69:21 - undefined_identifier
+  error - Undefined name 'id' - lib\features\reading\data\models\reading_quest_model.dart:75:13 - undefined_identifier
+  error - Undefined name 'instruction' - lib\features\reading\data\models\reading_quest_model.dart:76:22 - undefined_identifier
+  error - Undefined name 'difficulty' - lib\features\reading\data\models\reading_quest_model.dart:77:21 - undefined_identifier
+  error - Undefined name 'subtype' - lib\features\reading\data\models\reading_quest_model.dart:79:18 - undefined_identifier
+  error - Undefined name 'subtype' - lib\features\reading\data\models\reading_quest_model.dart:80:36 - undefined_identifier
+  error - Undefined name 'xpReward' - lib\features\reading\data\models\reading_quest_model.dart:81:19 - undefined_identifier
+  error - Undefined name 'coinReward' - lib\features\reading\data\models\reading_quest_model.dart:82:21 - undefined_identifier
+  error - Undefined name 'livesAllowed' - lib\features\reading\data\models\reading_quest_model.dart:83:23 - undefined_identifier
+  error - Undefined class 'GameSubtype' - lib\features\reading\data\models\reading_quest_model.dart:124:27 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\reading\data\repositories\reading_repository_impl.dart:4:8 - uri_does_not_exist
+  error - Undefined class 'GameSubtype' - lib\features\reading\data\repositories\reading_repository_impl.dart:16:14 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\reading\domain\entities\reading_quest.dart:1:8 - uri_does_not_exist
+  error - Classes can only extend other classes - lib\features\reading\domain\entities\reading_quest.dart:3:28 - extends_non_class
+  error - No associated named super constructor parameter - lib\features\reading\domain\entities\reading_quest.dart:18:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\reading\domain\entities\reading_quest.dart:19:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\reading\domain\entities\reading_quest.dart:20:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\reading\domain\entities\reading_quest.dart:21:11 - super_formal_parameter_without_associated_named
+  error - Undefined name 'GameSubtype' - lib\features\reading\domain\entities\reading_quest.dart:21:21 - undefined_identifier
+  error - No associated named super constructor parameter - lib\features\reading\domain\entities\reading_quest.dart:22:11 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\reading\domain\entities\reading_quest.dart:23:11 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\reading\domain\entities\reading_quest.dart:24:11 - super_formal_parameter_without_associated_named
+  error - The named parameter 'type' isn't defined - lib\features\reading\domain\entities\reading_quest.dart:36:14 - undefined_named_parameter
+  error - Undefined name 'QuestType' - lib\features\reading\domain\entities\reading_quest.dart:36:20 - undefined_identifier
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\reading\domain\repositories\reading_repository.dart:3:8 - uri_does_not_exist
+  error - Undefined class 'GameSubtype' - lib\features\reading\domain\repositories\reading_repository.dart:8:14 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/utils/generation_strategies.dart' - lib\features\settings\presentation\pages\admin_dashboard.dart:7:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\settings\presentation\pages\admin_dashboard.dart:8:8 - uri_does_not_exist
+  error - Undefined class 'QuestType' - lib\features\settings\presentation\pages\admin_dashboard.dart:26:3 - undefined_class
+  error - Undefined name 'QuestType' - lib\features\settings\presentation\pages\admin_dashboard.dart:26:30 - undefined_identifier
+  error - Undefined class 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:27:8 - undefined_class
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:38:25 - undefined_identifier
+  error - Undefined name 'PromptStrategy' - lib\features\settings\presentation\pages\admin_dashboard.dart:118:22 - undefined_identifier
+  error - The body might complete normally, causing 'null' to be returned, but the return type, 'bool', is a potentially non-nullable type - lib\features\settings\presentation\pages\admin_dashboard.dart:244:8 - body_might_complete_normally
+  error - Undefined class 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:244:24 - undefined_class
+  error - Undefined class 'QuestType' - lib\features\settings\presentation\pages\admin_dashboard.dart:244:42 - undefined_class
+  error - Undefined name 'QuestType' - lib\features\settings\presentation\pages\admin_dashboard.dart:246:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:248:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:249:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:250:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:251:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:252:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:253:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:254:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:255:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:256:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:257:11 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\settings\presentation\pages\admin_dashboard.dart:259:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:261:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:262:11 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\settings\presentation\pages\admin_dashboard.dart:264:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:266:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:267:11 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\settings\presentation\pages\admin_dashboard.dart:269:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:271:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:272:11 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\settings\presentation\pages\admin_dashboard.dart:274:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:276:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:277:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:278:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:279:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:280:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:281:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:282:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:283:11 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\settings\presentation\pages\admin_dashboard.dart:285:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:287:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:288:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:289:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:290:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:291:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:292:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:293:11 - undefined_identifier
+  error - Undefined name 'QuestType' - lib\features\settings\presentation\pages\admin_dashboard.dart:295:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:297:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:298:11 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:299:11 - undefined_identifier
+  error - The name 'QuestType' isn't a type, so it can't be used as a type argument - lib\features\settings\presentation\pages\admin_dashboard.dart:418:45 - non_type_as_type_argument
+  error - Undefined name 'QuestType' - lib\features\settings\presentation\pages\admin_dashboard.dart:421:32 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:426:51 - undefined_identifier
+  error - The name 'GameSubtype' isn't a type, so it can't be used as a type argument - lib\features\settings\presentation\pages\admin_dashboard.dart:436:45 - non_type_as_type_argument
+  error - Undefined name 'GameSubtype' - lib\features\settings\presentation\pages\admin_dashboard.dart:439:32 - undefined_identifier
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\speaking\data\datasources\speaking_remote_data_source.dart:3:8 - uri_does_not_exist
+  error - Undefined class 'GameSubtype' - lib\features\speaking\data\datasources\speaking_remote_data_source.dart:8:14 - undefined_class
+  error - Undefined class 'GameSubtype' - lib\features\speaking\data\datasources\speaking_remote_data_source.dart:20:14 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\speaking\data\models\speaking_quest_model.dart:2:8 - uri_does_not_exist
+  error - Undefined name 'GameSubtype' - lib\features\speaking\data\models\speaking_quest_model.dart:9:21 - undefined_identifier
+  error - Undefined class 'GameSubtype' - lib\features\speaking\data\models\speaking_quest_model.dart:63:10 - undefined_class
+  error - Undefined name 'GameSubtype' - lib\features\speaking\data\models\speaking_quest_model.dart:64:33 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\speaking\data\models\speaking_quest_model.dart:69:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\speaking\data\models\speaking_quest_model.dart:71:21 - undefined_identifier
+  error - Undefined name 'id' - lib\features\speaking\data\models\speaking_quest_model.dart:77:13 - undefined_identifier
+  error - Undefined name 'instruction' - lib\features\speaking\data\models\speaking_quest_model.dart:78:22 - undefined_identifier
+  error - Undefined name 'difficulty' - lib\features\speaking\data\models\speaking_quest_model.dart:79:21 - undefined_identifier
+  error - Undefined name 'subtype' - lib\features\speaking\data\models\speaking_quest_model.dart:81:18 - undefined_identifier
+  error - Undefined name 'subtype' - lib\features\speaking\data\models\speaking_quest_model.dart:82:36 - undefined_identifier
+  error - Undefined name 'xpReward' - lib\features\speaking\data\models\speaking_quest_model.dart:84:19 - undefined_identifier
+  error - Undefined name 'coinReward' - lib\features\speaking\data\models\speaking_quest_model.dart:85:21 - undefined_identifier
+  error - Undefined name 'livesAllowed' - lib\features\speaking\data\models\speaking_quest_model.dart:86:23 - undefined_identifier
+  error - Undefined class 'GameSubtype' - lib\features\speaking\data\models\speaking_quest_model.dart:102:27 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\speaking\data\repositories\speaking_repository_impl.dart:4:8 - uri_does_not_exist
+  error - Undefined class 'GameSubtype' - lib\features\speaking\data\repositories\speaking_repository_impl.dart:16:14 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\speaking\domain\entities\speaking_quest.dart:1:8 - uri_does_not_exist
+  error - Classes can only extend other classes - lib\features\speaking\domain\entities\speaking_quest.dart:3:29 - extends_non_class
+  error - No associated named super constructor parameter - lib\features\speaking\domain\entities\speaking_quest.dart:17:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\speaking\domain\entities\speaking_quest.dart:18:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\speaking\domain\entities\speaking_quest.dart:19:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\speaking\domain\entities\speaking_quest.dart:20:11 - super_formal_parameter_without_associated_named
+  error - Undefined name 'GameSubtype' - lib\features\speaking\domain\entities\speaking_quest.dart:20:21 - undefined_identifier
+  error - No associated named super constructor parameter - lib\features\speaking\domain\entities\speaking_quest.dart:21:11 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\speaking\domain\entities\speaking_quest.dart:22:11 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\speaking\domain\entities\speaking_quest.dart:23:11 - super_formal_parameter_without_associated_named
+  error - The named parameter 'type' isn't defined - lib\features\speaking\domain\entities\speaking_quest.dart:33:14 - undefined_named_parameter
+  error - Undefined name 'QuestType' - lib\features\speaking\domain\entities\speaking_quest.dart:33:20 - undefined_identifier
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\speaking\domain\repositories\speaking_repository.dart:3:8 - uri_does_not_exist
+  error - Undefined class 'GameSubtype' - lib\features\speaking\domain\repositories\speaking_repository.dart:8:14 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\speaking\domain\usecases\get_speaking_quest.dart:5:8 - uri_does_not_exist
+  error - Undefined class 'GameSubtype' - lib\features\speaking\domain\usecases\get_speaking_quest.dart:24:9 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\writing\data\datasources\writing_remote_data_source.dart:3:8 - uri_does_not_exist
+  error - Undefined class 'GameSubtype' - lib\features\writing\data\datasources\writing_remote_data_source.dart:8:14 - undefined_class
+  error - Undefined class 'GameSubtype' - lib\features\writing\data\datasources\writing_remote_data_source.dart:20:14 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\writing\data\models\writing_quest_model.dart:2:8 - uri_does_not_exist
+  error - Undefined name 'GameSubtype' - lib\features\writing\data\models\writing_quest_model.dart:9:21 - undefined_identifier
+  error - Undefined class 'GameSubtype' - lib\features\writing\data\models\writing_quest_model.dart:52:10 - undefined_class
+  error - Undefined name 'GameSubtype' - lib\features\writing\data\models\writing_quest_model.dart:53:33 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\writing\data\models\writing_quest_model.dart:57:12 - undefined_identifier
+  error - Undefined name 'GameSubtype' - lib\features\writing\data\models\writing_quest_model.dart:59:21 - undefined_identifier
+  error - Undefined name 'id' - lib\features\writing\data\models\writing_quest_model.dart:65:13 - undefined_identifier
+  error - Undefined name 'instruction' - lib\features\writing\data\models\writing_quest_model.dart:66:22 - undefined_identifier
+  error - Undefined name 'difficulty' - lib\features\writing\data\models\writing_quest_model.dart:67:21 - undefined_identifier
+  error - Undefined name 'subtype' - lib\features\writing\data\models\writing_quest_model.dart:69:18 - undefined_identifier
+  error - Undefined name 'subtype' - lib\features\writing\data\models\writing_quest_model.dart:70:36 - undefined_identifier
+  error - Undefined name 'xpReward' - lib\features\writing\data\models\writing_quest_model.dart:71:19 - undefined_identifier
+  error - Undefined name 'coinReward' - lib\features\writing\data\models\writing_quest_model.dart:72:21 - undefined_identifier
+  error - Undefined name 'livesAllowed' - lib\features\writing\data\models\writing_quest_model.dart:73:23 - undefined_identifier
+  error - Undefined class 'GameSubtype' - lib\features\writing\data\models\writing_quest_model.dart:104:27 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\writing\data\repositories\writing_repository_impl.dart:4:8 - uri_does_not_exist
+  error - Undefined class 'GameSubtype' - lib\features\writing\data\repositories\writing_repository_impl.dart:16:14 - undefined_class
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\writing\domain\entities\writing_quest.dart:1:8 - uri_does_not_exist
+  error - Classes can only extend other classes - lib\features\writing\domain\entities\writing_quest.dart:3:28 - extends_non_class
+  error - No associated named super constructor parameter - lib\features\writing\domain\entities\writing_quest.dart:16:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\writing\domain\entities\writing_quest.dart:17:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\writing\domain\entities\writing_quest.dart:18:20 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\writing\domain\entities\writing_quest.dart:19:11 - super_formal_parameter_without_associated_named
+  error - Undefined name 'GameSubtype' - lib\features\writing\domain\entities\writing_quest.dart:19:21 - undefined_identifier
+  error - No associated named super constructor parameter - lib\features\writing\domain\entities\writing_quest.dart:20:11 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\writing\domain\entities\writing_quest.dart:21:11 - super_formal_parameter_without_associated_named
+  error - No associated named super constructor parameter - lib\features\writing\domain\entities\writing_quest.dart:22:11 - super_formal_parameter_without_associated_named
+  error - The named parameter 'type' isn't defined - lib\features\writing\domain\entities\writing_quest.dart:31:14 - undefined_named_parameter
+  error - Undefined name 'QuestType' - lib\features\writing\domain\entities\writing_quest.dart:31:20 - undefined_identifier
+  error - Target of URI doesn't exist: 'package:voxai_quest/core/domain/entities/game_quest.dart' - lib\features\writing\domain\repositories\writing_repository.dart:3:8 - uri_does_not_exist
+  error - Undefined class 'GameSubtype' - lib\features\writing\domain\repositories\writing_repository.dart:8:14 - undefined_class
+warning - The asset directory 'assets/images/' doesn't exist - pubspec.yaml:124:7 - asset_directory_does_not_exist
+warning - The asset directory 'assets/images/textures/' doesn't exist - pubspec.yaml:125:7 - asset_directory_does_not_exist
+warning - The asset directory 'assets/sounds/' doesn't exist - pubspec.yaml:126:7 - asset_directory_does_not_exist
+
