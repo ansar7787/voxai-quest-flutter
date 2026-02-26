@@ -7,21 +7,17 @@ VoxAI Quest is a state-of-the-art language learning platform built with Flutter,
 
 ## ✨ Key Learning Zones
 
-### 🎙 Speaking & Phonetics
-- **Speaking Mastery**: Interactive challenges focusing on situational speaking and scene descriptions.
-- **Accent Studio**: Minimal pairs and intonation mimicking for natural pronunciation.
-- **Roleplay Arena**: AI-driven branching dialogues and situational responses.
+### 🎙 Core Mastery (80 Games)
+A massive curriculum of 80 unique games distributed across 8 specialized categories, each featuring **200 progressive levels** with 3 interactive questions per level.
+- **Speaking & Accent**: Situation Speaking, Scene Description, and Intonation drills.
+- **Literacy**: Reading comprehension, Writing Studio, and Grammar Guide.
+- **Vocabulary**: Immersive contextual learning in the Vocabulary Vault.
 
-### 📚 Literacy & Understanding
-- **Reading Foundations**: Comprehensive comprehension drills and speed-reading checks.
-- **Writing Studio**: From sentence building to daily journaling with intelligent feedback.
-- **Vocabulary Vault**: Immersive synonym matching and phrasal verb contextualization.
-- **Grammar Guide**: Gamified syntax correction and tense mastery.
-
-### 🧒 Kids Zone (Specialized Module)
+### 🧒 Kids Zone (20 Specialized Games)
+A tailored module for young learners featuring **20 unique kids-friendly games**, each with its own **200-level progression** system.
 - **Mascot System**: Interactive buddies (Owly, Panda, etc.) that guide young learners.
-- **Stickers Album**: A collectible reward system with 80+ unique stickers and 20 categories.
-- **Playful UX**: Organic "Bubbly Island" layout with floating animations and vibrant aesthetics.
+- **Stickers Album**: A collectible reward system with 80+ unique stickers to earn.
+- **Interactive Levels**: 3 tailored questions per level designed for engagement.
 
 ---
 
