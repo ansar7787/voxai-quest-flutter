@@ -1,3 +1,0 @@
-Analyzing writing...                                            
-No issues found! (ran in 1.7s)
-

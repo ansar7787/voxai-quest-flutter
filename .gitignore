@@ -1,3 +1,7 @@
+# -------------------------------------------------------------------
+# Flutter & Dart Best Practices Gitignore
+# -------------------------------------------------------------------
+
 # Miscellaneous
 *.class
 *.log
@@ -18,10 +22,10 @@ migrate_working_dir/
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# VS Code related
+.vscode/
+!.vscode/extensions.json
+*.code-workspace
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -32,17 +36,70 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
+.packages
 
-# Symbolication related
-app.*.symbols
-
-# Obfuscation related
-app.*.map.json
-
-# Android Studio will place build artifacts here
+# Android related
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/local.properties
+/android/key.properties
+/android/bundle
+/android/fastlane
+*.jks
+*.keystore
+*.apk
+*.aab
 
-# Environment variables
+# iOS related
+/ios/Flutter/Generated.xcconfig
+/ios/Flutter/flutter_export_environment.sh
+/ios/Pods/
+/ios/.symlinks/
+/ios/Flutter/App.framework
+/ios/Flutter/Flutter.framework
+/ios/Flutter/Flutter.podspec
+/ios/DerivedData
+/ios/Runner/GeneratedPluginRegistrant.h
+/ios/Runner/GeneratedPluginRegistrant.m
+/ios/Runner/GeneratedPluginRegistrant.swift
+*.moved-aside
+Podfile.lock
+
+# Windows related
+/windows/flutter/ephemeral/
+/windows/cmake-build-*/
+*.exe
+*.dll
+*.pdb
+
+# Web related
+/web/flutter_service_worker.js
+
+# MacOS related
+/macos/flutter/ephemeral/
+/macos/DerivedData
+
+# Symbols and Mapping
+app.*.symbols
+app.*.map.json
+
+# Sensitive Files & API Keys
+# [IMPORTANT] Do not commit these files if they contain secrets!
 .env*
+*-key.json
+credentials.json
+service-account-key.json
+google-services.json.backup
+GoogleService-Info.plist.backup
+
+# Firebase & Plugins
+# Usually google-services.json and GoogleService-Info.plist are kept in the repo
+# so Firebase works out of the box, but if you want maximum security, 
+# you could ignore them and manage via CI/CD variables.
+
+# Payment & Ads Cache
+**/razorpay_plugin/
+**/google_mobile_ads/
+
+# -------------------------------------------------------------------

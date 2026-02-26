@@ -1,6 +1,0 @@
-Analyzing reading...                                            
-
-  error - Undefined name 'readingBloc' - lib\features\reading\presentation\pages\read_and_match_game_screen.dart:98:9 - undefined_identifier
-  error - The named parameter 'amount' isn't defined - lib\features\reading\presentation\pages\read_and_match_game_screen.dart:386:42 - undefined_named_parameter
-   info - The 'if' statement could be replaced by a null-aware assignment - lib\features\reading\presentation\pages\sentence_order_reading_game_screen.dart:43:5 - prefer_conditional_assignment
-
