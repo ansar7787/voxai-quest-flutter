@@ -119,16 +119,6 @@ class ListeningBloc extends Bloc<ListeningEvent, ListeningState> {
 
       emit(ListeningLoading());
       try {
-        final isConnected = await networkInfo.isConnected;
-        if (!isConnected) {
-          emit(
-            ListeningError(
-              "No internet connection. Please check your network.",
-            ),
-          );
-          return;
-        }
-
         if (getQuest == null) {
           emit(ListeningError("UseCase dependency not provided"));
           return;

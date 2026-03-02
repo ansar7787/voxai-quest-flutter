@@ -136,14 +136,6 @@ class VocabularyBloc extends Bloc<VocabularyEvent, VocabularyState> {
 
     emit(VocabularyLoading());
     try {
-      final isConnected = await networkInfo.isConnected;
-      if (!isConnected) {
-        emit(
-          VocabularyError("No internet connection. Please check your network."),
-        );
-        return;
-      }
-
       final quests = await getQuests(event.gameType.name, event.level);
 
       if (quests.isEmpty) {

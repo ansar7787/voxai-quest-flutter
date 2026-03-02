@@ -120,14 +120,6 @@ class RoleplayBloc extends Bloc<RoleplayEvent, RoleplayState> {
 
       emit(RoleplayLoading());
       try {
-        final isConnected = await networkInfo.isConnected;
-        if (!isConnected) {
-          emit(
-            RoleplayError("No internet connection. Please check your network."),
-          );
-          return;
-        }
-
         if (getQuest == null) {
           emit(RoleplayError("UseCase dependency not provided"));
           return;

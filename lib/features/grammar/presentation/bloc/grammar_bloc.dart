@@ -121,14 +121,6 @@ class GrammarBloc extends Bloc<GrammarEvent, GrammarState> {
 
       emit(GrammarLoading());
       try {
-        final isConnected = await networkInfo.isConnected;
-        if (!isConnected) {
-          emit(
-            GrammarError("No internet connection. Please check your network."),
-          );
-          return;
-        }
-
         if (getQuest == null) {
           emit(GrammarError("UseCase dependency not provided"));
           return;

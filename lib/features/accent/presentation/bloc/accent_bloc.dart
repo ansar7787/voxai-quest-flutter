@@ -130,14 +130,6 @@ class AccentBloc extends Bloc<AccentEvent, AccentState> {
 
       emit(AccentLoading());
       try {
-        final isConnected = await networkInfo.isConnected;
-        if (!isConnected) {
-          emit(
-            AccentError("No internet connection. Please check your network."),
-          );
-          return;
-        }
-
         final result = await getQuest(
           GetAccentQuestParams(gameType: subtype, level: currentLevel!),
         );
