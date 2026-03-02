@@ -125,14 +125,6 @@ class SpeakingBloc extends Bloc<SpeakingEvent, SpeakingState> {
       currentLevel = event.level;
 
       emit(SpeakingLoading());
-      final isConnected = await networkInfo.isConnected;
-      if (!isConnected) {
-        emit(
-          SpeakingError("No internet connection. Please check your network."),
-        );
-        return;
-      }
-
       final GameSubtype subtype = event.gameType is GameSubtype
           ? event.gameType
           : GameSubtype.values.firstWhere(

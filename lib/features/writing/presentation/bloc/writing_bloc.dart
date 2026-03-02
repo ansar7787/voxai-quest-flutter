@@ -238,14 +238,6 @@ class WritingBloc extends Bloc<WritingEvent, WritingState> {
 
     emit(WritingLoading());
     try {
-      final isConnected = await networkInfo.isConnected;
-      if (!isConnected) {
-        emit(
-          WritingError("No internet connection. Please check your network."),
-        );
-        return;
-      }
-
       if (getQuest == null) {
         emit(WritingError("UseCase dependency not provided"));
         return;
