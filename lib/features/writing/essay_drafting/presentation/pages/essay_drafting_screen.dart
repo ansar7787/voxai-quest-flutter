@@ -14,9 +14,11 @@ import 'package:voxai_quest/core/presentation/widgets/modern_game_dialog.dart';
 import 'package:voxai_quest/core/presentation/widgets/modern_game_result_overlay.dart';
 import 'package:voxai_quest/core/presentation/widgets/scale_button.dart';
 import 'package:voxai_quest/core/presentation/widgets/shimmer_loading.dart';
+import 'package:voxai_quest/core/utils/ad_service.dart';
 import 'package:voxai_quest/core/utils/haptic_service.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart' as di;
 import 'package:voxai_quest/core/utils/sound_service.dart';
+import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/writing/essay_drafting/presentation/bloc/essay_drafting_bloc.dart';
 import 'package:voxai_quest/features/writing/essay_drafting/presentation/bloc/essay_drafting_event.dart';
 import 'package:voxai_quest/features/writing/essay_drafting/presentation/bloc/essay_drafting_state.dart';
@@ -51,6 +53,8 @@ class _EssayDraftingScreenState extends State<EssayDraftingScreen> {
     context.read<EssayDraftingBloc>().add(
       FetchEssayDraftingQuests(widget.level),
     );
+    // Pre-load ads
+    di.sl<AdService>().loadRewardedAd();
   }
 
   @override
@@ -78,7 +82,9 @@ class _EssayDraftingScreenState extends State<EssayDraftingScreen> {
 
     Future.delayed(const Duration(milliseconds: 300), () {
       if (mounted) {
-        context.read<EssayDraftingBloc>().add(SubmitEssayDraftingAnswer(isCorrect));
+        context.read<EssayDraftingBloc>().add(
+          SubmitEssayDraftingAnswer(isCorrect),
+        );
       }
     });
   }
@@ -137,7 +143,9 @@ class _EssayDraftingScreenState extends State<EssayDraftingScreen> {
                       progress: progress,
                       lives: state.livesRemaining,
                       onHint: () {
-                        context.read<EssayDraftingBloc>().add(EssayDraftingHintUsed());
+                        context.read<EssayDraftingBloc>().add(
+                          EssayDraftingHintUsed(),
+                        );
                         _controller.text =
                             "Regarding ${quest.topic ?? 'this topic'}, it is evident that ${quest.mainPoints?.first ?? 'several factors play a key role'}...";
                       },
@@ -161,7 +169,9 @@ class _EssayDraftingScreenState extends State<EssayDraftingScreen> {
                             ).animate().fadeIn(),
                             SizedBox(height: 8.h),
                             Text(
-                                  quest.instruction.isNotEmpty ? quest.instruction : "Construct your literary masterpiece.",
+                                  quest.instruction.isNotEmpty
+                                      ? quest.instruction
+                                      : "Construct your literary masterpiece.",
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.outfit(
                                     fontSize: 24.sp,
@@ -245,8 +255,9 @@ class _EssayDraftingScreenState extends State<EssayDraftingScreen> {
                         : "CONTENT INSUFFICIENT!",
                     subtitle:
                         "Sample: ${quest.correctAnswer ?? 'Your essay structure is solid.'}",
-                    onContinue: () =>
-                        context.read<EssayDraftingBloc>().add(NextEssayDraftingQuestion()),
+                    onContinue: () => context.read<EssayDraftingBloc>().add(
+                      NextEssayDraftingQuestion(),
+                    ),
                     primaryColor: theme.primaryColor,
                   ),
                 if (_showConfetti) const GameConfetti(),
@@ -260,7 +271,12 @@ class _EssayDraftingScreenState extends State<EssayDraftingScreen> {
     );
   }
 
-  Widget _buildPromptCard(String topic, List<String>? mainPoints, ThemeResult theme, bool isDark) {
+  Widget _buildPromptCard(
+    String topic,
+    List<String>? mainPoints,
+    ThemeResult theme,
+    bool isDark,
+  ) {
     return GlassTile(
       padding: EdgeInsets.all(28.r),
       borderRadius: BorderRadius.circular(36.r),
@@ -302,21 +318,28 @@ class _EssayDraftingScreenState extends State<EssayDraftingScreen> {
               spacing: 8.w,
               runSpacing: 8.h,
               alignment: WrapAlignment.center,
-              children: mainPoints.map((point) => Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                decoration: BoxDecoration(
-                  color: theme.primaryColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                child: Text(
-                  point,
-                  style: GoogleFonts.outfit(
-                    fontSize: 11.sp,
-                    fontWeight: FontWeight.w600,
-                    color: theme.primaryColor,
-                  ),
-                ),
-              )).toList(),
+              children: mainPoints
+                  .map(
+                    (point) => Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.w,
+                        vertical: 6.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: theme.primaryColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      child: Text(
+                        point,
+                        style: GoogleFonts.outfit(
+                          fontSize: 11.sp,
+                          fontWeight: FontWeight.w600,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
             ),
           ],
         ],
@@ -412,6 +435,31 @@ class _EssayDraftingScreenState extends State<EssayDraftingScreen> {
         onButtonPressed: () {
           Navigator.pop(context);
           context.pop();
+        },
+        onAdAction: () {
+          Navigator.pop(context);
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          final adService = di.sl<AdService>();
+          adService.showRewardedAd(
+            isPremium: isPremium,
+            onUserEarnedReward: (reward) {
+              // Dispatch Double Up Event
+              context.read<AuthBloc>().add(
+                AuthDoubleUpRewardsRequested(xp, coins),
+              );
+              // Show Success SnackBar
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("REWARDS DOUBLED! 💎💎"),
+                  backgroundColor: Color(0xFF10B981),
+                ),
+              );
+            },
+            onDismissed: () {
+              context.pop();
+            },
+          );
         },
       ),
     );

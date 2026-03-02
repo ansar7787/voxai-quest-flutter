@@ -20,16 +20,15 @@ class WordFormationBloc extends Bloc<WordFormationEvent, WordFormationState> {
   ) async {
     emit(WordFormationLoading());
     final result = await getQuests(event.level);
-    result.fold(
-      (failure) => emit(WordFormationError(failure.message)),
-      (quests) {
-        if (quests.isEmpty) {
-          emit(const WordFormationError("No quests found for this level."));
-        } else {
-          emit(WordFormationLoaded(quests: quests));
-        }
-      },
-    );
+    result.fold((failure) => emit(WordFormationError(failure.message)), (
+      quests,
+    ) {
+      if (quests.isEmpty) {
+        emit(const WordFormationError("No quests found for this level."));
+      } else {
+        emit(WordFormationLoaded(quests: quests));
+      }
+    });
   }
 
   void _onSubmitAnswer(
@@ -45,10 +44,9 @@ class WordFormationBloc extends Bloc<WordFormationEvent, WordFormationState> {
         if (newLives <= 0) {
           emit(WordFormationGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -63,16 +61,20 @@ class WordFormationBloc extends Bloc<WordFormationEvent, WordFormationState> {
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(WordFormationGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          WordFormationGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

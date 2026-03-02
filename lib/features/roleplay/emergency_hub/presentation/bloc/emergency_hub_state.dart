@@ -51,13 +51,13 @@ class EmergencyHubLoaded extends EmergencyHubState {
 
   @override
   List<Object?> get props => [
-        quests,
-        currentIndex,
-        livesRemaining,
-        lastAnswerCorrect,
-        xpEarned,
-        coinsEarned,
-      ];
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    xpEarned,
+    coinsEarned,
+  ];
 }
 
 class EmergencyHubError extends EmergencyHubState {
@@ -71,7 +71,10 @@ class EmergencyHubError extends EmergencyHubState {
 class EmergencyHubGameComplete extends EmergencyHubState {
   final int xpEarned;
   final int coinsEarned;
-  const EmergencyHubGameComplete({required this.xpEarned, required this.coinsEarned});
+  const EmergencyHubGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

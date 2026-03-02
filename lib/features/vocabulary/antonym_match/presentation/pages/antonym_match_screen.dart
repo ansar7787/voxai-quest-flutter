@@ -22,7 +22,6 @@ import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/vocabulary/presentation/bloc/vocabulary_bloc.dart';
 
-
 class AntonymMatchScreen extends StatefulWidget {
   final int level;
   const AntonymMatchScreen({super.key, required this.level});
@@ -74,7 +73,11 @@ class _AntonymMatchScreenState extends State<AntonymMatchScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('vocabulary', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'vocabulary',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -116,8 +119,7 @@ class _AntonymMatchScreenState extends State<AntonymMatchScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<VocabularyBloc>().add(
-                
-      FetchVocabularyQuests(
+                FetchVocabularyQuests(
                   gameType: GameSubtype.antonymSearch,
                   level: widget.level,
                 ),

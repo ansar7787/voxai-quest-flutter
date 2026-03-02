@@ -11,6 +11,7 @@ import 'package:voxai_quest/core/presentation/widgets/mesh_gradient_background.d
 import 'package:voxai_quest/core/presentation/widgets/scale_button.dart';
 import 'package:voxai_quest/core/utils/haptic_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:voxai_quest/core/presentation/widgets/banner_ad_widget.dart';
 
 class VoxinMascotScreen extends StatefulWidget {
   const VoxinMascotScreen({super.key});
@@ -472,6 +473,8 @@ class _VoxinMascotScreenState extends State<VoxinMascotScreen>
             },
           ),
           SizedBox(height: 32.h),
+          const BannerAdWidget(),
+          SizedBox(height: 32.h),
           if (user.voxinMascot != null)
             _buildEquippedSection(user, isDark, primaryColor, textColor),
         ]),
@@ -526,6 +529,9 @@ class _VoxinMascotScreenState extends State<VoxinMascotScreen>
               );
             },
           ),
+          SizedBox(height: 32.h),
+          const BannerAdWidget(),
+          SizedBox(height: 100.h),
         ]),
       ),
     );

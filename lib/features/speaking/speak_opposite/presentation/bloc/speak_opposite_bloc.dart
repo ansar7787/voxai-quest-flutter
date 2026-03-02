@@ -38,10 +38,9 @@ class SpeakOppositeBloc extends Bloc<SpeakOppositeEvent, SpeakOppositeState> {
         if (newLives <= 0) {
           emit(SpeakOppositeGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -56,15 +55,14 @@ class SpeakOppositeBloc extends Bloc<SpeakOppositeEvent, SpeakOppositeState> {
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(SpeakOppositeGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          SpeakOppositeGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-        ));
+        emit(state.copyWith(currentIndex: nextIndex, lastAnswerCorrect: null));
       }
     }
   }

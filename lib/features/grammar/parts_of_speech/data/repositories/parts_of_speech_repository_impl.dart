@@ -15,10 +15,14 @@ class PartsOfSpeechRepositoryImpl implements PartsOfSpeechRepository {
   });
 
   @override
-  Future<Either<Failure, List<PartsOfSpeechQuest>>> getPartsOfSpeechQuests(int level) async {
+  Future<Either<Failure, List<PartsOfSpeechQuest>>> getPartsOfSpeechQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getPartsOfSpeechQuests(level);
+        final remoteQuests = await remoteDataSource.getPartsOfSpeechQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class PartsOfSpeechRepositoryImpl implements PartsOfSpeechRepository {
     }
   }
 }
-

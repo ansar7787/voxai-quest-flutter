@@ -30,11 +30,11 @@ class TopicVocabQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        topic,
-        word,
-        definition,
-        example,
-        category,
-      ];
+    ...super.props,
+    topic,
+    word,
+    definition,
+    example,
+    category,
+  ];
 }

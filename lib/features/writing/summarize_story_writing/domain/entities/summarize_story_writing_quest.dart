@@ -26,9 +26,9 @@ class SummarizeStoryWritingQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        storyText,
-        storyTitle,
-        mainPoints,
-      ];
+    ...super.props,
+    storyText,
+    storyTitle,
+    mainPoints,
+  ];
 }

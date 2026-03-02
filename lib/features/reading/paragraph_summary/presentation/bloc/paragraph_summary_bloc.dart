@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/reading/paragraph_summary/domain/usecases/g
 import 'paragraph_summary_event.dart';
 import 'paragraph_summary_state.dart';
 
-class ParagraphSummaryBloc extends Bloc<ParagraphSummaryEvent, ParagraphSummaryState> {
+class ParagraphSummaryBloc
+    extends Bloc<ParagraphSummaryEvent, ParagraphSummaryState> {
   final GetParagraphSummaryQuests getQuests;
 
-  ParagraphSummaryBloc({required this.getQuests}) : super(ParagraphSummaryInitial()) {
+  ParagraphSummaryBloc({required this.getQuests})
+    : super(ParagraphSummaryInitial()) {
     on<FetchParagraphSummaryQuests>(_onFetchQuests);
     on<SubmitParagraphSummaryAnswer>(_onSubmitAnswer);
     on<NextParagraphSummaryQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class ParagraphSummaryBloc extends Bloc<ParagraphSummaryEvent, ParagraphSummaryS
         if (newLives <= 0) {
           emit(ParagraphSummaryGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class ParagraphSummaryBloc extends Bloc<ParagraphSummaryEvent, ParagraphSummaryS
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(ParagraphSummaryGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          ParagraphSummaryGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

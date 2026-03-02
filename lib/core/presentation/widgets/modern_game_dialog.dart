@@ -11,7 +11,10 @@ class ModernGameDialog extends StatelessWidget {
   final VoidCallback onButtonPressed;
   final VoidCallback? onSecondaryPressed;
   final String? secondaryButtonText;
+  final VoidCallback? onAdAction;
+  final String? adButtonText;
   final bool isSuccess;
+  final bool isRescueLife;
 
   const ModernGameDialog({
     super.key,
@@ -21,7 +24,10 @@ class ModernGameDialog extends StatelessWidget {
     required this.onButtonPressed,
     this.onSecondaryPressed,
     this.secondaryButtonText,
+    this.onAdAction,
+    this.adButtonText,
     this.isSuccess = true,
+    this.isRescueLife = false,
   });
 
   @override
@@ -82,13 +88,92 @@ class ModernGameDialog extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 32.h),
+              if (onAdAction != null) ...[
+                SizedBox(
+                      width: double.infinity,
+                      height: 56.h,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.r),
+                          gradient: LinearGradient(
+                            colors: isRescueLife
+                                ? [
+                                    const Color(0xFF2563EB),
+                                    const Color(0xFF1E3A8A),
+                                  ] // Blue for Rescue
+                                : [
+                                    const Color(0xFFFFD700),
+                                    const Color(0xFFFFA500),
+                                  ], // Gold for Double Up
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color:
+                                  (isRescueLife
+                                          ? Colors.blue
+                                          : const Color(0xFFFFA500))
+                                      .withValues(alpha: 0.3),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            foregroundColor: isRescueLife
+                                ? Colors.white
+                                : Colors.black87,
+                            elevation: 0,
+                            shadowColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.r),
+                            ),
+                          ),
+                          onPressed: onAdAction,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                isRescueLife
+                                    ? Icons.play_circle_fill
+                                    : Icons.play_circle_fill_rounded,
+                                size: 20.r,
+                              ),
+                              SizedBox(width: 8.w),
+                              Text(
+                                adButtonText ?? "DOUBLE REWARDS (2X)",
+                                style: GoogleFonts.outfit(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                    .animate(onPlay: (c) => isRescueLife ? c : c.repeat())
+                    .shimmer(
+                      duration: 2.seconds,
+                      color: Colors.white.withValues(alpha: 0.4),
+                    ),
+                SizedBox(height: 16.h),
+              ],
               SizedBox(
                 width: double.infinity,
                 height: 56.h,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor,
-                    foregroundColor: Colors.white,
+                    backgroundColor: isRescueLife
+                        ? (isDark ? Colors.white12 : Colors.grey[200])
+                        : primaryColor,
+                    foregroundColor: isRescueLife
+                        ? (isDark ? Colors.white54 : Colors.black54)
+                        : Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.r),

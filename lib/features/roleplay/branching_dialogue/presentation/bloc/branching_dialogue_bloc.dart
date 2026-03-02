@@ -3,11 +3,13 @@ import 'package:voxai_quest/features/roleplay/branching_dialogue/domain/usecases
 import 'branching_dialogue_event.dart';
 import 'branching_dialogue_state.dart';
 
-class BranchingDialogueBloc extends Bloc<BranchingDialogueEvent, BranchingDialogueState> {
+class BranchingDialogueBloc
+    extends Bloc<BranchingDialogueEvent, BranchingDialogueState> {
   final GetBranchingDialogueQuests getQuests;
 
-  BranchingDialogueBloc({required this.getQuests}) : super(BranchingDialogueInitial()) {
-        on<RestartLevel>((event, emit) => emit(BranchingDialogueInitial()));
+  BranchingDialogueBloc({required this.getQuests})
+    : super(BranchingDialogueInitial()) {
+    on<RestartLevel>((event, emit) => emit(BranchingDialogueInitial()));
     on<FetchBranchingDialogueQuests>(_onFetchQuests);
     on<SubmitBranchingDialogueAnswer>(_onSubmitAnswer);
     on<NextBranchingDialogueQuestion>(_onNextQuestion);
@@ -22,7 +24,11 @@ class BranchingDialogueBloc extends Bloc<BranchingDialogueEvent, BranchingDialog
     emit(BranchingDialogueLoading());
     final result = await getQuests(event.level);
     result.fold(
-      (failure) => emit(const BranchingDialogueError("Failed to load branching dialogue quests")),
+      (failure) => emit(
+        const BranchingDialogueError(
+          "Failed to load branching dialogue quests",
+        ),
+      ),
       (quests) => emit(BranchingDialogueLoaded(quests: quests)),
     );
   }
@@ -34,17 +40,25 @@ class BranchingDialogueBloc extends Bloc<BranchingDialogueEvent, BranchingDialog
     final state = this.state;
     if (state is BranchingDialogueLoaded) {
       final isCorrect = event.isCorrect;
-      final newLives = isCorrect ? state.livesRemaining : state.livesRemaining - 1;
+      final newLives = isCorrect
+          ? state.livesRemaining
+          : state.livesRemaining - 1;
 
       if (newLives <= 0) {
         emit(BranchingDialogueGameOver());
       } else {
-        emit(state.copyWith(
-          livesRemaining: newLives,
-          lastAnswerCorrect: isCorrect,
-          xpEarned: isCorrect ? state.xpEarned + state.currentQuest.xpReward : state.xpEarned,
-          coinsEarned: isCorrect ? state.coinsEarned + state.currentQuest.coinReward : state.coinsEarned,
-        ));
+        emit(
+          state.copyWith(
+            livesRemaining: newLives,
+            lastAnswerCorrect: isCorrect,
+            xpEarned: isCorrect
+                ? state.xpEarned + state.currentQuest.xpReward
+                : state.xpEarned,
+            coinsEarned: isCorrect
+                ? state.coinsEarned + state.currentQuest.coinReward
+                : state.coinsEarned,
+          ),
+        );
       }
     }
   }
@@ -56,15 +70,19 @@ class BranchingDialogueBloc extends Bloc<BranchingDialogueEvent, BranchingDialog
     final state = this.state;
     if (state is BranchingDialogueLoaded) {
       if (state.currentIndex + 1 < state.quests.length) {
-        emit(state.copyWith(
-          currentIndex: state.currentIndex + 1,
-          lastAnswerCorrect: null,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: state.currentIndex + 1,
+            lastAnswerCorrect: null,
+          ),
+        );
       } else {
-        emit(BranchingDialogueGameComplete(
-          xpEarned: state.xpEarned,
-          coinsEarned: state.coinsEarned,
-        ));
+        emit(
+          BranchingDialogueGameComplete(
+            xpEarned: state.xpEarned,
+            coinsEarned: state.coinsEarned,
+          ),
+        );
       }
     }
   }
@@ -86,4 +104,3 @@ class BranchingDialogueBloc extends Bloc<BranchingDialogueEvent, BranchingDialog
     // Implement hint logic if needed
   }
 }
-

@@ -39,10 +39,9 @@ class PartsOfSpeechBloc extends Bloc<PartsOfSpeechEvent, PartsOfSpeechState> {
         if (newLives <= 0) {
           emit(PartsOfSpeechGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +56,20 @@ class PartsOfSpeechBloc extends Bloc<PartsOfSpeechEvent, PartsOfSpeechState> {
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(PartsOfSpeechGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          PartsOfSpeechGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

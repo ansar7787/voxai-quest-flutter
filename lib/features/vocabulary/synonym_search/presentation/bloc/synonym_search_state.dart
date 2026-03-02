@@ -46,14 +46,23 @@ class SynonymSearchLoaded extends SynonymSearchState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class SynonymSearchGameComplete extends SynonymSearchState {
   final int xpEarned;
   final int coinsEarned;
 
-  const SynonymSearchGameComplete({required this.xpEarned, required this.coinsEarned});
+  const SynonymSearchGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

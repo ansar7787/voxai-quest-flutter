@@ -29,6 +29,4 @@ class RestoreJobInterviewLife extends JobInterviewEvent {}
 
 class JobInterviewHintUsed extends JobInterviewEvent {}
 
-
 class RestartLevel extends JobInterviewEvent {}
-

@@ -51,13 +51,13 @@ class MedicalConsultLoaded extends MedicalConsultState {
 
   @override
   List<Object?> get props => [
-        quests,
-        currentIndex,
-        livesRemaining,
-        lastAnswerCorrect,
-        xpEarned,
-        coinsEarned,
-      ];
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    xpEarned,
+    coinsEarned,
+  ];
 }
 
 class MedicalConsultError extends MedicalConsultState {
@@ -71,7 +71,10 @@ class MedicalConsultError extends MedicalConsultState {
 class MedicalConsultGameComplete extends MedicalConsultState {
   final int xpEarned;
   final int coinsEarned;
-  const MedicalConsultGameComplete({required this.xpEarned, required this.coinsEarned});
+  const MedicalConsultGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

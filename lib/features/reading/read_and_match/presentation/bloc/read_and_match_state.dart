@@ -46,14 +46,23 @@ class ReadAndMatchLoaded extends ReadAndMatchState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class ReadAndMatchGameComplete extends ReadAndMatchState {
   final int xpEarned;
   final int coinsEarned;
 
-  const ReadAndMatchGameComplete({required this.xpEarned, required this.coinsEarned});
+  const ReadAndMatchGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

@@ -23,7 +23,6 @@ import 'package:voxai_quest/core/utils/speech_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/speaking/presentation/bloc/speaking_bloc.dart';
 
-
 class SpeakOppositeScreen extends StatefulWidget {
   final int level;
   const SpeakOppositeScreen({super.key, required this.level});
@@ -114,7 +113,11 @@ class _SpeakOppositeScreenState extends State<SpeakOppositeScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('speaking', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'speaking',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -152,8 +155,7 @@ class _SpeakOppositeScreenState extends State<SpeakOppositeScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<SpeakingBloc>().add(
-                
-      FetchSpeakingQuests(
+                FetchSpeakingQuests(
                   gameType: GameSubtype.speakOpposite,
                   level: widget.level,
                 ),

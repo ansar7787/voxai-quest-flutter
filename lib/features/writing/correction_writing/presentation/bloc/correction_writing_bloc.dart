@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/writing/correction_writing/domain/usecases/
 import 'correction_writing_event.dart';
 import 'correction_writing_state.dart';
 
-class CorrectionWritingBloc extends Bloc<CorrectionWritingEvent, CorrectionWritingState> {
+class CorrectionWritingBloc
+    extends Bloc<CorrectionWritingEvent, CorrectionWritingState> {
   final GetCorrectionWritingQuests getQuests;
 
-  CorrectionWritingBloc({required this.getQuests}) : super(CorrectionWritingInitial()) {
+  CorrectionWritingBloc({required this.getQuests})
+    : super(CorrectionWritingInitial()) {
     on<FetchCorrectionWritingQuests>(_onFetchQuests);
     on<SubmitCorrectionWritingAnswer>(_onSubmitAnswer);
     on<NextCorrectionWritingQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class CorrectionWritingBloc extends Bloc<CorrectionWritingEvent, CorrectionWriti
         if (newLives <= 0) {
           emit(CorrectionWritingGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class CorrectionWritingBloc extends Bloc<CorrectionWritingEvent, CorrectionWriti
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(CorrectionWritingGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          CorrectionWritingGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

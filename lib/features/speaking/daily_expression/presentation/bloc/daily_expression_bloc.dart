@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/speaking/daily_expression/domain/usecases/g
 import 'daily_expression_event.dart';
 import 'daily_expression_state.dart';
 
-class DailyExpressionBloc extends Bloc<DailyExpressionEvent, DailyExpressionState> {
+class DailyExpressionBloc
+    extends Bloc<DailyExpressionEvent, DailyExpressionState> {
   final GetDailyExpressionQuests getQuests;
 
-  DailyExpressionBloc({required this.getQuests}) : super(DailyExpressionInitial()) {
+  DailyExpressionBloc({required this.getQuests})
+    : super(DailyExpressionInitial()) {
     on<FetchDailyExpressionQuests>(_onFetchQuests);
     on<SubmitDailyExpressionAnswer>(_onSubmitAnswer);
     on<NextDailyExpressionQuestion>(_onNextQuestion);
@@ -38,10 +40,9 @@ class DailyExpressionBloc extends Bloc<DailyExpressionEvent, DailyExpressionStat
         if (newLives <= 0) {
           emit(DailyExpressionGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -56,15 +57,14 @@ class DailyExpressionBloc extends Bloc<DailyExpressionEvent, DailyExpressionStat
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(DailyExpressionGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          DailyExpressionGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-        ));
+        emit(state.copyWith(currentIndex: nextIndex, lastAnswerCorrect: null));
       }
     }
   }

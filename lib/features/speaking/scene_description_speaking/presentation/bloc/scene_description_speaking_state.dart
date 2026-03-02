@@ -42,14 +42,23 @@ class SceneDescriptionSpeakingLoaded extends SceneDescriptionSpeakingState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
-class SceneDescriptionSpeakingGameComplete extends SceneDescriptionSpeakingState {
+class SceneDescriptionSpeakingGameComplete
+    extends SceneDescriptionSpeakingState {
   final int xpEarned;
   final int coinsEarned;
 
-  const SceneDescriptionSpeakingGameComplete({required this.xpEarned, required this.coinsEarned});
+  const SceneDescriptionSpeakingGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

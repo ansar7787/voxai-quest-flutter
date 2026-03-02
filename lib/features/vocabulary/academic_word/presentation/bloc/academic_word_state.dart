@@ -46,14 +46,23 @@ class AcademicWordLoaded extends AcademicWordState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class AcademicWordGameComplete extends AcademicWordState {
   final int xpEarned;
   final int coinsEarned;
 
-  const AcademicWordGameComplete({required this.xpEarned, required this.coinsEarned});
+  const AcademicWordGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

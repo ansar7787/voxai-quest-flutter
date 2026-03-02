@@ -46,14 +46,23 @@ class PronunciationFocusLoaded extends PronunciationFocusState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, lastAccuracyScore];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    lastAccuracyScore,
+  ];
 }
 
 class PronunciationFocusGameComplete extends PronunciationFocusState {
   final int xpEarned;
   final int coinsEarned;
 
-  const PronunciationFocusGameComplete({required this.xpEarned, required this.coinsEarned});
+  const PronunciationFocusGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

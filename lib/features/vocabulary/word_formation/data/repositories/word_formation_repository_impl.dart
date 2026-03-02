@@ -15,10 +15,14 @@ class WordFormationRepositoryImpl implements WordFormationRepository {
   });
 
   @override
-  Future<Either<Failure, List<WordFormationQuest>>> getWordFormationQuests(int level) async {
+  Future<Either<Failure, List<WordFormationQuest>>> getWordFormationQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getWordFormationQuests(level);
+        final remoteQuests = await remoteDataSource.getWordFormationQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class WordFormationRepositoryImpl implements WordFormationRepository {
     }
   }
 }
-

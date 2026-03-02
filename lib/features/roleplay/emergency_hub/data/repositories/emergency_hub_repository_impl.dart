@@ -16,10 +16,14 @@ class EmergencyHubRepositoryImpl implements EmergencyHubRepository {
   });
 
   @override
-  Future<Either<Failure, List<EmergencyHubQuest>>> getEmergencyHubQuests(int level) async {
+  Future<Either<Failure, List<EmergencyHubQuest>>> getEmergencyHubQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getEmergencyHubQuests(level);
+        final remoteQuests = await remoteDataSource.getEmergencyHubQuests(
+          level,
+        );
         return Right(remoteQuests);
       } on ServerException {
         return Left(ServerFailure('Server error occurred'));
@@ -29,4 +33,3 @@ class EmergencyHubRepositoryImpl implements EmergencyHubRepository {
     }
   }
 }
-

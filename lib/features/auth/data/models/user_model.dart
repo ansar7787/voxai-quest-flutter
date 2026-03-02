@@ -42,6 +42,9 @@ class UserModel extends UserEntity {
     super.claimedLevelMilestones,
     super.coinHistory,
     super.hasPermanentXPBoost,
+    super.lastFreeSpinDate,
+    super.lastAdSpinDate,
+    super.adSpinsUsedToday,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> map) {
@@ -191,6 +194,13 @@ class UserModel extends UserEntity {
           ? List<Map<String, dynamic>>.from(map['coinHistory'])
           : const [],
       hasPermanentXPBoost: map['hasPermanentXPBoost'] ?? false,
+      lastFreeSpinDate: map['lastFreeSpinDate'] != null
+          ? (map['lastFreeSpinDate'] as Timestamp).toDate()
+          : null,
+      lastAdSpinDate: map['lastAdSpinDate'] != null
+          ? (map['lastAdSpinDate'] as Timestamp).toDate()
+          : null,
+      adSpinsUsedToday: (map['adSpinsUsedToday'] as num?)?.toInt() ?? 0,
       voxinMascot: map['voxinMascot'],
       voxinEquippedAccessory: map['voxinEquippedAccessory'],
       voxinOwnedAccessories: map['voxinOwnedAccessories'] != null
@@ -237,6 +247,9 @@ class UserModel extends UserEntity {
     int? totalExp,
     Map<String, int>? unlockedLevels,
     bool? hasPermanentXPBoost,
+    DateTime? lastFreeSpinDate,
+    DateTime? lastAdSpinDate,
+    int? adSpinsUsedToday,
     String? voxinMascot,
     String? voxinEquippedAccessory,
     List<String>? voxinOwnedAccessories,
@@ -281,6 +294,9 @@ class UserModel extends UserEntity {
       totalExp: totalExp ?? this.totalExp,
       unlockedLevels: unlockedLevels ?? this.unlockedLevels,
       hasPermanentXPBoost: hasPermanentXPBoost ?? this.hasPermanentXPBoost,
+      lastFreeSpinDate: lastFreeSpinDate ?? this.lastFreeSpinDate,
+      lastAdSpinDate: lastAdSpinDate ?? this.lastAdSpinDate,
+      adSpinsUsedToday: adSpinsUsedToday ?? this.adSpinsUsedToday,
       voxinMascot: voxinMascot ?? this.voxinMascot,
       voxinEquippedAccessory:
           voxinEquippedAccessory ?? this.voxinEquippedAccessory,
@@ -336,6 +352,13 @@ class UserModel extends UserEntity {
       'claimedLevelMilestones': claimedLevelMilestones,
       'coinHistory': coinHistory,
       'hasPermanentXPBoost': hasPermanentXPBoost,
+      'lastFreeSpinDate': lastFreeSpinDate != null
+          ? Timestamp.fromDate(lastFreeSpinDate!)
+          : null,
+      'lastAdSpinDate': lastAdSpinDate != null
+          ? Timestamp.fromDate(lastAdSpinDate!)
+          : null,
+      'adSpinsUsedToday': adSpinsUsedToday,
       'voxinMascot': voxinMascot,
       'voxinEquippedAccessory': voxinEquippedAccessory,
       'voxinOwnedAccessories': voxinOwnedAccessories,

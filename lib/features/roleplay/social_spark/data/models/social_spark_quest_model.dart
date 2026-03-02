@@ -40,13 +40,19 @@ class SocialSparkQuestModel extends SocialSparkQuest {
       xpReward: (json['xpReward'] as num?)?.toInt() ?? 10,
       coinReward: (json['coinReward'] as num?)?.toInt() ?? 10,
       livesAllowed: (json['livesAllowed'] as num?)?.toInt() ?? 3,
-      interactionType: EnumParser.parseInteractionType(json['interactionType'] as String?),
-      options: (json['options'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      interactionType: EnumParser.parseInteractionType(
+        json['interactionType'] as String?,
+      ),
+      options: (json['options'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       correctAnswerIndex: (json['correctAnswerIndex'] as num?)?.toInt(),
       setting: json['setting'] as String?,
       socialContext: json['socialContext'] as String?,
       conversationStarter: json['conversationStarter'] as String?,
-      conversationalHooks: (json['conversationalHooks'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      conversationalHooks: (json['conversationalHooks'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       closure: json['closure'] as String?,
     );
   }
@@ -72,4 +78,3 @@ class SocialSparkQuestModel extends SocialSparkQuest {
     };
   }
 }
-

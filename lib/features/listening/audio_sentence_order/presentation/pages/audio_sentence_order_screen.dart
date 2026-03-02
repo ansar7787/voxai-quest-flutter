@@ -20,6 +20,8 @@ import 'package:voxai_quest/core/utils/injection_container.dart' as di;
 import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/core/utils/speech_service.dart';
 import 'package:voxai_quest/features/listening/presentation/bloc/listening_bloc.dart';
+import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:voxai_quest/core/utils/ad_service.dart';
 
 class AudioSentenceOrderScreen extends StatefulWidget {
   final int level;
@@ -81,7 +83,11 @@ class _AudioSentenceOrderScreenState extends State<AudioSentenceOrderScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('listening', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'listening',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -111,8 +117,7 @@ class _AudioSentenceOrderScreenState extends State<AudioSentenceOrderScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<ListeningBloc>().add(
-                
-      FetchListeningQuests(
+                FetchListeningQuests(
                   gameType: GameSubtype.audioSentenceOrder,
                   level: widget.level,
                 ),
@@ -120,7 +125,6 @@ class _AudioSentenceOrderScreenState extends State<AudioSentenceOrderScreen> {
             );
           }
           if (state is ListeningLoaded) {
-
             return Stack(
               children: [
                 const MeshGradientBackground(),
@@ -436,8 +440,6 @@ class _AudioSentenceOrderScreenState extends State<AudioSentenceOrderScreen> {
     );
   }
 
-  
-
   void _showCompletionDialog(BuildContext context, int xp, int coins) {
     _hapticService.success();
     _soundService.playLevelComplete();
@@ -465,17 +467,32 @@ class _AudioSentenceOrderScreenState extends State<AudioSentenceOrderScreen> {
       builder: (context) => ModernGameDialog(
         title: "SEQUENCE BROKEN",
         description: "The order seems a bit scrambled. Ready to try again?",
-        buttonText: "RETRY",
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
-          Navigator.pop(context);
-          context.read<ListeningBloc>().add(RestoreLife());
-        },
-        secondaryButtonText: "EXIT",
-        onSecondaryPressed: () {
-          Navigator.pop(context);
+          Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<ListeningBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

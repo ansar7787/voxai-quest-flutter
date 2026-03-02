@@ -691,19 +691,32 @@ class _PitchPatternMatchScreenState extends State<PitchPatternMatchScreen> {
       builder: (c) => ModernGameDialog(
         title: 'Off Key',
         description: 'The pitch was a bit flat. Try to sing the words!',
-        buttonText: 'RETRY',
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
-          Navigator.pop(c);
-          if (mounted) {
-            context.read<AccentBloc>().add(RestoreLife());
-          }
-        },
-        secondaryButtonText: 'QUIT',
-        onSecondaryPressed: () {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<AccentBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

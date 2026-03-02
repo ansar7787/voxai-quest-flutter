@@ -29,6 +29,4 @@ class RestoreElevatorPitchLife extends ElevatorPitchEvent {}
 
 class ElevatorPitchHintUsed extends ElevatorPitchEvent {}
 
-
 class RestartLevel extends ElevatorPitchEvent {}
-

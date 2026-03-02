@@ -39,8 +39,12 @@ class PhrasalVerbsQuestModel extends PhrasalVerbsQuest {
       xpReward: (json['xpReward'] as num?)?.toInt() ?? 10,
       coinReward: (json['coinReward'] as num?)?.toInt() ?? 10,
       livesAllowed: (json['livesAllowed'] as num?)?.toInt() ?? 3,
-      interactionType: EnumParser.parseInteractionType(json['interactionType'] as String?),
-      options: (json['options'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      interactionType: EnumParser.parseInteractionType(
+        json['interactionType'] as String?,
+      ),
+      options: (json['options'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       correctAnswerIndex: (json['correctAnswerIndex'] as num?)?.toInt(),
       correctAnswer: json['correctAnswer'] as String?,
       hint: json['hint'] as String?,
@@ -69,4 +73,3 @@ class PhrasalVerbsQuestModel extends PhrasalVerbsQuest {
     };
   }
 }
-

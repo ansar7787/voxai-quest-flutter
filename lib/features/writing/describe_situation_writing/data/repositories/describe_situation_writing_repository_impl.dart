@@ -5,7 +5,8 @@ import 'package:voxai_quest/features/writing/describe_situation_writing/data/dat
 import 'package:voxai_quest/features/writing/describe_situation_writing/domain/entities/describe_situation_writing_quest.dart';
 import 'package:voxai_quest/features/writing/describe_situation_writing/domain/repositories/describe_situation_writing_repository.dart';
 
-class DescribeSituationWritingRepositoryImpl implements DescribeSituationWritingRepository {
+class DescribeSituationWritingRepositoryImpl
+    implements DescribeSituationWritingRepository {
   final DescribeSituationWritingRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
 
@@ -15,10 +16,12 @@ class DescribeSituationWritingRepositoryImpl implements DescribeSituationWriting
   });
 
   @override
-  Future<Either<Failure, List<DescribeSituationWritingQuest>>> getDescribeSituationWritingQuests(int level) async {
+  Future<Either<Failure, List<DescribeSituationWritingQuest>>>
+  getDescribeSituationWritingQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getDescribeSituationWritingQuests(level);
+        final remoteQuests = await remoteDataSource
+            .getDescribeSituationWritingQuests(level);
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class DescribeSituationWritingRepositoryImpl implements DescribeSituationWriting
     }
   }
 }
-

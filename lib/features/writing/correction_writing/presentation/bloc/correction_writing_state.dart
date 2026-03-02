@@ -46,14 +46,23 @@ class CorrectionWritingLoaded extends CorrectionWritingState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class CorrectionWritingGameComplete extends CorrectionWritingState {
   final int xpEarned;
   final int coinsEarned;
 
-  const CorrectionWritingGameComplete({required this.xpEarned, required this.coinsEarned});
+  const CorrectionWritingGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

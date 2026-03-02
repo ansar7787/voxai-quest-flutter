@@ -26,11 +26,11 @@ class DailyExpressionQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        expression,
-        meaning,
-        context,
-        audioUrl,
-        translation,
-      ];
+    ...super.props,
+    expression,
+    meaning,
+    context,
+    audioUrl,
+    translation,
+  ];
 }

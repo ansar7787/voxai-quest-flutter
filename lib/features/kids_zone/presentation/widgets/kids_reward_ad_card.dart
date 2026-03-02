@@ -135,8 +135,10 @@ class KidsRewardAdCard extends StatelessWidget {
 
   void _showRewardAd(BuildContext context) {
     bool rewardEarned = false;
+    final isPremium = context.read<AuthBloc>().state.user?.isPremium ?? false;
 
     di.sl<AdService>().showRewardedAd(
+      isPremium: isPremium,
       onUserEarnedReward: (reward) {
         rewardEarned = true;
         context.read<AuthBloc>().add(const AuthAddKidsCoinsRequested(50));

@@ -39,10 +39,5 @@ class FlashcardsQuest extends GameQuest {
   }
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        word,
-        definition,
-        example,
-      ];
+  List<Object?> get props => [...super.props, word, definition, example];
 }

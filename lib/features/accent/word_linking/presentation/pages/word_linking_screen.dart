@@ -628,19 +628,32 @@ class _WordLinkingScreenState extends State<WordLinkingScreen> {
       builder: (c) => ModernGameDialog(
         title: 'Connection Lost',
         description: 'The sounds were too detached. Try to flow more!',
-        buttonText: 'RETRY',
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
-          Navigator.pop(c);
-          if (mounted) {
-            context.read<AccentBloc>().add(RestoreLife());
-          }
-        },
-        secondaryButtonText: 'QUIT',
-        onSecondaryPressed: () {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<AccentBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

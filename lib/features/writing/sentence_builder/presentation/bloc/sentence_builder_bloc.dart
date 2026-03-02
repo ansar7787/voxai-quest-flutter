@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/writing/sentence_builder/domain/usecases/ge
 import 'sentence_builder_event.dart';
 import 'sentence_builder_state.dart';
 
-class SentenceBuilderBloc extends Bloc<SentenceBuilderEvent, SentenceBuilderState> {
+class SentenceBuilderBloc
+    extends Bloc<SentenceBuilderEvent, SentenceBuilderState> {
   final GetSentenceBuilderQuests getQuests;
 
-  SentenceBuilderBloc({required this.getQuests}) : super(SentenceBuilderInitial()) {
+  SentenceBuilderBloc({required this.getQuests})
+    : super(SentenceBuilderInitial()) {
     on<FetchSentenceBuilderQuests>(_onFetchQuests);
     on<SubmitSentenceBuilderAnswer>(_onSubmitAnswer);
     on<NextSentenceBuilderQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class SentenceBuilderBloc extends Bloc<SentenceBuilderEvent, SentenceBuilderStat
         if (newLives <= 0) {
           emit(SentenceBuilderGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class SentenceBuilderBloc extends Bloc<SentenceBuilderEvent, SentenceBuilderStat
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(SentenceBuilderGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          SentenceBuilderGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

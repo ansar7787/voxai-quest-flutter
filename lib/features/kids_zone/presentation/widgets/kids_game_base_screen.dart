@@ -10,11 +10,12 @@ import 'package:voxai_quest/features/kids_zone/presentation/bloc/kids_bloc.dart'
 import 'package:voxai_quest/core/utils/ad_service.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart' as di;
 import 'package:voxai_quest/features/kids_zone/presentation/utils/kids_tts_service.dart';
-import 'package:voxai_quest/features/kids_zone/presentation/utils/kids_audio_service.dart';
 import 'package:voxai_quest/features/kids_zone/presentation/widgets/kids_feedback_overlay.dart';
+import 'package:voxai_quest/core/utils/analytics_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:voxai_quest/features/kids_zone/presentation/utils/kids_assets.dart';
+import 'package:voxai_quest/features/kids_zone/presentation/utils/kids_audio_service.dart';
 
 class KidsGameBaseScreen extends StatefulWidget {
   final String title;
@@ -605,6 +606,7 @@ class _KidsGameBaseScreenState extends State<KidsGameBaseScreen> {
                             });
                           } else {
                             adService.showRewardedAd(
+                              isPremium: isPremium,
                               onUserEarnedReward: (reward) {
                                 context.read<KidsBloc>().add(
                                   ClaimDoubleKidsRewards(
@@ -704,6 +706,11 @@ class _KidsGameBaseScreenState extends State<KidsGameBaseScreen> {
 
   void _showGameOverDialog(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final adService = di.sl<AdService>();
+    final analytics = di.sl<AnalyticsService>();
+    final user = context.read<AuthBloc>().state.user;
+    final isPremium = user?.isPremium ?? false;
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -714,7 +721,7 @@ class _KidsGameBaseScreenState extends State<KidsGameBaseScreen> {
         ),
         title: Center(
           child: Text(
-            "OOPS!",
+            "DON'T GIVE UP!",
             style: GoogleFonts.poppins(
               fontWeight: FontWeight.w900,
               color: isDark ? Colors.white : Colors.black,
@@ -722,37 +729,98 @@ class _KidsGameBaseScreenState extends State<KidsGameBaseScreen> {
           ),
         ),
         content: Text(
-          "Don't worry, you can try again!",
+          "Get back in the game and keep your progress!",
           textAlign: TextAlign.center,
           style: GoogleFonts.poppins(
             color: isDark ? Colors.white70 : Colors.black87,
           ),
         ),
         actions: [
-          Center(
-            child: ScaleButton(
-              onTap: () {
-                context.pop();
-                context.pop();
-              },
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 15.h),
-                decoration: BoxDecoration(
-                  color: isDark ? Colors.white10 : Colors.grey[200],
-                  borderRadius: BorderRadius.circular(30.r),
-                  border: isDark ? Border.all(color: Colors.white12) : null,
-                ),
-                child: Text(
-                  "OK",
-                  style: GoogleFonts.poppins(
-                    color: isDark ? Colors.white : Colors.black54,
-                    fontWeight: FontWeight.bold,
+          Column(
+            children: [
+              Center(
+                child: ScaleButton(
+                  onTap: () {
+                    void restoreLife() {
+                      analytics.logRescueLifeUsed(
+                        widget.gameType,
+                        widget.level,
+                      );
+                      context.read<KidsBloc>().add(RestoreKidsLife());
+                      context.pop(); // Close dialog
+                    }
+
+                    if (isPremium) {
+                      restoreLife();
+                    } else {
+                      adService.showRewardedAd(
+                        isPremium: false,
+                        onUserEarnedReward: (_) {
+                          restoreLife();
+                        },
+                        onDismissed: () {},
+                      );
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(vertical: 15.h),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF2563EB), Color(0xFF1E3A8A)],
+                      ),
+                      borderRadius: BorderRadius.circular(30.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.blue.withValues(alpha: 0.3),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          isPremium ? Icons.favorite : Icons.play_circle_fill,
+                          color: Colors.white,
+                          size: 20.sp,
+                        ),
+                        SizedBox(width: 8.w),
+                        Text(
+                          isPremium ? "CONTINUE" : "WATCH AD TO CONTINUE",
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
+              SizedBox(height: 12.h),
+              Center(
+                child: ScaleButton(
+                  onTap: () {
+                    analytics.logLevelFail(widget.gameType, widget.level);
+                    context.pop();
+                    context.pop();
+                  },
+                  child: Text(
+                    "GIVE UP",
+                    style: GoogleFonts.poppins(
+                      color: isDark ? Colors.white54 : Colors.grey,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.sp,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10.h),
+            ],
           ),
-          SizedBox(height: 10.h),
         ],
       ),
     );

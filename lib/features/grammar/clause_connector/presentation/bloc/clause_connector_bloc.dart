@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/grammar/clause_connector/domain/usecases/ge
 import 'clause_connector_event.dart';
 import 'clause_connector_state.dart';
 
-class ClauseConnectorBloc extends Bloc<ClauseConnectorEvent, ClauseConnectorState> {
+class ClauseConnectorBloc
+    extends Bloc<ClauseConnectorEvent, ClauseConnectorState> {
   final GetClauseConnectorQuests getQuests;
 
-  ClauseConnectorBloc({required this.getQuests}) : super(ClauseConnectorInitial()) {
+  ClauseConnectorBloc({required this.getQuests})
+    : super(ClauseConnectorInitial()) {
     on<FetchClauseConnectorQuests>(_onFetchQuests);
     on<SubmitClauseConnectorAnswer>(_onSubmitAnswer);
     on<NextClauseConnectorQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class ClauseConnectorBloc extends Bloc<ClauseConnectorEvent, ClauseConnectorStat
         if (newLives <= 0) {
           emit(ClauseConnectorGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class ClauseConnectorBloc extends Bloc<ClauseConnectorEvent, ClauseConnectorStat
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(ClauseConnectorGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          ClauseConnectorGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

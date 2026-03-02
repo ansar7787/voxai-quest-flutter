@@ -28,11 +28,11 @@ class JobInterviewQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        question,
-        sampleAnswers,
-        keyPoints,
-        role,
-        company,
-      ];
+    ...super.props,
+    question,
+    sampleAnswers,
+    keyPoints,
+    role,
+    company,
+  ];
 }

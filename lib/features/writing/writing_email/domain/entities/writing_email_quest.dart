@@ -28,10 +28,10 @@ class WritingEmailQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        scenario,
-        recipient,
-        subject,
-        requiredPoints,
-      ];
+    ...super.props,
+    scenario,
+    recipient,
+    subject,
+    requiredPoints,
+  ];
 }

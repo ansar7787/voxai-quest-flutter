@@ -30,11 +30,11 @@ class AcademicWordQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        word,
-        definition,
-        example,
-        synonym,
-        antonym,
-      ];
+    ...super.props,
+    word,
+    definition,
+    example,
+    synonym,
+    antonym,
+  ];
 }

@@ -23,9 +23,5 @@ class PrefixSuffixQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        targetWord,
-        sentence,
-      ];
+  List<Object?> get props => [...super.props, targetWord, sentence];
 }

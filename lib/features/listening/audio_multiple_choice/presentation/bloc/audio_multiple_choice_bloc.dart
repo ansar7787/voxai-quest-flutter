@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/listening/audio_multiple_choice/domain/usec
 import 'audio_multiple_choice_event.dart';
 import 'audio_multiple_choice_state.dart';
 
-class AudioMultipleChoiceBloc extends Bloc<AudioMultipleChoiceEvent, AudioMultipleChoiceState> {
+class AudioMultipleChoiceBloc
+    extends Bloc<AudioMultipleChoiceEvent, AudioMultipleChoiceState> {
   final GetAudioMultipleChoiceQuests getQuests;
 
-  AudioMultipleChoiceBloc({required this.getQuests}) : super(AudioMultipleChoiceInitial()) {
+  AudioMultipleChoiceBloc({required this.getQuests})
+    : super(AudioMultipleChoiceInitial()) {
     on<FetchAudioMultipleChoiceQuests>(_onFetchQuests);
     on<SubmitAudioMultipleChoiceAnswer>(_onSubmitAnswer);
     on<NextAudioMultipleChoiceQuestion>(_onNextQuestion);
@@ -38,10 +40,9 @@ class AudioMultipleChoiceBloc extends Bloc<AudioMultipleChoiceEvent, AudioMultip
         if (newLives <= 0) {
           emit(AudioMultipleChoiceGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -56,15 +57,14 @@ class AudioMultipleChoiceBloc extends Bloc<AudioMultipleChoiceEvent, AudioMultip
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(AudioMultipleChoiceGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          AudioMultipleChoiceGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-        ));
+        emit(state.copyWith(currentIndex: nextIndex, lastAnswerCorrect: null));
       }
     }
   }
@@ -76,4 +76,3 @@ class AudioMultipleChoiceBloc extends Bloc<AudioMultipleChoiceEvent, AudioMultip
     emit(AudioMultipleChoiceInitial());
   }
 }
-

@@ -23,7 +23,6 @@ import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/writing/domain/entities/writing_quest.dart';
 import 'package:voxai_quest/features/writing/presentation/bloc/writing_bloc.dart';
 
-
 class DescribeSituationScreen extends StatefulWidget {
   final int level;
   const DescribeSituationScreen({super.key, required this.level});
@@ -143,8 +142,7 @@ class _DescribeSituationScreenState extends State<DescribeSituationScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<WritingBloc>().add(
-                
-      FetchWritingQuests(
+                FetchWritingQuests(
                   gameType: GameSubtype.describeSituationWriting,
                   level: widget.level,
                 ),
@@ -515,17 +513,32 @@ class _DescribeSituationScreenState extends State<DescribeSituationScreen> {
       builder: (c) => ModernGameDialog(
         title: 'Blank Canvas',
         description: 'The situation needs your words. Try again!',
-        buttonText: 'RETRY',
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
-          Navigator.pop(c);
-          context.read<WritingBloc>().add(RestoreLife());
-        },
-        secondaryButtonText: 'QUIT',
-        onSecondaryPressed: () {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<WritingBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

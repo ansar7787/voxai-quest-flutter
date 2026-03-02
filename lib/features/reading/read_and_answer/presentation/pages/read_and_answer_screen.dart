@@ -46,6 +46,8 @@ class _ReadAndAnswerScreenState extends State<ReadAndAnswerScreen> {
         level: widget.level,
       ),
     );
+    // Pre-load ads
+    di.sl<AdService>().loadRewardedAd();
   }
 
   void _submitAnswer(int index, int? correctIndex, BuildContext context) {
@@ -444,6 +446,31 @@ class _ReadAndAnswerScreenState extends State<ReadAndAnswerScreen> {
           Navigator.pop(c);
           context.pop(true);
         },
+        onAdAction: () {
+          Navigator.pop(c);
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          final adService = di.sl<AdService>();
+          adService.showRewardedAd(
+            isPremium: isPremium,
+            onUserEarnedReward: (reward) {
+              // Dispatch Double Up Event
+              context.read<AuthBloc>().add(
+                AuthDoubleUpRewardsRequested(xp, coins),
+              );
+              // Show Success SnackBar
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("REWARDS DOUBLED! 💎💎"),
+                  backgroundColor: Color(0xFF10B981),
+                ),
+              );
+            },
+            onDismissed: () {
+              context.pop(true);
+            },
+          );
+        },
       ),
     );
   }
@@ -457,14 +484,32 @@ class _ReadAndAnswerScreenState extends State<ReadAndAnswerScreen> {
         title: 'Reflection Needed',
         description:
             'Your reading journey paused here. Try the previous chapter again!',
-        buttonText: 'RETRY',
         isSuccess: false,
-        onButtonPressed: () => Navigator.pop(c),
-        secondaryButtonText: 'QUIT',
-        onSecondaryPressed: () {
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
+        onButtonPressed: () {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<ReadingBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

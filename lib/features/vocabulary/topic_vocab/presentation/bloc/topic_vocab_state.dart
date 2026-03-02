@@ -46,14 +46,23 @@ class TopicVocabLoaded extends TopicVocabState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class TopicVocabGameComplete extends TopicVocabState {
   final int xpEarned;
   final int coinsEarned;
 
-  const TopicVocabGameComplete({required this.xpEarned, required this.coinsEarned});
+  const TopicVocabGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

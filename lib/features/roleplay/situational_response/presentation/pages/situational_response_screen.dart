@@ -23,7 +23,6 @@ import 'package:voxai_quest/core/utils/speech_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/roleplay/presentation/bloc/roleplay_bloc.dart';
 
-
 class SituationalResponseScreen extends StatefulWidget {
   final int level;
   const SituationalResponseScreen({super.key, required this.level});
@@ -136,8 +135,7 @@ class _SituationalResponseScreenState extends State<SituationalResponseScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<RoleplayBloc>().add(
-                
-      FetchRoleplayQuests(
+                FetchRoleplayQuests(
                   gameType: GameSubtype.situationalResponse,
                   level: widget.level,
                 ),

@@ -7,7 +7,8 @@ abstract class DescribeSituationWritingEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class FetchDescribeSituationWritingQuests extends DescribeSituationWritingEvent {
+class FetchDescribeSituationWritingQuests
+    extends DescribeSituationWritingEvent {
   final int level;
 
   const FetchDescribeSituationWritingQuests(this.level);
@@ -16,7 +17,8 @@ class FetchDescribeSituationWritingQuests extends DescribeSituationWritingEvent 
   List<Object?> get props => [level];
 }
 
-class SubmitDescribeSituationWritingAnswer extends DescribeSituationWritingEvent {
+class SubmitDescribeSituationWritingAnswer
+    extends DescribeSituationWritingEvent {
   final bool isCorrect;
 
   const SubmitDescribeSituationWritingAnswer(this.isCorrect);
@@ -25,8 +27,10 @@ class SubmitDescribeSituationWritingAnswer extends DescribeSituationWritingEvent
   List<Object?> get props => [isCorrect];
 }
 
-class NextDescribeSituationWritingQuestion extends DescribeSituationWritingEvent {}
+class NextDescribeSituationWritingQuestion
+    extends DescribeSituationWritingEvent {}
 
-class RestoreDescribeSituationWritingLife extends DescribeSituationWritingEvent {}
+class RestoreDescribeSituationWritingLife
+    extends DescribeSituationWritingEvent {}
 
 class DescribeSituationWritingHintUsed extends DescribeSituationWritingEvent {}

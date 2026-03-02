@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/grammar/subject_verb_agreement/domain/useca
 import 'subject_verb_agreement_event.dart';
 import 'subject_verb_agreement_state.dart';
 
-class SubjectVerbAgreementBloc extends Bloc<SubjectVerbAgreementEvent, SubjectVerbAgreementState> {
+class SubjectVerbAgreementBloc
+    extends Bloc<SubjectVerbAgreementEvent, SubjectVerbAgreementState> {
   final GetSubjectVerbAgreementQuests getQuests;
 
-  SubjectVerbAgreementBloc({required this.getQuests}) : super(SubjectVerbAgreementInitial()) {
+  SubjectVerbAgreementBloc({required this.getQuests})
+    : super(SubjectVerbAgreementInitial()) {
     on<FetchSubjectVerbAgreementQuests>(_onFetchQuests);
     on<SubmitSubjectVerbAgreementAnswer>(_onSubmitAnswer);
     on<NextSubjectVerbAgreementQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class SubjectVerbAgreementBloc extends Bloc<SubjectVerbAgreementEvent, SubjectVe
         if (newLives <= 0) {
           emit(SubjectVerbAgreementGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class SubjectVerbAgreementBloc extends Bloc<SubjectVerbAgreementEvent, SubjectVe
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(SubjectVerbAgreementGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          SubjectVerbAgreementGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

@@ -28,11 +28,11 @@ class GourmetOrderQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        customerName,
-        orderDetails,
-        ingredients,
-        specialRequest,
-        response,
-      ];
+    ...super.props,
+    customerName,
+    orderDetails,
+    ingredients,
+    specialRequest,
+    response,
+  ];
 }

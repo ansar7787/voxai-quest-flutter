@@ -15,10 +15,13 @@ class PronunciationFocusRepositoryImpl implements PronunciationFocusRepository {
   });
 
   @override
-  Future<Either<Failure, List<PronunciationFocusQuest>>> getPronunciationFocusQuests(int level) async {
+  Future<Either<Failure, List<PronunciationFocusQuest>>>
+  getPronunciationFocusQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getPronunciationFocusQuests(level);
+        final remoteQuests = await remoteDataSource.getPronunciationFocusQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class PronunciationFocusRepositoryImpl implements PronunciationFocusRepository {
     }
   }
 }
-

@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/listening/fast_speech_decoder/domain/usecas
 import 'fast_speech_decoder_event.dart';
 import 'fast_speech_decoder_state.dart';
 
-class FastSpeechDecoderBloc extends Bloc<FastSpeechDecoderEvent, FastSpeechDecoderState> {
+class FastSpeechDecoderBloc
+    extends Bloc<FastSpeechDecoderEvent, FastSpeechDecoderState> {
   final GetFastSpeechDecoderQuests getQuests;
 
-  FastSpeechDecoderBloc({required this.getQuests}) : super(FastSpeechDecoderInitial()) {
+  FastSpeechDecoderBloc({required this.getQuests})
+    : super(FastSpeechDecoderInitial()) {
     on<FetchFastSpeechDecoderQuests>(_onFetchQuests);
     on<SubmitFastSpeechDecoderAnswer>(_onSubmitAnswer);
     on<NextFastSpeechDecoderQuestion>(_onNextQuestion);
@@ -35,10 +37,10 @@ class FastSpeechDecoderBloc extends Bloc<FastSpeechDecoderEvent, FastSpeechDecod
         RegExp(r'[^\w\s]'),
         '',
       );
-      final normalizedCorrect = event.correctAnswer.trim().toLowerCase().replaceAll(
-        RegExp(r'[^\w\s]'),
-        '',
-      );
+      final normalizedCorrect = event.correctAnswer
+          .trim()
+          .toLowerCase()
+          .replaceAll(RegExp(r'[^\w\s]'), '');
 
       final isCorrect = normalizedInput == normalizedCorrect;
 
@@ -49,10 +51,9 @@ class FastSpeechDecoderBloc extends Bloc<FastSpeechDecoderEvent, FastSpeechDecod
         if (newLives <= 0) {
           emit(FastSpeechDecoderGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -67,15 +68,14 @@ class FastSpeechDecoderBloc extends Bloc<FastSpeechDecoderEvent, FastSpeechDecod
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(FastSpeechDecoderGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          FastSpeechDecoderGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-        ));
+        emit(state.copyWith(currentIndex: nextIndex, lastAnswerCorrect: null));
       }
     }
   }
@@ -87,4 +87,3 @@ class FastSpeechDecoderBloc extends Bloc<FastSpeechDecoderEvent, FastSpeechDecod
     emit(FastSpeechDecoderInitial());
   }
 }
-

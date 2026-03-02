@@ -5,13 +5,16 @@ abstract class ElevatorPitchRemoteDataSource {
   Future<List<ElevatorPitchQuestModel>> getElevatorPitchQuests(int level);
 }
 
-class ElevatorPitchRemoteDataSourceImpl implements ElevatorPitchRemoteDataSource {
+class ElevatorPitchRemoteDataSourceImpl
+    implements ElevatorPitchRemoteDataSource {
   final FirebaseFirestore firestore;
 
   ElevatorPitchRemoteDataSourceImpl({required this.firestore});
 
   @override
-  Future<List<ElevatorPitchQuestModel>> getElevatorPitchQuests(int level) async {
+  Future<List<ElevatorPitchQuestModel>> getElevatorPitchQuests(
+    int level,
+  ) async {
     final snapshot = await firestore
         .collection('curriculum')
         .doc('roleplay')
@@ -20,7 +23,10 @@ class ElevatorPitchRemoteDataSourceImpl implements ElevatorPitchRemoteDataSource
         .get();
 
     return snapshot.docs
-        .map((doc) => ElevatorPitchQuestModel.fromJson(doc.data()..['id'] = doc.id))
+        .map(
+          (doc) =>
+              ElevatorPitchQuestModel.fromJson(doc.data()..['id'] = doc.id),
+        )
         .toList();
   }
 }

@@ -36,9 +36,5 @@ class AntonymSearchQuest extends GameQuest {
   }
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        word,
-        antonyms,
-      ];
+  List<Object?> get props => [...super.props, word, antonyms];
 }

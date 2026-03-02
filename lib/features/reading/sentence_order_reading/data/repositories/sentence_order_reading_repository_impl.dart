@@ -5,7 +5,8 @@ import 'package:voxai_quest/features/reading/sentence_order_reading/data/datasou
 import 'package:voxai_quest/features/reading/sentence_order_reading/domain/entities/sentence_order_reading_quest.dart';
 import 'package:voxai_quest/features/reading/sentence_order_reading/domain/repositories/sentence_order_reading_repository.dart';
 
-class SentenceOrderReadingRepositoryImpl implements SentenceOrderReadingRepository {
+class SentenceOrderReadingRepositoryImpl
+    implements SentenceOrderReadingRepository {
   final SentenceOrderReadingRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
 
@@ -15,10 +16,12 @@ class SentenceOrderReadingRepositoryImpl implements SentenceOrderReadingReposito
   });
 
   @override
-  Future<Either<Failure, List<SentenceOrderReadingQuest>>> getSentenceOrderReadingQuests(int level) async {
+  Future<Either<Failure, List<SentenceOrderReadingQuest>>>
+  getSentenceOrderReadingQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getSentenceOrderReadingQuests(level);
+        final remoteQuests = await remoteDataSource
+            .getSentenceOrderReadingQuests(level);
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class SentenceOrderReadingRepositoryImpl implements SentenceOrderReadingReposito
     }
   }
 }
-

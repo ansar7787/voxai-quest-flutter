@@ -15,10 +15,14 @@ class ReadAndAnswerRepositoryImpl implements ReadAndAnswerRepository {
   });
 
   @override
-  Future<Either<Failure, List<ReadAndAnswerQuest>>> getReadAndAnswerQuests(int level) async {
+  Future<Either<Failure, List<ReadAndAnswerQuest>>> getReadAndAnswerQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getReadAndAnswerQuests(level);
+        final remoteQuests = await remoteDataSource.getReadAndAnswerQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class ReadAndAnswerRepositoryImpl implements ReadAndAnswerRepository {
     }
   }
 }
-

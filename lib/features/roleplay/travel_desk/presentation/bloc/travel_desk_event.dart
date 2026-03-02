@@ -29,6 +29,4 @@ class RestoreTravelDeskLife extends TravelDeskEvent {}
 
 class TravelDeskHintUsed extends TravelDeskEvent {}
 
-
 class RestartLevel extends TravelDeskEvent {}
-

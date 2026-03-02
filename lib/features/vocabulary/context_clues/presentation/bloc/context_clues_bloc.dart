@@ -20,16 +20,15 @@ class ContextCluesBloc extends Bloc<ContextCluesEvent, ContextCluesState> {
   ) async {
     emit(ContextCluesLoading());
     final result = await getQuests(event.level);
-    result.fold(
-      (failure) => emit(ContextCluesError(failure.message)),
-      (quests) {
-        if (quests.isEmpty) {
-          emit(const ContextCluesError("No quests found for this level."));
-        } else {
-          emit(ContextCluesLoaded(quests: quests));
-        }
-      },
-    );
+    result.fold((failure) => emit(ContextCluesError(failure.message)), (
+      quests,
+    ) {
+      if (quests.isEmpty) {
+        emit(const ContextCluesError("No quests found for this level."));
+      } else {
+        emit(ContextCluesLoaded(quests: quests));
+      }
+    });
   }
 
   void _onSubmitAnswer(
@@ -45,10 +44,9 @@ class ContextCluesBloc extends Bloc<ContextCluesEvent, ContextCluesState> {
         if (newLives <= 0) {
           emit(ContextCluesGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -63,16 +61,20 @@ class ContextCluesBloc extends Bloc<ContextCluesEvent, ContextCluesState> {
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(ContextCluesGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          ContextCluesGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

@@ -114,8 +114,10 @@ class AdRewardCard extends StatelessWidget {
 
   void _showRewardAd(BuildContext context) {
     bool rewardEarned = false;
+    final isPremium = context.read<AuthBloc>().state.user?.isPremium ?? false;
 
     di.sl<AdService>().showRewardedAd(
+      isPremium: isPremium,
       onUserEarnedReward: (reward) {
         rewardEarned = true;
         // Use AuthAddCoinsRequested to ensure history is logged

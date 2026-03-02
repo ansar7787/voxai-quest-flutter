@@ -13,7 +13,8 @@ class SentenceBuilderQuest extends GameQuest {
     super.xpReward,
     super.coinReward,
     super.livesAllowed,
-    super.interactionType = InteractionType.choice, // Special handling for building sentences
+    super.interactionType =
+        InteractionType.choice, // Special handling for building sentences
     super.options,
     super.correctAnswerIndex,
     super.correctAnswer,
@@ -23,9 +24,5 @@ class SentenceBuilderQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        prompt,
-        scrambledWords,
-      ];
+  List<Object?> get props => [...super.props, prompt, scrambledWords];
 }

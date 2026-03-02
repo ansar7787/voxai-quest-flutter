@@ -42,14 +42,22 @@ class SituationSpeakingLoaded extends SituationSpeakingState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class SituationSpeakingGameComplete extends SituationSpeakingState {
   final int xpEarned;
   final int coinsEarned;
 
-  const SituationSpeakingGameComplete({required this.xpEarned, required this.coinsEarned});
+  const SituationSpeakingGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

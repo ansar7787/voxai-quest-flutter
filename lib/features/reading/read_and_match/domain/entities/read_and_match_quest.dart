@@ -1,7 +1,8 @@
 import 'package:voxai_quest/core/domain/entities/game_quest.dart';
 
 class ReadAndMatchQuest extends GameQuest {
-  final Map<String, String>? pairs; // Map of items to match (e.g., word to definition)
+  final Map<String, String>?
+  pairs; // Map of items to match (e.g., word to definition)
 
   const ReadAndMatchQuest({
     required super.id,
@@ -21,8 +22,5 @@ class ReadAndMatchQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        pairs,
-      ];
+  List<Object?> get props => [...super.props, pairs];
 }

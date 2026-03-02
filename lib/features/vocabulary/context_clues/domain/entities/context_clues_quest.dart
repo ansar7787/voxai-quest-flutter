@@ -25,9 +25,5 @@ class ContextCluesQuest extends GameQuest {
   String? get displaySentence => sentence ?? instruction;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        sentence,
-        targetWord,
-      ];
+  List<Object?> get props => [...super.props, sentence, targetWord];
 }

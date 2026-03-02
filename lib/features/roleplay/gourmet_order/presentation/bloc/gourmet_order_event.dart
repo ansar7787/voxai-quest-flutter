@@ -29,6 +29,4 @@ class RestoreGourmetOrderLife extends GourmetOrderEvent {}
 
 class GourmetOrderHintUsed extends GourmetOrderEvent {}
 
-
 class RestartLevel extends GourmetOrderEvent {}
-

@@ -46,14 +46,23 @@ class PrefixSuffixLoaded extends PrefixSuffixState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class PrefixSuffixGameComplete extends PrefixSuffixState {
   final int xpEarned;
   final int coinsEarned;
 
-  const PrefixSuffixGameComplete({required this.xpEarned, required this.coinsEarned});
+  const PrefixSuffixGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

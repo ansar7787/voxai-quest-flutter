@@ -46,14 +46,23 @@ class SentenceBuilderLoaded extends SentenceBuilderState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class SentenceBuilderGameComplete extends SentenceBuilderState {
   final int xpEarned;
   final int coinsEarned;
 
-  const SentenceBuilderGameComplete({required this.xpEarned, required this.coinsEarned});
+  const SentenceBuilderGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

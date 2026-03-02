@@ -23,9 +23,5 @@ class WordFormationQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        root,
-        sentence,
-      ];
+  List<Object?> get props => [...super.props, root, sentence];
 }

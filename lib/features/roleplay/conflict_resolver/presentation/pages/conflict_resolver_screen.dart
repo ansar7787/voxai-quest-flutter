@@ -23,7 +23,6 @@ import 'package:voxai_quest/core/utils/speech_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/roleplay/presentation/bloc/roleplay_bloc.dart';
 
-
 class ConflictResolverScreen extends StatefulWidget {
   final int level;
   const ConflictResolverScreen({super.key, required this.level});
@@ -92,7 +91,11 @@ class _ConflictResolverScreenState extends State<ConflictResolverScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('roleplay', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'roleplay',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
       backgroundColor: isDark
@@ -142,8 +145,7 @@ class _ConflictResolverScreenState extends State<ConflictResolverScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<RoleplayBloc>().add(
-                
-      FetchRoleplayQuests(
+                FetchRoleplayQuests(
                   gameType: GameSubtype.conflictResolver,
                   level: widget.level,
                 ),

@@ -23,7 +23,6 @@ import 'package:voxai_quest/core/utils/speech_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/roleplay/presentation/bloc/roleplay_bloc.dart';
 
-
 class JobInterviewScreen extends StatefulWidget {
   final int level;
   const JobInterviewScreen({super.key, required this.level});
@@ -93,7 +92,11 @@ class _JobInterviewScreenState extends State<JobInterviewScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('roleplay', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'roleplay',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
       backgroundColor: isDark
@@ -143,8 +146,7 @@ class _JobInterviewScreenState extends State<JobInterviewScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<RoleplayBloc>().add(
-                
-      FetchRoleplayQuests(
+                FetchRoleplayQuests(
                   gameType: GameSubtype.jobInterview,
                   level: widget.level,
                 ),

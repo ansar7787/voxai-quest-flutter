@@ -15,10 +15,13 @@ class SituationSpeakingRepositoryImpl implements SituationSpeakingRepository {
   });
 
   @override
-  Future<Either<Failure, List<SituationSpeakingQuest>>> getSituationSpeakingQuests(int level) async {
+  Future<Either<Failure, List<SituationSpeakingQuest>>>
+  getSituationSpeakingQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getSituationSpeakingQuests(level);
+        final remoteQuests = await remoteDataSource.getSituationSpeakingQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class SituationSpeakingRepositoryImpl implements SituationSpeakingRepository {
     }
   }
 }
-

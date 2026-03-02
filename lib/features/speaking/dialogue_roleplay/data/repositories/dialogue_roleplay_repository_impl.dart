@@ -15,10 +15,13 @@ class DialogueRoleplayRepositoryImpl implements DialogueRoleplayRepository {
   });
 
   @override
-  Future<Either<Failure, List<DialogueRoleplayQuest>>> getDialogueRoleplayQuests(int level) async {
+  Future<Either<Failure, List<DialogueRoleplayQuest>>>
+  getDialogueRoleplayQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getDialogueRoleplayQuests(level);
+        final remoteQuests = await remoteDataSource.getDialogueRoleplayQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class DialogueRoleplayRepositoryImpl implements DialogueRoleplayRepository {
     }
   }
 }
-

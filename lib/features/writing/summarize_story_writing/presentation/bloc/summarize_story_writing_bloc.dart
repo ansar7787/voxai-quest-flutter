@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/writing/summarize_story_writing/domain/usec
 import 'summarize_story_writing_event.dart';
 import 'summarize_story_writing_state.dart';
 
-class SummarizeStoryWritingBloc extends Bloc<SummarizeStoryWritingEvent, SummarizeStoryWritingState> {
+class SummarizeStoryWritingBloc
+    extends Bloc<SummarizeStoryWritingEvent, SummarizeStoryWritingState> {
   final GetSummarizeStoryWritingQuests getQuests;
 
-  SummarizeStoryWritingBloc({required this.getQuests}) : super(SummarizeStoryWritingInitial()) {
+  SummarizeStoryWritingBloc({required this.getQuests})
+    : super(SummarizeStoryWritingInitial()) {
     on<FetchSummarizeStoryWritingQuests>(_onFetchQuests);
     on<SubmitSummarizeStoryWritingAnswer>(_onSubmitAnswer);
     on<NextSummarizeStoryWritingQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class SummarizeStoryWritingBloc extends Bloc<SummarizeStoryWritingEvent, Summari
         if (newLives <= 0) {
           emit(SummarizeStoryWritingGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class SummarizeStoryWritingBloc extends Bloc<SummarizeStoryWritingEvent, Summari
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(SummarizeStoryWritingGameComplete(
-          xpEarned: totalQuests * 15,
-          coinsEarned: totalQuests * 8,
-        ));
+        emit(
+          SummarizeStoryWritingGameComplete(
+            xpEarned: totalQuests * 15,
+            coinsEarned: totalQuests * 8,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

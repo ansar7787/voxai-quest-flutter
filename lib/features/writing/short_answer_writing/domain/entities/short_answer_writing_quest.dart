@@ -24,8 +24,8 @@ class ShortAnswerWritingQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        questionPrompt,
-        acceptableKeywords,
-      ];
+    ...super.props,
+    questionPrompt,
+    acceptableKeywords,
+  ];
 }

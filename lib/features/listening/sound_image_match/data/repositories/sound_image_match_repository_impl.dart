@@ -15,7 +15,9 @@ class SoundImageMatchRepositoryImpl implements SoundImageMatchRepository {
   });
 
   @override
-  Future<Either<Failure, List<SoundImageMatchQuest>>> getQuests(int level) async {
+  Future<Either<Failure, List<SoundImageMatchQuest>>> getQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteQuests = await remoteDataSource.getQuests(level);

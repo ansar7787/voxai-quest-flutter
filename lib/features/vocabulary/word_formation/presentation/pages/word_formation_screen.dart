@@ -109,8 +109,7 @@ class _WordFormationScreenState extends State<WordFormationScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<VocabularyBloc>().add(
-                
-      FetchVocabularyQuests(
+                FetchVocabularyQuests(
                   gameType: GameSubtype.wordFormation,
                   level: widget.level,
                 ),

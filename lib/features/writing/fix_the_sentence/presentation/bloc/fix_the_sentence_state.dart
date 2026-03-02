@@ -46,14 +46,23 @@ class FixTheSentenceLoaded extends FixTheSentenceState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class FixTheSentenceGameComplete extends FixTheSentenceState {
   final int xpEarned;
   final int coinsEarned;
 
-  const FixTheSentenceGameComplete({required this.xpEarned, required this.coinsEarned});
+  const FixTheSentenceGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

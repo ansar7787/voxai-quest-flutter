@@ -26,9 +26,9 @@ class EssayDraftingQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        topic,
-        mainPoints,
-        wordCountRequirement,
-      ];
+    ...super.props,
+    topic,
+    mainPoints,
+    wordCountRequirement,
+  ];
 }

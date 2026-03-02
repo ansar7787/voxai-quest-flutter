@@ -42,14 +42,22 @@ class SpeakOppositeLoaded extends SpeakOppositeState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class SpeakOppositeGameComplete extends SpeakOppositeState {
   final int xpEarned;
   final int coinsEarned;
 
-  const SpeakOppositeGameComplete({required this.xpEarned, required this.coinsEarned});
+  const SpeakOppositeGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

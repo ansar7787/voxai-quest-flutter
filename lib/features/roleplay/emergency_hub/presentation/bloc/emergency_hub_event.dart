@@ -29,6 +29,4 @@ class RestoreEmergencyHubLife extends EmergencyHubEvent {}
 
 class EmergencyHubHintUsed extends EmergencyHubEvent {}
 
-
 class RestartLevel extends EmergencyHubEvent {}
-

@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/speaking/speak_missing_word/domain/usecases
 import 'speak_missing_word_event.dart';
 import 'speak_missing_word_state.dart';
 
-class SpeakMissingWordBloc extends Bloc<SpeakMissingWordEvent, SpeakMissingWordState> {
+class SpeakMissingWordBloc
+    extends Bloc<SpeakMissingWordEvent, SpeakMissingWordState> {
   final GetSpeakMissingWordQuests getQuests;
 
-  SpeakMissingWordBloc({required this.getQuests}) : super(SpeakMissingWordInitial()) {
+  SpeakMissingWordBloc({required this.getQuests})
+    : super(SpeakMissingWordInitial()) {
     on<FetchSpeakMissingWordQuests>(_onFetchQuests);
     on<SubmitSpeakMissingWordAnswer>(_onSubmitAnswer);
     on<NextSpeakMissingWordQuestion>(_onNextQuestion);
@@ -38,10 +40,9 @@ class SpeakMissingWordBloc extends Bloc<SpeakMissingWordEvent, SpeakMissingWordS
         if (newLives <= 0) {
           emit(SpeakMissingWordGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -56,15 +57,14 @@ class SpeakMissingWordBloc extends Bloc<SpeakMissingWordEvent, SpeakMissingWordS
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(SpeakMissingWordGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          SpeakMissingWordGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-        ));
+        emit(state.copyWith(currentIndex: nextIndex, lastAnswerCorrect: null));
       }
     }
   }

@@ -20,16 +20,15 @@ class PrefixSuffixBloc extends Bloc<PrefixSuffixEvent, PrefixSuffixState> {
   ) async {
     emit(PrefixSuffixLoading());
     final result = await getQuests(event.level);
-    result.fold(
-      (failure) => emit(PrefixSuffixError(failure.message)),
-      (quests) {
-        if (quests.isEmpty) {
-          emit(const PrefixSuffixError("No quests found for this level."));
-        } else {
-          emit(PrefixSuffixLoaded(quests: quests));
-        }
-      },
-    );
+    result.fold((failure) => emit(PrefixSuffixError(failure.message)), (
+      quests,
+    ) {
+      if (quests.isEmpty) {
+        emit(const PrefixSuffixError("No quests found for this level."));
+      } else {
+        emit(PrefixSuffixLoaded(quests: quests));
+      }
+    });
   }
 
   void _onSubmitAnswer(
@@ -45,10 +44,9 @@ class PrefixSuffixBloc extends Bloc<PrefixSuffixEvent, PrefixSuffixState> {
         if (newLives <= 0) {
           emit(PrefixSuffixGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -63,16 +61,20 @@ class PrefixSuffixBloc extends Bloc<PrefixSuffixEvent, PrefixSuffixState> {
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(PrefixSuffixGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          PrefixSuffixGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

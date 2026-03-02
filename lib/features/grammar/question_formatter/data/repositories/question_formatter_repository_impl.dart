@@ -15,10 +15,13 @@ class QuestionFormatterRepositoryImpl implements QuestionFormatterRepository {
   });
 
   @override
-  Future<Either<Failure, List<QuestionFormatterQuest>>> getQuestionFormatterQuests(int level) async {
+  Future<Either<Failure, List<QuestionFormatterQuest>>>
+  getQuestionFormatterQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getQuestionFormatterQuests(level);
+        final remoteQuests = await remoteDataSource.getQuestionFormatterQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class QuestionFormatterRepositoryImpl implements QuestionFormatterRepository {
     }
   }
 }
-

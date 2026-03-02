@@ -15,10 +15,14 @@ class TenseMasteryRepositoryImpl implements TenseMasteryRepository {
   });
 
   @override
-  Future<Either<Failure, List<TenseMasteryQuest>>> getTenseMasteryQuests(int level) async {
+  Future<Either<Failure, List<TenseMasteryQuest>>> getTenseMasteryQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getTenseMasteryQuests(level);
+        final remoteQuests = await remoteDataSource.getTenseMasteryQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class TenseMasteryRepositoryImpl implements TenseMasteryRepository {
     }
   }
 }
-

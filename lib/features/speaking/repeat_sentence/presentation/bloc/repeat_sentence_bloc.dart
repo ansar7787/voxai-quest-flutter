@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/speaking/repeat_sentence/domain/usecases/ge
 import 'repeat_sentence_event.dart';
 import 'repeat_sentence_state.dart';
 
-class RepeatSentenceBloc extends Bloc<RepeatSentenceEvent, RepeatSentenceState> {
+class RepeatSentenceBloc
+    extends Bloc<RepeatSentenceEvent, RepeatSentenceState> {
   final GetRepeatSentenceQuests getQuests;
 
-  RepeatSentenceBloc({required this.getQuests}) : super(RepeatSentenceInitial()) {
+  RepeatSentenceBloc({required this.getQuests})
+    : super(RepeatSentenceInitial()) {
     on<FetchRepeatSentenceQuests>(_onFetchQuests);
     on<SubmitRepeatSentenceAnswer>(_onSubmitAnswer);
     on<NextRepeatSentenceQuestion>(_onNextQuestion);
@@ -38,10 +40,9 @@ class RepeatSentenceBloc extends Bloc<RepeatSentenceEvent, RepeatSentenceState> 
         if (newLives <= 0) {
           emit(RepeatSentenceGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -56,15 +57,14 @@ class RepeatSentenceBloc extends Bloc<RepeatSentenceEvent, RepeatSentenceState> 
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(RepeatSentenceGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          RepeatSentenceGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-        ));
+        emit(state.copyWith(currentIndex: nextIndex, lastAnswerCorrect: null));
       }
     }
   }

@@ -38,7 +38,9 @@ class DailyExpressionQuestModel extends DailyExpressionQuest {
       xpReward: (json['xpReward'] as num?)?.toInt() ?? 10,
       coinReward: (json['coinReward'] as num?)?.toInt() ?? 10,
       livesAllowed: (json['livesAllowed'] as num?)?.toInt() ?? 3,
-      interactionType: EnumParser.parseInteractionType(json['interactionType'] as String?),
+      interactionType: EnumParser.parseInteractionType(
+        json['interactionType'] as String?,
+      ),
       expression: json['expression'] as String?,
       meaning: json['meaning'] as String?,
       context: json['context'] as String?,
@@ -66,4 +68,3 @@ class DailyExpressionQuestModel extends DailyExpressionQuest {
     };
   }
 }
-

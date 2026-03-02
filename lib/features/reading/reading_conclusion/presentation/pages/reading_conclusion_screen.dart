@@ -22,7 +22,6 @@ import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/reading/presentation/bloc/reading_bloc.dart';
 
-
 class ReadingConclusionScreen extends StatefulWidget {
   final int level;
   const ReadingConclusionScreen({super.key, required this.level});
@@ -121,8 +120,7 @@ class _ReadingConclusionScreenState extends State<ReadingConclusionScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<ReadingBloc>().add(
-                
-      FetchReadingQuests(
+                FetchReadingQuests(
                   gameType: GameSubtype.readingConclusion,
                   level: widget.level,
                 ),
@@ -490,17 +488,32 @@ class _ReadingConclusionScreenState extends State<ReadingConclusionScreen> {
       builder: (c) => ModernGameDialog(
         title: 'Thread Broken',
         description: 'Try to find the logical end of the story next time!',
-        buttonText: 'RETRY',
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
-          Navigator.pop(c);
-          context.read<ReadingBloc>().add(RestoreLife());
-        },
-        secondaryButtonText: 'QUIT',
-        onSecondaryPressed: () {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<ReadingBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

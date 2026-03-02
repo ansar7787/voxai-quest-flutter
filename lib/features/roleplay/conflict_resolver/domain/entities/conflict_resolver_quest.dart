@@ -28,11 +28,11 @@ class ConflictResolverQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        scenario,
-        antagonistName,
-        conflictPoint,
-        deEscalationTechniques,
-        resolution,
-      ];
+    ...super.props,
+    scenario,
+    antagonistName,
+    conflictPoint,
+    deEscalationTechniques,
+    resolution,
+  ];
 }

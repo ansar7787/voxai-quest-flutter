@@ -15,7 +15,9 @@ class VoiceSwapRepositoryImpl implements VoiceSwapRepository {
   });
 
   @override
-  Future<Either<Failure, List<VoiceSwapQuest>>> getVoiceSwapQuests(int level) async {
+  Future<Either<Failure, List<VoiceSwapQuest>>> getVoiceSwapQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteQuests = await remoteDataSource.getVoiceSwapQuests(level);
@@ -28,4 +30,3 @@ class VoiceSwapRepositoryImpl implements VoiceSwapRepository {
     }
   }
 }
-

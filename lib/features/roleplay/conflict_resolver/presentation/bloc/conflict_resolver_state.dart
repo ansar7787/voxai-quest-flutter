@@ -51,13 +51,13 @@ class ConflictResolverLoaded extends ConflictResolverState {
 
   @override
   List<Object?> get props => [
-        quests,
-        currentIndex,
-        livesRemaining,
-        lastAnswerCorrect,
-        xpEarned,
-        coinsEarned,
-      ];
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    xpEarned,
+    coinsEarned,
+  ];
 }
 
 class ConflictResolverError extends ConflictResolverState {
@@ -71,7 +71,10 @@ class ConflictResolverError extends ConflictResolverState {
 class ConflictResolverGameComplete extends ConflictResolverState {
   final int xpEarned;
   final int coinsEarned;
-  const ConflictResolverGameComplete({required this.xpEarned, required this.coinsEarned});
+  const ConflictResolverGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

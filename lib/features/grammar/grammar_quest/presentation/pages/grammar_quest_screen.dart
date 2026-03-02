@@ -47,6 +47,8 @@ class _GrammarQuestScreenState extends State<GrammarQuestScreen> {
         level: widget.level,
       ),
     );
+    // Pre-load ads
+    di.sl<AdService>().loadRewardedAd();
   }
 
   void _submitAnswer(int index, int correctIndex) {
@@ -490,6 +492,31 @@ class _GrammarQuestScreenState extends State<GrammarQuestScreen> {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          Navigator.pop(c);
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          final adService = di.sl<AdService>();
+          adService.showRewardedAd(
+            isPremium: isPremium,
+            onUserEarnedReward: (reward) {
+              // Dispatch Double Up Event
+              context.read<AuthBloc>().add(
+                AuthDoubleUpRewardsRequested(xp, coins),
+              );
+              // Show Success SnackBar
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("REWARDS DOUBLED! 💎💎"),
+                  backgroundColor: Color(0xFF10B981),
+                ),
+              );
+            },
+            onDismissed: () {
+              context.pop();
+            },
+          );
+        },
       ),
     );
   }
@@ -502,13 +529,52 @@ class _GrammarQuestScreenState extends State<GrammarQuestScreen> {
       builder: (c) => ModernGameDialog(
         title: 'Paradox Detected',
         description: 'Your syntax failed. Recharge and try again!',
-        buttonText: 'RETRY',
         isSuccess: false,
-        onButtonPressed: () => Navigator.pop(c),
-        secondaryButtonText: 'QUIT',
-        onSecondaryPressed: () {
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
+        onButtonPressed: () {
           Navigator.pop(c);
           context.pop();
+        },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<GrammarBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
+        adButtonText: "RESCUE LIFE (AD)",
+        onAdAction: () {
+          Navigator.pop(c);
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          final adService = di.sl<AdService>();
+          adService.showRewardedAd(
+            isPremium: isPremium,
+            onDismissed: () {},
+            onUserEarnedReward: (reward) {
+              context.read<GrammarBloc>().add(RestoreLife());
+              _hapticService.success();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("LIFE RESCUED! ❤️"),
+                  backgroundColor: Color(0xFF10B981),
+                ),
+              );
+            },
+          );
         },
       ),
     );

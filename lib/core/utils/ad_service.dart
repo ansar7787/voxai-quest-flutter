@@ -20,6 +20,7 @@ class AdService {
   Future<void> init() async {
     if (!kIsWeb) {
       await MobileAds.instance.initialize();
+      loadAppOpenAd();
     }
   }
 
@@ -133,9 +134,16 @@ class AdService {
   }
 
   void showRewardedAd({
+    required bool isPremium,
     required Function(RewardItem) onUserEarnedReward,
     required VoidCallback onDismissed,
   }) {
+    if (isPremium) {
+      onUserEarnedReward(RewardItem(1, 'Premium Reward'));
+      onDismissed();
+      return;
+    }
+
     if (_rewardedAd == null) {
       debugPrint('Warning: Attempted to show rewarded ad before loaded.');
       onDismissed();
@@ -161,5 +169,76 @@ class AdService {
       },
     );
     _rewardedAd = null;
+  }
+
+  // App Open Ads
+  AppOpenAd? _appOpenAd;
+  bool _isShowingAppOpenAd = false;
+  DateTime? _appOpenLoadTime;
+
+  /// Load an App Open Ad
+  void loadAppOpenAd() {
+    final adUnitId = Platform.isAndroid
+        ? dotenv.env['ADMOB_APP_OPEN_ANDROID'] ??
+              'ca-app-pub-3940256099942544/9257395921' // Test ID
+        : dotenv.env['ADMOB_APP_OPEN_IOS'] ??
+              'ca-app-pub-3940256099942544/5575463023'; // Test ID
+
+    AppOpenAd.load(
+      adUnitId: adUnitId,
+      request: request,
+      adLoadCallback: AppOpenAdLoadCallback(
+        onAdLoaded: (ad) {
+          _appOpenLoadTime = DateTime.now();
+          _appOpenAd = ad;
+        },
+        onAdFailedToLoad: (error) {
+          debugPrint('AppOpenAd failed to load: $error');
+        },
+      ),
+    );
+  }
+
+  /// Needs to be shown if the ad exists and is not expired (active < 4 hours)
+  bool get _isAppOpenAdAvailable {
+    return _appOpenAd != null &&
+        _appOpenLoadTime != null &&
+        DateTime.now().difference(_appOpenLoadTime!).inHours < 4;
+  }
+
+  /// Show the App Open Ad
+  void showAppOpenAdIfAvailable({required bool isPremium}) {
+    if (isPremium) return; // Premium bypass
+    if (!_isAppOpenAdAvailable || _isShowingAppOpenAd) {
+      loadAppOpenAd(); // Preload for next time if unavailable
+      return;
+    }
+
+    // Don't show if we are currently showing a rewarded or interstitial ad
+    if (_rewardedAd != null ||
+        _interstitialAd == null && _numInterstitialLoadAttempts > 0) {
+      return;
+    }
+
+    _isShowingAppOpenAd = true;
+    _appOpenAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (ad) {
+        _isShowingAppOpenAd = true;
+      },
+      onAdFailedToShowFullScreenContent: (ad, error) {
+        _isShowingAppOpenAd = false;
+        ad.dispose();
+        _appOpenAd = null;
+        loadAppOpenAd();
+      },
+      onAdDismissedFullScreenContent: (ad) {
+        _isShowingAppOpenAd = false;
+        ad.dispose();
+        _appOpenAd = null;
+        loadAppOpenAd();
+      },
+    );
+
+    _appOpenAd!.show();
   }
 }

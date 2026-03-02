@@ -23,9 +23,5 @@ class QuestionFormatterQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        statement,
-        questionType,
-      ];
+  List<Object?> get props => [...super.props, statement, questionType];
 }

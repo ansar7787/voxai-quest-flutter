@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/speaking/scene_description_speaking/domain/
 import 'scene_description_speaking_event.dart';
 import 'scene_description_speaking_state.dart';
 
-class SceneDescriptionSpeakingBloc extends Bloc<SceneDescriptionSpeakingEvent, SceneDescriptionSpeakingState> {
+class SceneDescriptionSpeakingBloc
+    extends Bloc<SceneDescriptionSpeakingEvent, SceneDescriptionSpeakingState> {
   final GetSceneDescriptionSpeakingQuests getQuests;
 
-  SceneDescriptionSpeakingBloc({required this.getQuests}) : super(SceneDescriptionSpeakingInitial()) {
+  SceneDescriptionSpeakingBloc({required this.getQuests})
+    : super(SceneDescriptionSpeakingInitial()) {
     on<FetchSceneDescriptionSpeakingQuests>(_onFetchQuests);
     on<SubmitSceneDescriptionSpeakingAnswer>(_onSubmitAnswer);
     on<NextSceneDescriptionSpeakingQuestion>(_onNextQuestion);
@@ -38,10 +40,9 @@ class SceneDescriptionSpeakingBloc extends Bloc<SceneDescriptionSpeakingEvent, S
         if (newLives <= 0) {
           emit(SceneDescriptionSpeakingGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -56,15 +57,14 @@ class SceneDescriptionSpeakingBloc extends Bloc<SceneDescriptionSpeakingEvent, S
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(SceneDescriptionSpeakingGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          SceneDescriptionSpeakingGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-        ));
+        emit(state.copyWith(currentIndex: nextIndex, lastAnswerCorrect: null));
       }
     }
   }

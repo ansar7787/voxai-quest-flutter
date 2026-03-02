@@ -16,7 +16,9 @@ class SocialSparkRepositoryImpl implements SocialSparkRepository {
   });
 
   @override
-  Future<Either<Failure, List<SocialSparkQuest>>> getSocialSparkQuests(int level) async {
+  Future<Either<Failure, List<SocialSparkQuest>>> getSocialSparkQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteQuests = await remoteDataSource.getSocialSparkQuests(level);

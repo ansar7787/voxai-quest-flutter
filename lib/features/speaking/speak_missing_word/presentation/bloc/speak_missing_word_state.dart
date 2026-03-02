@@ -42,14 +42,22 @@ class SpeakMissingWordLoaded extends SpeakMissingWordState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class SpeakMissingWordGameComplete extends SpeakMissingWordState {
   final int xpEarned;
   final int coinsEarned;
 
-  const SpeakMissingWordGameComplete({required this.xpEarned, required this.coinsEarned});
+  const SpeakMissingWordGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

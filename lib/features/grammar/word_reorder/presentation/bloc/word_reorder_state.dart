@@ -46,14 +46,23 @@ class WordReorderLoaded extends WordReorderState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class WordReorderGameComplete extends WordReorderState {
   final int xpEarned;
   final int coinsEarned;
 
-  const WordReorderGameComplete({required this.xpEarned, required this.coinsEarned});
+  const WordReorderGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

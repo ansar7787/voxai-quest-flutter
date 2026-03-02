@@ -22,7 +22,6 @@ import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/writing/presentation/bloc/writing_bloc.dart';
 
-
 class SummarizeStoryWritingScreen extends StatefulWidget {
   final int level;
   const SummarizeStoryWritingScreen({super.key, required this.level});
@@ -137,8 +136,7 @@ class _SummarizeStoryWritingScreenState
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<WritingBloc>().add(
-                
-      FetchWritingQuests(
+                FetchWritingQuests(
                   gameType: GameSubtype.summarizeStoryWriting,
                   level: widget.level,
                 ),
@@ -477,17 +475,32 @@ class _SummarizeStoryWritingScreenState
       builder: (c) => ModernGameDialog(
         title: 'Story Locked',
         description: 'You lost all hearts. Try to focus on the key points!',
-        buttonText: 'RETRY',
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
-          Navigator.pop(c);
-          context.read<WritingBloc>().add(RestoreLife());
-        },
-        secondaryButtonText: 'QUIT',
-        onSecondaryPressed: () {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<WritingBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

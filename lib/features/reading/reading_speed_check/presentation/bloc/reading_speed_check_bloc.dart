@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/reading/reading_speed_check/domain/usecases
 import 'reading_speed_check_event.dart';
 import 'reading_speed_check_state.dart';
 
-class ReadingSpeedCheckBloc extends Bloc<ReadingSpeedCheckEvent, ReadingSpeedCheckState> {
+class ReadingSpeedCheckBloc
+    extends Bloc<ReadingSpeedCheckEvent, ReadingSpeedCheckState> {
   final GetReadingSpeedCheckQuests getQuests;
 
-  ReadingSpeedCheckBloc({required this.getQuests}) : super(ReadingSpeedCheckInitial()) {
+  ReadingSpeedCheckBloc({required this.getQuests})
+    : super(ReadingSpeedCheckInitial()) {
     on<FetchReadingSpeedCheckQuests>(_onFetchQuests);
     on<SubmitReadingSpeedCheckAnswer>(_onSubmitAnswer);
     on<NextReadingSpeedCheckQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class ReadingSpeedCheckBloc extends Bloc<ReadingSpeedCheckEvent, ReadingSpeedChe
         if (newLives <= 0) {
           emit(ReadingSpeedCheckGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class ReadingSpeedCheckBloc extends Bloc<ReadingSpeedCheckEvent, ReadingSpeedChe
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(ReadingSpeedCheckGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          ReadingSpeedCheckGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

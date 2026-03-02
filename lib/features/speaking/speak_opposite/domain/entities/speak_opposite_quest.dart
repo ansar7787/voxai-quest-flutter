@@ -26,11 +26,11 @@ class SpeakOppositeQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        word,
-        phoneticScript,
-        audioUrl,
-        oppositeWord,
-        translation,
-      ];
+    ...super.props,
+    word,
+    phoneticScript,
+    audioUrl,
+    oppositeWord,
+    translation,
+  ];
 }

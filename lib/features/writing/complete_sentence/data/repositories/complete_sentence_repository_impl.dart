@@ -15,10 +15,13 @@ class CompleteSentenceRepositoryImpl implements CompleteSentenceRepository {
   });
 
   @override
-  Future<Either<Failure, List<CompleteSentenceQuest>>> getCompleteSentenceQuests(int level) async {
+  Future<Either<Failure, List<CompleteSentenceQuest>>>
+  getCompleteSentenceQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getCompleteSentenceQuests(level);
+        final remoteQuests = await remoteDataSource.getCompleteSentenceQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class CompleteSentenceRepositoryImpl implements CompleteSentenceRepository {
     }
   }
 }
-

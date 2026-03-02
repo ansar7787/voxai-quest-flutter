@@ -91,19 +91,17 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
               }
 
               if (state is VocabularyError) {
-            return QuestUnavailableScreen(
-              message: state.message,
-              onRetry: () => context.read<VocabularyBloc>().add(
-                
-      FetchVocabularyQuests(
-                  gameType: GameSubtype.flashcards,
-                  level: widget.level,
-                ),
-              ),
-            );
-          }
-          if (state is VocabularyLoaded) {
-
+                return QuestUnavailableScreen(
+                  message: state.message,
+                  onRetry: () => context.read<VocabularyBloc>().add(
+                    FetchVocabularyQuests(
+                      gameType: GameSubtype.flashcards,
+                      level: widget.level,
+                    ),
+                  ),
+                );
+              }
+              if (state is VocabularyLoaded) {
                 final quest = state.currentQuest;
                 final progress = (state.currentIndex + 1) / state.quests.length;
 
@@ -132,7 +130,7 @@ class _FlashcardsScreenState extends State<FlashcardsScreen> {
                     ],
                   ),
                 );
-          }
+              }
 
               return const SizedBox.shrink();
             },

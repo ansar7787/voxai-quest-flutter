@@ -46,14 +46,23 @@ class GrammarQuestLoaded extends GrammarQuestState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class GrammarQuestGameComplete extends GrammarQuestState {
   final int xpEarned;
   final int coinsEarned;
 
-  const GrammarQuestGameComplete({required this.xpEarned, required this.coinsEarned});
+  const GrammarQuestGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

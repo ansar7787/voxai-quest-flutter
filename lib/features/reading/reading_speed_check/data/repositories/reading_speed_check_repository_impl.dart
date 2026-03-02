@@ -15,10 +15,13 @@ class ReadingSpeedCheckRepositoryImpl implements ReadingSpeedCheckRepository {
   });
 
   @override
-  Future<Either<Failure, List<ReadingSpeedCheckQuest>>> getReadingSpeedCheckQuests(int level) async {
+  Future<Either<Failure, List<ReadingSpeedCheckQuest>>>
+  getReadingSpeedCheckQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getReadingSpeedCheckQuests(level);
+        final remoteQuests = await remoteDataSource.getReadingSpeedCheckQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class ReadingSpeedCheckRepositoryImpl implements ReadingSpeedCheckRepository {
     }
   }
 }
-

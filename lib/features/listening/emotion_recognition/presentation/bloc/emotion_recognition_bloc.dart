@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/listening/emotion_recognition/domain/usecas
 import 'emotion_recognition_event.dart';
 import 'emotion_recognition_state.dart';
 
-class EmotionRecognitionBloc extends Bloc<EmotionRecognitionEvent, EmotionRecognitionState> {
+class EmotionRecognitionBloc
+    extends Bloc<EmotionRecognitionEvent, EmotionRecognitionState> {
   final GetEmotionRecognitionQuests getQuests;
 
-  EmotionRecognitionBloc({required this.getQuests}) : super(EmotionRecognitionInitial()) {
+  EmotionRecognitionBloc({required this.getQuests})
+    : super(EmotionRecognitionInitial()) {
     on<FetchEmotionRecognitionQuests>(_onFetchQuests);
     on<SubmitEmotionRecognitionAnswer>(_onSubmitAnswer);
     on<NextEmotionRecognitionQuestion>(_onNextQuestion);
@@ -38,10 +40,9 @@ class EmotionRecognitionBloc extends Bloc<EmotionRecognitionEvent, EmotionRecogn
         if (newLives <= 0) {
           emit(EmotionRecognitionGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -56,15 +57,14 @@ class EmotionRecognitionBloc extends Bloc<EmotionRecognitionEvent, EmotionRecogn
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(EmotionRecognitionGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          EmotionRecognitionGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-        ));
+        emit(state.copyWith(currentIndex: nextIndex, lastAnswerCorrect: null));
       }
     }
   }
@@ -76,4 +76,3 @@ class EmotionRecognitionBloc extends Bloc<EmotionRecognitionEvent, EmotionRecogn
     emit(EmotionRecognitionInitial());
   }
 }
-

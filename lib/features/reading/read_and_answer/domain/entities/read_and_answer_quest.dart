@@ -23,9 +23,5 @@ class ReadAndAnswerQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        passage,
-        question,
-      ];
+  List<Object?> get props => [...super.props, passage, question];
 }

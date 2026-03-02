@@ -46,14 +46,23 @@ class CompleteSentenceLoaded extends CompleteSentenceState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class CompleteSentenceGameComplete extends CompleteSentenceState {
   final int xpEarned;
   final int coinsEarned;
 
-  const CompleteSentenceGameComplete({required this.xpEarned, required this.coinsEarned});
+  const CompleteSentenceGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

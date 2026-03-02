@@ -15,10 +15,14 @@ class SpeakSynonymRepositoryImpl implements SpeakSynonymRepository {
   });
 
   @override
-  Future<Either<Failure, List<SpeakSynonymQuest>>> getSpeakSynonymQuests(int level) async {
+  Future<Either<Failure, List<SpeakSynonymQuest>>> getSpeakSynonymQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getSpeakSynonymQuests(level);
+        final remoteQuests = await remoteDataSource.getSpeakSynonymQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class SpeakSynonymRepositoryImpl implements SpeakSynonymRepository {
     }
   }
 }
-

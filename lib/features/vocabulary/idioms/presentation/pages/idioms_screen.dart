@@ -21,7 +21,6 @@ import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/vocabulary/presentation/bloc/vocabulary_bloc.dart';
 
-
 class IdiomsScreen extends StatefulWidget {
   final int level;
   const IdiomsScreen({super.key, required this.level});
@@ -60,7 +59,11 @@ class _IdiomsScreenState extends State<IdiomsScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('vocabulary', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'vocabulary',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
       backgroundColor: isDark
@@ -103,8 +106,7 @@ class _IdiomsScreenState extends State<IdiomsScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<VocabularyBloc>().add(
-                
-      FetchVocabularyQuests(
+                FetchVocabularyQuests(
                   gameType: GameSubtype.idioms,
                   level: widget.level,
                 ),

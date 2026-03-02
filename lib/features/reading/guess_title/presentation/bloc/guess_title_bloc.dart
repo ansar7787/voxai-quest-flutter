@@ -39,10 +39,9 @@ class GuessTitleBloc extends Bloc<GuessTitleEvent, GuessTitleState> {
         if (newLives <= 0) {
           emit(GuessTitleGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +56,20 @@ class GuessTitleBloc extends Bloc<GuessTitleEvent, GuessTitleState> {
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(GuessTitleGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          GuessTitleGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }
@@ -78,10 +81,7 @@ class GuessTitleBloc extends Bloc<GuessTitleEvent, GuessTitleState> {
     emit(GuessTitleInitial());
   }
 
-  void _onHintUsed(
-    GuessTitleHintUsed event,
-    Emitter<GuessTitleState> emit,
-  ) {
+  void _onHintUsed(GuessTitleHintUsed event, Emitter<GuessTitleState> emit) {
     final state = this.state;
     if (state is GuessTitleLoaded) {
       emit(state.copyWith(hintUsed: true));

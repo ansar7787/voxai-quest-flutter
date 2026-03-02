@@ -23,9 +23,5 @@ class WordReorderQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        words,
-        orderedSentence,
-      ];
+  List<Object?> get props => [...super.props, words, orderedSentence];
 }

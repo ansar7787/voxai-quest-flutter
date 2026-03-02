@@ -29,6 +29,4 @@ class RestoreBranchingDialogueLife extends BranchingDialogueEvent {}
 
 class BranchingDialogueHintUsed extends BranchingDialogueEvent {}
 
-
 class RestartLevel extends BranchingDialogueEvent {}
-

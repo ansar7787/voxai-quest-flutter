@@ -51,13 +51,13 @@ class BranchingDialogueLoaded extends BranchingDialogueState {
 
   @override
   List<Object?> get props => [
-        quests,
-        currentIndex,
-        livesRemaining,
-        lastAnswerCorrect,
-        xpEarned,
-        coinsEarned,
-      ];
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    xpEarned,
+    coinsEarned,
+  ];
 }
 
 class BranchingDialogueError extends BranchingDialogueState {
@@ -71,7 +71,10 @@ class BranchingDialogueError extends BranchingDialogueState {
 class BranchingDialogueGameComplete extends BranchingDialogueState {
   final int xpEarned;
   final int coinsEarned;
-  const BranchingDialogueGameComplete({required this.xpEarned, required this.coinsEarned});
+  const BranchingDialogueGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

@@ -23,9 +23,5 @@ class GrammarQuestQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        questionText,
-        explanation,
-      ];
+  List<Object?> get props => [...super.props, questionText, explanation];
 }

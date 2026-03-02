@@ -46,14 +46,23 @@ class DailyJournalLoaded extends DailyJournalState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class DailyJournalGameComplete extends DailyJournalState {
   final int xpEarned;
   final int coinsEarned;
 
-  const DailyJournalGameComplete({required this.xpEarned, required this.coinsEarned});
+  const DailyJournalGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

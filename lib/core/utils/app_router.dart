@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:voxai_quest/core/domain/entities/game_quest.dart';
@@ -559,6 +560,9 @@ class AppRouter {
 
   static final router = GoRouter(
     initialLocation: initialRoute,
+    observers: [
+      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+    ],
     refreshListenable: _StreamListenable(di.sl<AuthBloc>().stream),
     redirect: (context, state) {
       final authState = di.sl<AuthBloc>().state;

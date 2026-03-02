@@ -42,14 +42,22 @@ class FastSpeechDecoderLoaded extends FastSpeechDecoderState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class FastSpeechDecoderGameComplete extends FastSpeechDecoderState {
   final int xpEarned;
   final int coinsEarned;
 
-  const FastSpeechDecoderGameComplete({required this.xpEarned, required this.coinsEarned});
+  const FastSpeechDecoderGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

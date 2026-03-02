@@ -15,10 +15,14 @@ class OpinionWritingRepositoryImpl implements OpinionWritingRepository {
   });
 
   @override
-  Future<Either<Failure, List<OpinionWritingQuest>>> getOpinionWritingQuests(int level) async {
+  Future<Either<Failure, List<OpinionWritingQuest>>> getOpinionWritingQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getOpinionWritingQuests(level);
+        final remoteQuests = await remoteDataSource.getOpinionWritingQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class OpinionWritingRepositoryImpl implements OpinionWritingRepository {
     }
   }
 }
-

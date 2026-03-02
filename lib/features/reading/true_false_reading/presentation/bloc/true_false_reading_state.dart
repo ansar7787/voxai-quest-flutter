@@ -46,14 +46,23 @@ class TrueFalseReadingLoaded extends TrueFalseReadingState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class TrueFalseReadingGameComplete extends TrueFalseReadingState {
   final int xpEarned;
   final int coinsEarned;
 
-  const TrueFalseReadingGameComplete({required this.xpEarned, required this.coinsEarned});
+  const TrueFalseReadingGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

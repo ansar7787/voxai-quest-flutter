@@ -28,11 +28,11 @@ class ElevatorPitchQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        investorProfile,
-        productDescription,
-        timeLimit,
-        keySellingPoints,
-        feedback,
-      ];
+    ...super.props,
+    investorProfile,
+    productDescription,
+    timeLimit,
+    keySellingPoints,
+    feedback,
+  ];
 }

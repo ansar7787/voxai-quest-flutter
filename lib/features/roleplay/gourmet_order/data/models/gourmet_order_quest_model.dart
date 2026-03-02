@@ -40,12 +40,18 @@ class GourmetOrderQuestModel extends GourmetOrderQuest {
       xpReward: (json['xpReward'] as num?)?.toInt() ?? 10,
       coinReward: (json['coinReward'] as num?)?.toInt() ?? 10,
       livesAllowed: (json['livesAllowed'] as num?)?.toInt() ?? 3,
-      interactionType: EnumParser.parseInteractionType(json['interactionType'] as String?),
-      options: (json['options'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      interactionType: EnumParser.parseInteractionType(
+        json['interactionType'] as String?,
+      ),
+      options: (json['options'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       correctAnswerIndex: (json['correctAnswerIndex'] as num?)?.toInt(),
       customerName: json['customerName'] as String?,
       orderDetails: json['orderDetails'] as String?,
-      ingredients: (json['ingredients'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      ingredients: (json['ingredients'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       specialRequest: json['specialRequest'] as String?,
       response: json['response'] as String?,
     );
@@ -72,4 +78,3 @@ class GourmetOrderQuestModel extends GourmetOrderQuest {
     };
   }
 }
-

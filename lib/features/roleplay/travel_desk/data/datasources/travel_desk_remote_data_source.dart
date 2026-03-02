@@ -20,7 +20,9 @@ class TravelDeskRemoteDataSourceImpl implements TravelDeskRemoteDataSource {
         .get();
 
     return snapshot.docs
-        .map((doc) => TravelDeskQuestModel.fromJson(doc.data()..['id'] = doc.id))
+        .map(
+          (doc) => TravelDeskQuestModel.fromJson(doc.data()..['id'] = doc.id),
+        )
         .toList();
   }
 }

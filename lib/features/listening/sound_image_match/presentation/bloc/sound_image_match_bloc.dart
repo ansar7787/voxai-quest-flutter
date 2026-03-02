@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/listening/sound_image_match/domain/usecases
 import 'sound_image_match_event.dart';
 import 'sound_image_match_state.dart';
 
-class SoundImageMatchBloc extends Bloc<SoundImageMatchEvent, SoundImageMatchState> {
+class SoundImageMatchBloc
+    extends Bloc<SoundImageMatchEvent, SoundImageMatchState> {
   final GetSoundImageMatchQuests getQuests;
 
-  SoundImageMatchBloc({required this.getQuests}) : super(SoundImageMatchInitial()) {
+  SoundImageMatchBloc({required this.getQuests})
+    : super(SoundImageMatchInitial()) {
     on<FetchSoundImageMatchQuests>(_onFetchQuests);
     on<SubmitSoundImageMatchAnswer>(_onSubmitAnswer);
     on<NextSoundImageMatchQuestion>(_onNextQuestion);
@@ -38,10 +40,9 @@ class SoundImageMatchBloc extends Bloc<SoundImageMatchEvent, SoundImageMatchStat
         if (newLives <= 0) {
           emit(SoundImageMatchGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -56,15 +57,14 @@ class SoundImageMatchBloc extends Bloc<SoundImageMatchEvent, SoundImageMatchStat
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(SoundImageMatchGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          SoundImageMatchGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-        ));
+        emit(state.copyWith(currentIndex: nextIndex, lastAnswerCorrect: null));
       }
     }
   }
@@ -76,4 +76,3 @@ class SoundImageMatchBloc extends Bloc<SoundImageMatchEvent, SoundImageMatchStat
     emit(SoundImageMatchInitial());
   }
 }
-

@@ -8,7 +8,9 @@ class GetSentenceOrderReadingQuests {
 
   GetSentenceOrderReadingQuests(this.repository);
 
-  Future<Either<Failure, List<SentenceOrderReadingQuest>>> call(int level) async {
+  Future<Either<Failure, List<SentenceOrderReadingQuest>>> call(
+    int level,
+  ) async {
     return await repository.getSentenceOrderReadingQuests(level);
   }
 }

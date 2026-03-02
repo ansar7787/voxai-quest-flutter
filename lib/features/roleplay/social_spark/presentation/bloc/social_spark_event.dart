@@ -29,6 +29,4 @@ class RestoreSocialSparkLife extends SocialSparkEvent {}
 
 class SocialSparkHintUsed extends SocialSparkEvent {}
 
-
 class RestartLevel extends SocialSparkEvent {}
-

@@ -167,6 +167,10 @@ class AuthRepairStreakRequested extends AuthEvent {
   List<Object?> get props => [cost];
 }
 
+class AuthRepairStreakWithAdRequested extends AuthEvent {
+  const AuthRepairStreakWithAdRequested();
+}
+
 class AuthPurchaseStreakFreezeRequested extends AuthEvent {
   final int cost;
   const AuthPurchaseStreakFreezeRequested(this.cost);
@@ -202,6 +206,22 @@ class AuthClaimDailyChestRequested extends AuthEvent {
   const AuthClaimDailyChestRequested(this.amount);
   @override
   List<Object?> get props => [amount];
+}
+
+class AuthDoubleUpRewardsRequested extends AuthEvent {
+  final int bonusXp;
+  final int bonusCoins;
+  const AuthDoubleUpRewardsRequested(this.bonusXp, this.bonusCoins);
+  @override
+  List<Object?> get props => [bonusXp, bonusCoins];
+}
+
+class AuthClaimDailySpinRequested extends AuthEvent {
+  final int reward;
+  final bool isAdSpin;
+  const AuthClaimDailySpinRequested(this.reward, {this.isAdSpin = false});
+  @override
+  List<Object?> get props => [reward, isAdSpin];
 }
 
 class AuthPurchaseXPBoostRequested extends AuthEvent {
@@ -366,14 +386,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEquipKidsAccessoryRequested>(_onEquipKidsAccessoryRequested);
     on<AuthAddKidsCoinsRequested>(_onAddKidsCoinsRequested);
     on<AuthRepairStreakRequested>(_onRepairStreakRequested);
+    on<AuthRepairStreakWithAdRequested>(_onRepairStreakWithAdRequested);
     on<AuthPurchaseStreakFreezeRequested>(_onPurchaseStreakFreezeRequested);
     on<AuthActivateDoubleXPRequested>(_onActivateDoubleXPRequested);
     on<AuthClaimStreakMilestoneRequested>(_onClaimStreakMilestoneRequested);
     on<AuthClaimLevelMilestoneRequested>(_onClaimLevelMilestoneRequested);
     on<AuthClaimDailyChestRequested>(_onClaimDailyChestRequested);
+    on<AuthClaimDailySpinRequested>(_onClaimDailySpinRequested);
     on<AuthUpdateVoxinMascotRequested>(_onUpdateVoxinMascotRequested);
     on<AuthBuyVoxinAccessoryRequested>(_onBuyVoxinAccessoryRequested);
     on<AuthEquipVoxinAccessoryRequested>(_onEquipVoxinAccessoryRequested);
+    on<AuthDoubleUpRewardsRequested>(_onDoubleUpRewardsRequested);
     on<AuthClearPurchaseFeedback>(_onClearPurchaseFeedback);
 
     _userSubscription = _getUserStream().listen(
@@ -874,6 +897,31 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  Future<void> _onRepairStreakWithAdRequested(
+    AuthRepairStreakWithAdRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    if (state.user != null) {
+      final currentUser = state.user!;
+
+      // Optimistic Update: Assume repair sets streak back to what it was + 1
+      final newStreak = currentUser.currentStreak == 1
+          ? 2
+          : currentUser.currentStreak + 1;
+
+      final updatedUser = currentUser.copyWith(currentStreak: newStreak);
+      emit(AuthState.authenticated(updatedUser));
+
+      // Use the existing repair streak use case but with 0 cost if the ad was shown
+      // Or we can just use the generic update if repairStreak use case strictly checks cost
+      // For now, let's use the generic update to ensure success without coin check
+      final result = await _updateUser(UpdateUserParams(user: updatedUser));
+      result.fold((failure) {
+        emit(AuthState.authenticated(currentUser));
+      }, (_) => null);
+    }
+  }
+
   Future<void> _onPurchaseStreakFreezeRequested(
     AuthPurchaseStreakFreezeRequested event,
     Emitter<AuthState> emit,
@@ -1039,6 +1087,42 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  Future<void> _onClaimDailySpinRequested(
+    AuthClaimDailySpinRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    if (state.user != null) {
+      final currentUser = state.user!;
+      final now = DateTime.now();
+
+      // Optimistic Update
+      final newHistory = _addCoinHistoryEntry(
+        currentUser.coinHistory,
+        title: event.isAdSpin ? 'Ad Spin Reward' : 'Daily Free Spin Reward',
+        amount: event.reward,
+        isEarned: true,
+      );
+
+      final updatedUser = currentUser.copyWith(
+        coins: currentUser.coins + event.reward,
+        lastFreeSpinDate: event.isAdSpin ? currentUser.lastFreeSpinDate : now,
+        lastAdSpinDate: event.isAdSpin ? now : currentUser.lastAdSpinDate,
+        adSpinsUsedToday: event.isAdSpin
+            ? currentUser.adSpinsUsedToday + 1
+            : currentUser.adSpinsUsedToday,
+        coinHistory: newHistory,
+      );
+
+      emit(AuthState.authenticated(updatedUser));
+
+      final result = await _updateUser(UpdateUserParams(user: updatedUser));
+      result.fold((failure) {
+        // Revert on failure
+        emit(AuthState.authenticated(currentUser));
+      }, (_) => null);
+    }
+  }
+
   /// Helper to maintain a max of 10 history entries
   List<Map<String, dynamic>> _addCoinHistoryEntry(
     List<Map<String, dynamic>> currentHistory, {
@@ -1162,6 +1246,38 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           ),
         );
         emit(AuthState.authenticated(currentUser, message: null));
+      }, (_) => null);
+    }
+  }
+
+  Future<void> _onDoubleUpRewardsRequested(
+    AuthDoubleUpRewardsRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    if (state.user != null) {
+      final currentUser = state.user!;
+
+      // Optimistic Update
+      final newHistory = _addCoinHistoryEntry(
+        currentUser.coinHistory,
+        title: 'Double Up Reward',
+        amount: event.bonusCoins,
+        isEarned: true,
+      );
+
+      final updatedUser = currentUser.copyWith(
+        coins: currentUser.coins + event.bonusCoins,
+        totalExp: currentUser.totalExp + event.bonusXp,
+        coinHistory: newHistory,
+      );
+
+      emit(AuthState.authenticated(updatedUser));
+
+      // Persist to Firestore
+      final result = await _updateUser(UpdateUserParams(user: updatedUser));
+      result.fold((failure) {
+        // Revert on failure
+        emit(AuthState.authenticated(currentUser));
       }, (_) => null);
     }
   }

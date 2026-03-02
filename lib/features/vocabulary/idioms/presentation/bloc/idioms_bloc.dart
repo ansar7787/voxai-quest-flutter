@@ -20,22 +20,16 @@ class IdiomsBloc extends Bloc<IdiomsEvent, IdiomsState> {
   ) async {
     emit(IdiomsLoading());
     final result = await getQuests(event.level);
-    result.fold(
-      (failure) => emit(IdiomsError(failure.message)),
-      (quests) {
-        if (quests.isEmpty) {
-          emit(const IdiomsError("No quests found for this level."));
-        } else {
-          emit(IdiomsLoaded(quests: quests));
-        }
-      },
-    );
+    result.fold((failure) => emit(IdiomsError(failure.message)), (quests) {
+      if (quests.isEmpty) {
+        emit(const IdiomsError("No quests found for this level."));
+      } else {
+        emit(IdiomsLoaded(quests: quests));
+      }
+    });
   }
 
-  void _onSubmitAnswer(
-    SubmitIdiomsAnswer event,
-    Emitter<IdiomsState> emit,
-  ) {
+  void _onSubmitAnswer(SubmitIdiomsAnswer event, Emitter<IdiomsState> emit) {
     final state = this.state;
     if (state is IdiomsLoaded) {
       if (event.isCorrect) {
@@ -45,49 +39,43 @@ class IdiomsBloc extends Bloc<IdiomsEvent, IdiomsState> {
         if (newLives <= 0) {
           emit(IdiomsGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
   }
 
-  void _onNextQuestion(
-    NextIdiomsQuestion event,
-    Emitter<IdiomsState> emit,
-  ) {
+  void _onNextQuestion(NextIdiomsQuestion event, Emitter<IdiomsState> emit) {
     final state = this.state;
     if (state is IdiomsLoaded) {
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(IdiomsGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          IdiomsGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }
 
-  void _onRestoreLife(
-    RestoreIdiomsLife event,
-    Emitter<IdiomsState> emit,
-  ) {
+  void _onRestoreLife(RestoreIdiomsLife event, Emitter<IdiomsState> emit) {
     emit(IdiomsInitial());
   }
 
-  void _onHintUsed(
-    IdiomsHintUsed event,
-    Emitter<IdiomsState> emit,
-  ) {
+  void _onHintUsed(IdiomsHintUsed event, Emitter<IdiomsState> emit) {
     final state = this.state;
     if (state is IdiomsLoaded) {
       emit(state.copyWith(hintUsed: true));

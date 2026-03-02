@@ -24,8 +24,8 @@ class ArticleInsertionQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        sentenceWithBlank,
-        articleToInsert,
-      ];
+    ...super.props,
+    sentenceWithBlank,
+    articleToInsert,
+  ];
 }

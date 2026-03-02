@@ -7,7 +7,7 @@ class SocialSparkBloc extends Bloc<SocialSparkEvent, SocialSparkState> {
   final GetSocialSparkQuests getQuests;
 
   SocialSparkBloc({required this.getQuests}) : super(SocialSparkInitial()) {
-        on<RestartLevel>((event, emit) => emit(SocialSparkInitial()));
+    on<RestartLevel>((event, emit) => emit(SocialSparkInitial()));
     on<FetchSocialSparkQuests>(_onFetchQuests);
     on<SubmitSocialSparkAnswer>(_onSubmitAnswer);
     on<NextSocialSparkQuestion>(_onNextQuestion);
@@ -22,7 +22,8 @@ class SocialSparkBloc extends Bloc<SocialSparkEvent, SocialSparkState> {
     emit(SocialSparkLoading());
     final result = await getQuests(event.level);
     result.fold(
-      (failure) => emit(const SocialSparkError("Failed to load social spark quests")),
+      (failure) =>
+          emit(const SocialSparkError("Failed to load social spark quests")),
       (quests) => emit(SocialSparkLoaded(quests: quests)),
     );
   }
@@ -34,17 +35,25 @@ class SocialSparkBloc extends Bloc<SocialSparkEvent, SocialSparkState> {
     final state = this.state;
     if (state is SocialSparkLoaded) {
       final isCorrect = event.isCorrect;
-      final newLives = isCorrect ? state.livesRemaining : state.livesRemaining - 1;
+      final newLives = isCorrect
+          ? state.livesRemaining
+          : state.livesRemaining - 1;
 
       if (newLives <= 0) {
         emit(SocialSparkGameOver());
       } else {
-        emit(state.copyWith(
-          livesRemaining: newLives,
-          lastAnswerCorrect: isCorrect,
-          xpEarned: isCorrect ? state.xpEarned + state.currentQuest.xpReward : state.xpEarned,
-          coinsEarned: isCorrect ? state.coinsEarned + state.currentQuest.coinReward : state.coinsEarned,
-        ));
+        emit(
+          state.copyWith(
+            livesRemaining: newLives,
+            lastAnswerCorrect: isCorrect,
+            xpEarned: isCorrect
+                ? state.xpEarned + state.currentQuest.xpReward
+                : state.xpEarned,
+            coinsEarned: isCorrect
+                ? state.coinsEarned + state.currentQuest.coinReward
+                : state.coinsEarned,
+          ),
+        );
       }
     }
   }
@@ -56,15 +65,19 @@ class SocialSparkBloc extends Bloc<SocialSparkEvent, SocialSparkState> {
     final state = this.state;
     if (state is SocialSparkLoaded) {
       if (state.currentIndex + 1 < state.quests.length) {
-        emit(state.copyWith(
-          currentIndex: state.currentIndex + 1,
-          lastAnswerCorrect: null,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: state.currentIndex + 1,
+            lastAnswerCorrect: null,
+          ),
+        );
       } else {
-        emit(SocialSparkGameComplete(
-          xpEarned: state.xpEarned,
-          coinsEarned: state.coinsEarned,
-        ));
+        emit(
+          SocialSparkGameComplete(
+            xpEarned: state.xpEarned,
+            coinsEarned: state.coinsEarned,
+          ),
+        );
       }
     }
   }
@@ -79,11 +92,7 @@ class SocialSparkBloc extends Bloc<SocialSparkEvent, SocialSparkState> {
     }
   }
 
-  void _onHintUsed(
-    SocialSparkHintUsed event,
-    Emitter<SocialSparkState> emit,
-  ) {
+  void _onHintUsed(SocialSparkHintUsed event, Emitter<SocialSparkState> emit) {
     // Implement hint logic if needed
   }
 }
-

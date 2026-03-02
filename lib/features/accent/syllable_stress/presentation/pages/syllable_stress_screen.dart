@@ -22,6 +22,7 @@ import 'package:voxai_quest/features/accent/domain/entities/accent_quest.dart';
 import 'package:voxai_quest/features/accent/presentation/bloc/accent_bloc.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:confetti/confetti.dart';
+import 'package:voxai_quest/core/utils/ad_service.dart';
 
 class SyllableStressScreen extends StatefulWidget {
   final int level;
@@ -651,20 +652,35 @@ class _SyllableStressScreenState extends State<SyllableStressScreen> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => ModernGameDialog(
+      builder: (c) => ModernGameDialog(
         title: "OUT OF STEP",
         description: "Don't lose your pulse. Try again to find the stress!",
-        buttonText: "RETRY",
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
-          Navigator.pop(context);
-          context.read<AccentBloc>().add(RestoreLife());
-        },
-        secondaryButtonText: "EXIT",
-        onSecondaryPressed: () {
-          Navigator.pop(context);
+          Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<AccentBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

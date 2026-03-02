@@ -16,10 +16,14 @@ class JobInterviewRepositoryImpl implements JobInterviewRepository {
   });
 
   @override
-  Future<Either<Failure, List<JobInterviewQuest>>> getJobInterviewQuests(int level) async {
+  Future<Either<Failure, List<JobInterviewQuest>>> getJobInterviewQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getJobInterviewQuests(level);
+        final remoteQuests = await remoteDataSource.getJobInterviewQuests(
+          level,
+        );
         return Right(remoteQuests);
       } on ServerException {
         return Left(ServerFailure('Server error occurred'));
@@ -29,4 +33,3 @@ class JobInterviewRepositoryImpl implements JobInterviewRepository {
     }
   }
 }
-

@@ -8,7 +8,9 @@ class GetSituationalResponseQuests {
 
   GetSituationalResponseQuests(this.repository);
 
-  Future<Either<Failure, List<SituationalResponseQuest>>> call(int level) async {
+  Future<Either<Failure, List<SituationalResponseQuest>>> call(
+    int level,
+  ) async {
     return await repository.getSituationalResponseQuests(level);
   }
 }

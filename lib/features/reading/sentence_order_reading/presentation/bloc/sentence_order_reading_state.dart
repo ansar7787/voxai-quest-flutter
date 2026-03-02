@@ -46,14 +46,23 @@ class SentenceOrderReadingLoaded extends SentenceOrderReadingState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class SentenceOrderReadingGameComplete extends SentenceOrderReadingState {
   final int xpEarned;
   final int coinsEarned;
 
-  const SentenceOrderReadingGameComplete({required this.xpEarned, required this.coinsEarned});
+  const SentenceOrderReadingGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

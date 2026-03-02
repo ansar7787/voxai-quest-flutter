@@ -8,7 +8,9 @@ class GetDescribeSituationWritingQuests {
 
   GetDescribeSituationWritingQuests(this.repository);
 
-  Future<Either<Failure, List<DescribeSituationWritingQuest>>> call(int level) async {
+  Future<Either<Failure, List<DescribeSituationWritingQuest>>> call(
+    int level,
+  ) async {
     return await repository.getDescribeSituationWritingQuests(level);
   }
 }

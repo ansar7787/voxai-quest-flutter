@@ -15,10 +15,14 @@ class WritingEmailRepositoryImpl implements WritingEmailRepository {
   });
 
   @override
-  Future<Either<Failure, List<WritingEmailQuest>>> getWritingEmailQuests(int level) async {
+  Future<Either<Failure, List<WritingEmailQuest>>> getWritingEmailQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getWritingEmailQuests(level);
+        final remoteQuests = await remoteDataSource.getWritingEmailQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));

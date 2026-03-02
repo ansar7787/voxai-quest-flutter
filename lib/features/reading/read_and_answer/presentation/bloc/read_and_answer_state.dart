@@ -46,14 +46,23 @@ class ReadAndAnswerLoaded extends ReadAndAnswerState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class ReadAndAnswerGameComplete extends ReadAndAnswerState {
   final int xpEarned;
   final int coinsEarned;
 
-  const ReadAndAnswerGameComplete({required this.xpEarned, required this.coinsEarned});
+  const ReadAndAnswerGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

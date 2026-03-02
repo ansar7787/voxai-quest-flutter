@@ -22,7 +22,6 @@ import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/vocabulary/presentation/bloc/vocabulary_bloc.dart';
 
-
 class IdiomMeaningScreen extends StatefulWidget {
   final int level;
   const IdiomMeaningScreen({super.key, required this.level});
@@ -67,7 +66,11 @@ class _IdiomMeaningScreenState extends State<IdiomMeaningScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('vocabulary', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'vocabulary',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -109,8 +112,7 @@ class _IdiomMeaningScreenState extends State<IdiomMeaningScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<VocabularyBloc>().add(
-                
-      FetchVocabularyQuests(
+                FetchVocabularyQuests(
                   gameType: GameSubtype.idioms,
                   level: widget.level,
                 ),
@@ -512,17 +514,32 @@ class _IdiomMeaningScreenState extends State<IdiomMeaningScreen> {
         title: 'Expression Expired',
         description:
             'Idioms can be colorful and confusing. Review the meanings and try again!',
-        buttonText: 'RETRY',
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
-          Navigator.pop(c);
-          context.read<VocabularyBloc>().add(RestoreLife());
-        },
-        secondaryButtonText: 'QUIT',
-        onSecondaryPressed: () {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<VocabularyBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

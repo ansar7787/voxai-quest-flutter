@@ -42,14 +42,22 @@ class SoundImageMatchLoaded extends SoundImageMatchState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class SoundImageMatchGameComplete extends SoundImageMatchState {
   final int xpEarned;
   final int coinsEarned;
 
-  const SoundImageMatchGameComplete({required this.xpEarned, required this.coinsEarned});
+  const SoundImageMatchGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

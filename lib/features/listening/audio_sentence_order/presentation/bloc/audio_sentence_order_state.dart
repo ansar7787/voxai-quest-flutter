@@ -42,14 +42,22 @@ class AudioSentenceOrderLoaded extends AudioSentenceOrderState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class AudioSentenceOrderGameComplete extends AudioSentenceOrderState {
   final int xpEarned;
   final int coinsEarned;
 
-  const AudioSentenceOrderGameComplete({required this.xpEarned, required this.coinsEarned});
+  const AudioSentenceOrderGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

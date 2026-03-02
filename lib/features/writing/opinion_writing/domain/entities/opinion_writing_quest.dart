@@ -23,9 +23,5 @@ class OpinionWritingQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        topic,
-        viewpoints,
-      ];
+  List<Object?> get props => [...super.props, topic, viewpoints];
 }

@@ -23,9 +23,5 @@ class FixTheSentenceQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        incorrectSentence,
-        correction,
-      ];
+  List<Object?> get props => [...super.props, incorrectSentence, correction];
 }

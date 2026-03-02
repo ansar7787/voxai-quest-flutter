@@ -15,10 +15,14 @@ class PhrasalVerbsRepositoryImpl implements PhrasalVerbsRepository {
   });
 
   @override
-  Future<Either<Failure, List<PhrasalVerbsQuest>>> getPhrasalVerbsQuests(int level) async {
+  Future<Either<Failure, List<PhrasalVerbsQuest>>> getPhrasalVerbsQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getPhrasalVerbsQuests(level);
+        final remoteQuests = await remoteDataSource.getPhrasalVerbsQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class PhrasalVerbsRepositoryImpl implements PhrasalVerbsRepository {
     }
   }
 }
-

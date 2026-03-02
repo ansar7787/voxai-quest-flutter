@@ -156,8 +156,7 @@ class _DialogueRoleplayScreenState extends State<DialogueRoleplayScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<SpeakingBloc>().add(
-                
-      FetchSpeakingQuests(
+                FetchSpeakingQuests(
                   gameType: GameSubtype.dialogueRoleplay,
                   level: widget.level,
                 ),

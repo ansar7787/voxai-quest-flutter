@@ -16,10 +16,13 @@ class BranchingDialogueRepositoryImpl implements BranchingDialogueRepository {
   });
 
   @override
-  Future<Either<Failure, List<BranchingDialogueQuest>>> getBranchingDialogueQuests(int level) async {
+  Future<Either<Failure, List<BranchingDialogueQuest>>>
+  getBranchingDialogueQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getBranchingDialogueQuests(level);
+        final remoteQuests = await remoteDataSource.getBranchingDialogueQuests(
+          level,
+        );
         return Right(remoteQuests);
       } on ServerException {
         return Left(ServerFailure('Server error occurred'));
@@ -29,4 +32,3 @@ class BranchingDialogueRepositoryImpl implements BranchingDialogueRepository {
     }
   }
 }
-

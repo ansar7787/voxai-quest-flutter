@@ -20,7 +20,10 @@ class SubmitPronunciationFocusAnswer extends PronunciationFocusEvent {
   final bool isCorrect;
   final double accuracyScore;
 
-  const SubmitPronunciationFocusAnswer({required this.isCorrect, required this.accuracyScore});
+  const SubmitPronunciationFocusAnswer({
+    required this.isCorrect,
+    required this.accuracyScore,
+  });
 
   @override
   List<Object?> get props => [isCorrect, accuracyScore];

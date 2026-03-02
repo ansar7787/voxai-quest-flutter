@@ -28,11 +28,11 @@ class MedicalConsultQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        patientName,
-        condition,
-        patientQuery,
-        keySymptoms,
-        advice,
-      ];
+    ...super.props,
+    patientName,
+    condition,
+    patientQuery,
+    keySymptoms,
+    advice,
+  ];
 }

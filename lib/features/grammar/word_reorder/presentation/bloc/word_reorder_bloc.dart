@@ -39,10 +39,9 @@ class WordReorderBloc extends Bloc<WordReorderEvent, WordReorderState> {
         if (newLives <= 0) {
           emit(WordReorderGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +56,20 @@ class WordReorderBloc extends Bloc<WordReorderEvent, WordReorderState> {
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(WordReorderGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          WordReorderGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }
@@ -78,10 +81,7 @@ class WordReorderBloc extends Bloc<WordReorderEvent, WordReorderState> {
     emit(WordReorderInitial());
   }
 
-  void _onHintUsed(
-    WordReorderHintUsed event,
-    Emitter<WordReorderState> emit,
-  ) {
+  void _onHintUsed(WordReorderHintUsed event, Emitter<WordReorderState> emit) {
     final state = this.state;
     if (state is WordReorderLoaded) {
       emit(state.copyWith(hintUsed: true));

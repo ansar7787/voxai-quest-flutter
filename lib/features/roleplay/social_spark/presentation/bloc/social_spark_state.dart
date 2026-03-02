@@ -51,13 +51,13 @@ class SocialSparkLoaded extends SocialSparkState {
 
   @override
   List<Object?> get props => [
-        quests,
-        currentIndex,
-        livesRemaining,
-        lastAnswerCorrect,
-        xpEarned,
-        coinsEarned,
-      ];
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    xpEarned,
+    coinsEarned,
+  ];
 }
 
 class SocialSparkError extends SocialSparkState {
@@ -71,7 +71,10 @@ class SocialSparkError extends SocialSparkState {
 class SocialSparkGameComplete extends SocialSparkState {
   final int xpEarned;
   final int coinsEarned;
-  const SocialSparkGameComplete({required this.xpEarned, required this.coinsEarned});
+  const SocialSparkGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

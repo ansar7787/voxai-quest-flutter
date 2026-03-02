@@ -15,7 +15,9 @@ class EmotionRecognitionRepositoryImpl implements EmotionRecognitionRepository {
   });
 
   @override
-  Future<Either<Failure, List<EmotionRecognitionQuest>>> getQuests(int level) async {
+  Future<Either<Failure, List<EmotionRecognitionQuest>>> getQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteQuests = await remoteDataSource.getQuests(level);

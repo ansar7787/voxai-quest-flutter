@@ -42,14 +42,22 @@ class DetailSpotlightLoaded extends DetailSpotlightState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class DetailSpotlightGameComplete extends DetailSpotlightState {
   final int xpEarned;
   final int coinsEarned;
 
-  const DetailSpotlightGameComplete({required this.xpEarned, required this.coinsEarned});
+  const DetailSpotlightGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

@@ -15,10 +15,14 @@ class FixTheSentenceRepositoryImpl implements FixTheSentenceRepository {
   });
 
   @override
-  Future<Either<Failure, List<FixTheSentenceQuest>>> getFixTheSentenceQuests(int level) async {
+  Future<Either<Failure, List<FixTheSentenceQuest>>> getFixTheSentenceQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getFixTheSentenceQuests(level);
+        final remoteQuests = await remoteDataSource.getFixTheSentenceQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class FixTheSentenceRepositoryImpl implements FixTheSentenceRepository {
     }
   }
 }
-

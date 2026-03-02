@@ -15,7 +15,9 @@ class FlashcardsRepositoryImpl implements FlashcardsRepository {
   });
 
   @override
-  Future<Either<Failure, List<FlashcardsQuest>>> getFlashcardsQuests(int level) async {
+  Future<Either<Failure, List<FlashcardsQuest>>> getFlashcardsQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteQuests = await remoteDataSource.getFlashcardsQuests(level);
@@ -28,4 +30,3 @@ class FlashcardsRepositoryImpl implements FlashcardsRepository {
     }
   }
 }
-

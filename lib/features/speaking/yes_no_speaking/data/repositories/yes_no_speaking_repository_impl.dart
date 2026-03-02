@@ -15,10 +15,14 @@ class YesNoSpeakingRepositoryImpl implements YesNoSpeakingRepository {
   });
 
   @override
-  Future<Either<Failure, List<YesNoSpeakingQuest>>> getYesNoSpeakingQuests(int level) async {
+  Future<Either<Failure, List<YesNoSpeakingQuest>>> getYesNoSpeakingQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getYesNoSpeakingQuests(level);
+        final remoteQuests = await remoteDataSource.getYesNoSpeakingQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class YesNoSpeakingRepositoryImpl implements YesNoSpeakingRepository {
     }
   }
 }
-

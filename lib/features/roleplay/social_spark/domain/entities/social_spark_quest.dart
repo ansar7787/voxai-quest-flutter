@@ -28,11 +28,11 @@ class SocialSparkQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        setting,
-        socialContext,
-        conversationStarter,
-        conversationalHooks,
-        closure,
-      ];
+    ...super.props,
+    setting,
+    socialContext,
+    conversationStarter,
+    conversationalHooks,
+    closure,
+  ];
 }

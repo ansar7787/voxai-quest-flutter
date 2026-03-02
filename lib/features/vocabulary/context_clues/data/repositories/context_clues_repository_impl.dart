@@ -15,10 +15,14 @@ class ContextCluesRepositoryImpl implements ContextCluesRepository {
   });
 
   @override
-  Future<Either<Failure, List<ContextCluesQuest>>> getContextCluesQuests(int level) async {
+  Future<Either<Failure, List<ContextCluesQuest>>> getContextCluesQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getContextCluesQuests(level);
+        final remoteQuests = await remoteDataSource.getContextCluesQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class ContextCluesRepositoryImpl implements ContextCluesRepository {
     }
   }
 }
-

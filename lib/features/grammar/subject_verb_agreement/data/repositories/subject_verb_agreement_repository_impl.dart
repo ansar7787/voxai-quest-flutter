@@ -5,7 +5,8 @@ import 'package:voxai_quest/features/grammar/subject_verb_agreement/data/datasou
 import 'package:voxai_quest/features/grammar/subject_verb_agreement/domain/entities/subject_verb_agreement_quest.dart';
 import 'package:voxai_quest/features/grammar/subject_verb_agreement/domain/repositories/subject_verb_agreement_repository.dart';
 
-class SubjectVerbAgreementRepositoryImpl implements SubjectVerbAgreementRepository {
+class SubjectVerbAgreementRepositoryImpl
+    implements SubjectVerbAgreementRepository {
   final SubjectVerbAgreementRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
 
@@ -15,10 +16,12 @@ class SubjectVerbAgreementRepositoryImpl implements SubjectVerbAgreementReposito
   });
 
   @override
-  Future<Either<Failure, List<SubjectVerbAgreementQuest>>> getSubjectVerbAgreementQuests(int level) async {
+  Future<Either<Failure, List<SubjectVerbAgreementQuest>>>
+  getSubjectVerbAgreementQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getSubjectVerbAgreementQuests(level);
+        final remoteQuests = await remoteDataSource
+            .getSubjectVerbAgreementQuests(level);
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class SubjectVerbAgreementRepositoryImpl implements SubjectVerbAgreementReposito
     }
   }
 }
-

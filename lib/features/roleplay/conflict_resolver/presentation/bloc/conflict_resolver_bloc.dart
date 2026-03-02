@@ -3,11 +3,13 @@ import 'package:voxai_quest/features/roleplay/conflict_resolver/domain/usecases/
 import 'conflict_resolver_event.dart';
 import 'conflict_resolver_state.dart';
 
-class ConflictResolverBloc extends Bloc<ConflictResolverEvent, ConflictResolverState> {
+class ConflictResolverBloc
+    extends Bloc<ConflictResolverEvent, ConflictResolverState> {
   final GetConflictResolverQuests getQuests;
 
-  ConflictResolverBloc({required this.getQuests}) : super(ConflictResolverInitial()) {
-        on<RestartLevel>((event, emit) => emit(ConflictResolverInitial()));
+  ConflictResolverBloc({required this.getQuests})
+    : super(ConflictResolverInitial()) {
+    on<RestartLevel>((event, emit) => emit(ConflictResolverInitial()));
     on<FetchConflictResolverQuests>(_onFetchQuests);
     on<SubmitConflictResolverAnswer>(_onSubmitAnswer);
     on<NextConflictResolverQuestion>(_onNextQuestion);
@@ -22,7 +24,9 @@ class ConflictResolverBloc extends Bloc<ConflictResolverEvent, ConflictResolverS
     emit(ConflictResolverLoading());
     final result = await getQuests(event.level);
     result.fold(
-      (failure) => emit(const ConflictResolverError("Failed to load conflict resolver quests")),
+      (failure) => emit(
+        const ConflictResolverError("Failed to load conflict resolver quests"),
+      ),
       (quests) => emit(ConflictResolverLoaded(quests: quests)),
     );
   }
@@ -34,17 +38,25 @@ class ConflictResolverBloc extends Bloc<ConflictResolverEvent, ConflictResolverS
     final state = this.state;
     if (state is ConflictResolverLoaded) {
       final isCorrect = event.isCorrect;
-      final newLives = isCorrect ? state.livesRemaining : state.livesRemaining - 1;
+      final newLives = isCorrect
+          ? state.livesRemaining
+          : state.livesRemaining - 1;
 
       if (newLives <= 0) {
         emit(ConflictResolverGameOver());
       } else {
-        emit(state.copyWith(
-          livesRemaining: newLives,
-          lastAnswerCorrect: isCorrect,
-          xpEarned: isCorrect ? state.xpEarned + state.currentQuest.xpReward : state.xpEarned,
-          coinsEarned: isCorrect ? state.coinsEarned + state.currentQuest.coinReward : state.coinsEarned,
-        ));
+        emit(
+          state.copyWith(
+            livesRemaining: newLives,
+            lastAnswerCorrect: isCorrect,
+            xpEarned: isCorrect
+                ? state.xpEarned + state.currentQuest.xpReward
+                : state.xpEarned,
+            coinsEarned: isCorrect
+                ? state.coinsEarned + state.currentQuest.coinReward
+                : state.coinsEarned,
+          ),
+        );
       }
     }
   }
@@ -56,15 +68,19 @@ class ConflictResolverBloc extends Bloc<ConflictResolverEvent, ConflictResolverS
     final state = this.state;
     if (state is ConflictResolverLoaded) {
       if (state.currentIndex + 1 < state.quests.length) {
-        emit(state.copyWith(
-          currentIndex: state.currentIndex + 1,
-          lastAnswerCorrect: null,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: state.currentIndex + 1,
+            lastAnswerCorrect: null,
+          ),
+        );
       } else {
-        emit(ConflictResolverGameComplete(
-          xpEarned: state.xpEarned,
-          coinsEarned: state.coinsEarned,
-        ));
+        emit(
+          ConflictResolverGameComplete(
+            xpEarned: state.xpEarned,
+            coinsEarned: state.coinsEarned,
+          ),
+        );
       }
     }
   }
@@ -86,4 +102,3 @@ class ConflictResolverBloc extends Bloc<ConflictResolverEvent, ConflictResolverS
     // Implement hint logic if needed
   }
 }
-

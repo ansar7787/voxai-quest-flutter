@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/writing/fix_the_sentence/domain/usecases/ge
 import 'fix_the_sentence_event.dart';
 import 'fix_the_sentence_state.dart';
 
-class FixTheSentenceBloc extends Bloc<FixTheSentenceEvent, FixTheSentenceState> {
+class FixTheSentenceBloc
+    extends Bloc<FixTheSentenceEvent, FixTheSentenceState> {
   final GetFixTheSentenceQuests getQuests;
 
-  FixTheSentenceBloc({required this.getQuests}) : super(FixTheSentenceInitial()) {
+  FixTheSentenceBloc({required this.getQuests})
+    : super(FixTheSentenceInitial()) {
     on<FetchFixTheSentenceQuests>(_onFetchQuests);
     on<SubmitFixTheSentenceAnswer>(_onSubmitAnswer);
     on<NextFixTheSentenceQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class FixTheSentenceBloc extends Bloc<FixTheSentenceEvent, FixTheSentenceState> 
         if (newLives <= 0) {
           emit(FixTheSentenceGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class FixTheSentenceBloc extends Bloc<FixTheSentenceEvent, FixTheSentenceState> 
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(FixTheSentenceGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          FixTheSentenceGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

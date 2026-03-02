@@ -51,13 +51,13 @@ class TravelDeskLoaded extends TravelDeskState {
 
   @override
   List<Object?> get props => [
-        quests,
-        currentIndex,
-        livesRemaining,
-        lastAnswerCorrect,
-        xpEarned,
-        coinsEarned,
-      ];
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    xpEarned,
+    coinsEarned,
+  ];
 }
 
 class TravelDeskError extends TravelDeskState {
@@ -71,7 +71,10 @@ class TravelDeskError extends TravelDeskState {
 class TravelDeskGameComplete extends TravelDeskState {
   final int xpEarned;
   final int coinsEarned;
-  const TravelDeskGameComplete({required this.xpEarned, required this.coinsEarned});
+  const TravelDeskGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

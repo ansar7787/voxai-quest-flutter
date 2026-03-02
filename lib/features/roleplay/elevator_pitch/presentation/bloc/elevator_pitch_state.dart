@@ -51,13 +51,13 @@ class ElevatorPitchLoaded extends ElevatorPitchState {
 
   @override
   List<Object?> get props => [
-        quests,
-        currentIndex,
-        livesRemaining,
-        lastAnswerCorrect,
-        xpEarned,
-        coinsEarned,
-      ];
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    xpEarned,
+    coinsEarned,
+  ];
 }
 
 class ElevatorPitchError extends ElevatorPitchState {
@@ -71,7 +71,10 @@ class ElevatorPitchError extends ElevatorPitchState {
 class ElevatorPitchGameComplete extends ElevatorPitchState {
   final int xpEarned;
   final int coinsEarned;
-  const ElevatorPitchGameComplete({required this.xpEarned, required this.coinsEarned});
+  const ElevatorPitchGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

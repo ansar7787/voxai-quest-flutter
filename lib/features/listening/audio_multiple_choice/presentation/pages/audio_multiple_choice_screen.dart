@@ -23,7 +23,6 @@ import 'package:voxai_quest/core/utils/speech_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/listening/presentation/bloc/listening_bloc.dart';
 
-
 class AudioMultipleChoiceScreen extends StatefulWidget {
   final int level;
   const AudioMultipleChoiceScreen({super.key, required this.level});
@@ -50,6 +49,8 @@ class _AudioMultipleChoiceScreenState extends State<AudioMultipleChoiceScreen> {
         level: widget.level,
       ),
     );
+    // Pre-load ads
+    di.sl<AdService>().loadRewardedAd();
   }
 
   void _playAudio(String text) async {
@@ -129,8 +130,7 @@ class _AudioMultipleChoiceScreenState extends State<AudioMultipleChoiceScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<ListeningBloc>().add(
-                
-      FetchListeningQuests(
+                FetchListeningQuests(
                   gameType: GameSubtype.audioMultipleChoice,
                   level: widget.level,
                 ),
@@ -474,6 +474,31 @@ class _AudioMultipleChoiceScreenState extends State<AudioMultipleChoiceScreen> {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          Navigator.pop(c);
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          final adService = di.sl<AdService>();
+          adService.showRewardedAd(
+            isPremium: isPremium,
+            onUserEarnedReward: (reward) {
+              // Dispatch Double Up Event
+              context.read<AuthBloc>().add(
+                AuthDoubleUpRewardsRequested(xp, coins),
+              );
+              // Show Success SnackBar
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("REWARDS DOUBLED! 💎💎"),
+                  backgroundColor: Color(0xFF10B981),
+                ),
+              );
+            },
+            onDismissed: () {
+              context.pop();
+            },
+          );
+        },
       ),
     );
   }
@@ -486,11 +511,52 @@ class _AudioMultipleChoiceScreenState extends State<AudioMultipleChoiceScreen> {
       builder: (c) => ModernGameDialog(
         title: 'Audio Cut Off',
         description: 'Your listening streak was interrupted. Try again!',
-        buttonText: 'QUIT',
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
           Navigator.pop(c);
           context.pop();
+        },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<ListeningBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
+        adButtonText: "RESCUE LIFE (AD)",
+        onAdAction: () {
+          Navigator.pop(c);
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          final adService = di.sl<AdService>();
+          adService.showRewardedAd(
+            isPremium: isPremium,
+            onDismissed: () {},
+            onUserEarnedReward: (reward) {
+              context.read<ListeningBloc>().add(RestoreLife());
+              _hapticService.success();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("LIFE RESCUED! ❤️"),
+                  backgroundColor: Color(0xFF10B981),
+                ),
+              );
+            },
+          );
         },
       ),
     );

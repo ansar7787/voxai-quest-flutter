@@ -41,6 +41,9 @@ class UserEntity extends Equatable {
   final List<int> claimedLevelMilestones;
   final List<Map<String, dynamic>> coinHistory;
   final bool hasPermanentXPBoost;
+  final DateTime? lastFreeSpinDate;
+  final DateTime? lastAdSpinDate;
+  final int adSpinsUsedToday;
 
   const UserEntity({
     required this.id,
@@ -153,6 +156,9 @@ class UserEntity extends Equatable {
     this.claimedLevelMilestones = const [],
     this.coinHistory = const [],
     this.hasPermanentXPBoost = false,
+    this.lastFreeSpinDate,
+    this.lastAdSpinDate,
+    this.adSpinsUsedToday = 0,
   });
 
   int get level => (totalExp / 100).floor() + 1;
@@ -258,6 +264,9 @@ class UserEntity extends Equatable {
     claimedLevelMilestones,
     coinHistory,
     hasPermanentXPBoost,
+    lastFreeSpinDate,
+    lastAdSpinDate,
+    adSpinsUsedToday,
   ];
 
   UserEntity copyWith({
@@ -294,6 +303,9 @@ class UserEntity extends Equatable {
     int? totalExp,
     Map<String, int>? unlockedLevels,
     bool? hasPermanentXPBoost,
+    DateTime? lastFreeSpinDate,
+    DateTime? lastAdSpinDate,
+    int? adSpinsUsedToday,
     String? voxinMascot,
     String? voxinEquippedAccessory,
     List<String>? voxinOwnedAccessories,
@@ -338,6 +350,9 @@ class UserEntity extends Equatable {
       totalExp: totalExp ?? this.totalExp,
       unlockedLevels: unlockedLevels ?? this.unlockedLevels,
       hasPermanentXPBoost: hasPermanentXPBoost ?? this.hasPermanentXPBoost,
+      lastFreeSpinDate: lastFreeSpinDate ?? this.lastFreeSpinDate,
+      lastAdSpinDate: lastAdSpinDate ?? this.lastAdSpinDate,
+      adSpinsUsedToday: adSpinsUsedToday ?? this.adSpinsUsedToday,
       voxinMascot: voxinMascot ?? this.voxinMascot,
       voxinEquippedAccessory:
           voxinEquippedAccessory ?? this.voxinEquippedAccessory,

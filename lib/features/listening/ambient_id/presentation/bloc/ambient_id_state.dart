@@ -42,14 +42,22 @@ class AmbientIdLoaded extends AmbientIdState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class AmbientIdGameComplete extends AmbientIdState {
   final int xpEarned;
   final int coinsEarned;
 
-  const AmbientIdGameComplete({required this.xpEarned, required this.coinsEarned});
+  const AmbientIdGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

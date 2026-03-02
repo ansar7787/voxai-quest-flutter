@@ -46,14 +46,23 @@ class ArticleInsertionLoaded extends ArticleInsertionState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class ArticleInsertionGameComplete extends ArticleInsertionState {
   final int xpEarned;
   final int coinsEarned;
 
-  const ArticleInsertionGameComplete({required this.xpEarned, required this.coinsEarned});
+  const ArticleInsertionGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/writing/short_answer_writing/domain/usecase
 import 'short_answer_writing_event.dart';
 import 'short_answer_writing_state.dart';
 
-class ShortAnswerWritingBloc extends Bloc<ShortAnswerWritingEvent, ShortAnswerWritingState> {
+class ShortAnswerWritingBloc
+    extends Bloc<ShortAnswerWritingEvent, ShortAnswerWritingState> {
   final GetShortAnswerWritingQuests getQuests;
 
-  ShortAnswerWritingBloc({required this.getQuests}) : super(ShortAnswerWritingInitial()) {
+  ShortAnswerWritingBloc({required this.getQuests})
+    : super(ShortAnswerWritingInitial()) {
     on<FetchShortAnswerWritingQuests>(_onFetchQuests);
     on<SubmitShortAnswerWritingAnswer>(_onSubmitAnswer);
     on<NextShortAnswerWritingQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class ShortAnswerWritingBloc extends Bloc<ShortAnswerWritingEvent, ShortAnswerWr
         if (newLives <= 0) {
           emit(ShortAnswerWritingGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class ShortAnswerWritingBloc extends Bloc<ShortAnswerWritingEvent, ShortAnswerWr
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(ShortAnswerWritingGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          ShortAnswerWritingGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

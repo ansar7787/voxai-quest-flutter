@@ -22,7 +22,6 @@ import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/reading/presentation/bloc/reading_bloc.dart';
 
-
 class ParagraphSummaryScreen extends StatefulWidget {
   final int level;
   const ParagraphSummaryScreen({super.key, required this.level});
@@ -46,6 +45,8 @@ class _ParagraphSummaryScreenState extends State<ParagraphSummaryScreen> {
         level: widget.level,
       ),
     );
+    // Pre-load ads
+    di.sl<AdService>().loadRewardedAd();
   }
 
   void _onOptionSelected(int index) {
@@ -120,8 +121,7 @@ class _ParagraphSummaryScreenState extends State<ParagraphSummaryScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<ReadingBloc>().add(
-                
-      FetchReadingQuests(
+                FetchReadingQuests(
                   gameType: GameSubtype.paragraphSummary,
                   level: widget.level,
                 ),
@@ -459,6 +459,31 @@ class _ParagraphSummaryScreenState extends State<ParagraphSummaryScreen> {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          Navigator.pop(c);
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          final adService = di.sl<AdService>();
+          adService.showRewardedAd(
+            isPremium: isPremium,
+            onUserEarnedReward: (reward) {
+              // Dispatch Double Up Event
+              context.read<AuthBloc>().add(
+                AuthDoubleUpRewardsRequested(xp, coins),
+              );
+              // Show Success SnackBar
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("REWARDS DOUBLED! 💎💎"),
+                  backgroundColor: Color(0xFF10B981),
+                ),
+              );
+            },
+            onDismissed: () {
+              context.pop();
+            },
+          );
+        },
       ),
     );
   }
@@ -471,17 +496,32 @@ class _ParagraphSummaryScreenState extends State<ParagraphSummaryScreen> {
       builder: (c) => ModernGameDialog(
         title: 'Analysis Faded',
         description: 'Read carefully to synthesize the information correctly!',
-        buttonText: 'RETRY',
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
-          Navigator.pop(c);
-          context.read<ReadingBloc>().add(RestoreLife());
-        },
-        secondaryButtonText: 'QUIT',
-        onSecondaryPressed: () {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<ReadingBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

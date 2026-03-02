@@ -20,6 +20,8 @@ import 'package:voxai_quest/core/utils/injection_container.dart' as di;
 import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/core/utils/speech_service.dart';
 import 'package:voxai_quest/features/listening/presentation/bloc/listening_bloc.dart';
+import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:voxai_quest/core/utils/ad_service.dart';
 
 class AudioTrueFalseScreen extends StatefulWidget {
   final int level;
@@ -77,7 +79,11 @@ class _AudioTrueFalseScreenState extends State<AudioTrueFalseScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('listening', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'listening',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -102,8 +108,7 @@ class _AudioTrueFalseScreenState extends State<AudioTrueFalseScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<ListeningBloc>().add(
-                
-      FetchListeningQuests(
+                FetchListeningQuests(
                   gameType: GameSubtype.audioTrueFalse,
                   level: widget.level,
                 ),
@@ -111,7 +116,6 @@ class _AudioTrueFalseScreenState extends State<AudioTrueFalseScreen> {
             );
           }
           if (state is ListeningLoaded) {
-
             return Stack(
               children: [
                 const MeshGradientBackground(),
@@ -373,8 +377,6 @@ class _AudioTrueFalseScreenState extends State<AudioTrueFalseScreen> {
     );
   }
 
-  
-
   void _showCompletionDialog(BuildContext context, int xp, int coins) {
     _hapticService.success();
     _soundService.playLevelComplete();
@@ -402,17 +404,32 @@ class _AudioTrueFalseScreenState extends State<AudioTrueFalseScreen> {
       builder: (context) => ModernGameDialog(
         title: "TRUTH CONCEALED",
         description: "Some facts slipped past your ears. Want to try again?",
-        buttonText: "RETRY",
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
-          Navigator.pop(context);
-          context.read<ListeningBloc>().add(RestoreLife());
-        },
-        secondaryButtonText: "EXIT",
-        onSecondaryPressed: () {
-          Navigator.pop(context);
+          Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<ListeningBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

@@ -15,10 +15,14 @@ class FindWordMeaningRepositoryImpl implements FindWordMeaningRepository {
   });
 
   @override
-  Future<Either<Failure, List<FindWordMeaningQuest>>> getFindWordMeaningQuests(int level) async {
+  Future<Either<Failure, List<FindWordMeaningQuest>>> getFindWordMeaningQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getFindWordMeaningQuests(level);
+        final remoteQuests = await remoteDataSource.getFindWordMeaningQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class FindWordMeaningRepositoryImpl implements FindWordMeaningRepository {
     }
   }
 }
-

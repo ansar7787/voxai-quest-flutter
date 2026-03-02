@@ -15,10 +15,14 @@ class DailyJournalRepositoryImpl implements DailyJournalRepository {
   });
 
   @override
-  Future<Either<Failure, List<DailyJournalQuest>>> getDailyJournalQuests(int level) async {
+  Future<Either<Failure, List<DailyJournalQuest>>> getDailyJournalQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getDailyJournalQuests(level);
+        final remoteQuests = await remoteDataSource.getDailyJournalQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class DailyJournalRepositoryImpl implements DailyJournalRepository {
     }
   }
 }
-

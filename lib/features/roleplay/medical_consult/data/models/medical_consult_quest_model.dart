@@ -40,13 +40,19 @@ class MedicalConsultQuestModel extends MedicalConsultQuest {
       xpReward: (json['xpReward'] as num?)?.toInt() ?? 10,
       coinReward: (json['coinReward'] as num?)?.toInt() ?? 10,
       livesAllowed: (json['livesAllowed'] as num?)?.toInt() ?? 3,
-      interactionType: EnumParser.parseInteractionType(json['interactionType'] as String?),
-      options: (json['options'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      interactionType: EnumParser.parseInteractionType(
+        json['interactionType'] as String?,
+      ),
+      options: (json['options'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       correctAnswerIndex: (json['correctAnswerIndex'] as num?)?.toInt(),
       patientName: json['patientName'] as String?,
       condition: json['condition'] as String?,
       patientQuery: json['patientQuery'] as String?,
-      keySymptoms: (json['keySymptoms'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      keySymptoms: (json['keySymptoms'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       advice: json['advice'] as String?,
     );
   }
@@ -72,4 +78,3 @@ class MedicalConsultQuestModel extends MedicalConsultQuest {
     };
   }
 }
-

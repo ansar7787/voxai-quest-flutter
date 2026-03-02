@@ -46,14 +46,23 @@ class SummarizeStoryWritingLoaded extends SummarizeStoryWritingState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class SummarizeStoryWritingGameComplete extends SummarizeStoryWritingState {
   final int xpEarned;
   final int coinsEarned;
 
-  const SummarizeStoryWritingGameComplete({required this.xpEarned, required this.coinsEarned});
+  const SummarizeStoryWritingGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

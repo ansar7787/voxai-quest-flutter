@@ -5,13 +5,16 @@ abstract class ConflictResolverRemoteDataSource {
   Future<List<ConflictResolverQuestModel>> getConflictResolverQuests(int level);
 }
 
-class ConflictResolverRemoteDataSourceImpl implements ConflictResolverRemoteDataSource {
+class ConflictResolverRemoteDataSourceImpl
+    implements ConflictResolverRemoteDataSource {
   final FirebaseFirestore firestore;
 
   ConflictResolverRemoteDataSourceImpl({required this.firestore});
 
   @override
-  Future<List<ConflictResolverQuestModel>> getConflictResolverQuests(int level) async {
+  Future<List<ConflictResolverQuestModel>> getConflictResolverQuests(
+    int level,
+  ) async {
     final snapshot = await firestore
         .collection('curriculum')
         .doc('roleplay')
@@ -20,7 +23,10 @@ class ConflictResolverRemoteDataSourceImpl implements ConflictResolverRemoteData
         .get();
 
     return snapshot.docs
-        .map((doc) => ConflictResolverQuestModel.fromJson(doc.data()..['id'] = doc.id))
+        .map(
+          (doc) =>
+              ConflictResolverQuestModel.fromJson(doc.data()..['id'] = doc.id),
+        )
         .toList();
   }
 }

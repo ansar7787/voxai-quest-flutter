@@ -23,9 +23,5 @@ class CorrectionWritingQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        incorrectText,
-        errors,
-      ];
+  List<Object?> get props => [...super.props, incorrectText, errors];
 }

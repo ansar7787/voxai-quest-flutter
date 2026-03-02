@@ -23,7 +23,6 @@ import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/speaking/domain/entities/speaking_quest.dart';
 import 'package:voxai_quest/features/speaking/presentation/bloc/speaking_bloc.dart';
 
-
 class SpeakMissingWordScreen extends StatefulWidget {
   final int level;
   const SpeakMissingWordScreen({super.key, required this.level});
@@ -113,7 +112,11 @@ class _SpeakMissingWordScreenState extends State<SpeakMissingWordScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('speaking', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'speaking',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -151,8 +154,7 @@ class _SpeakMissingWordScreenState extends State<SpeakMissingWordScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<SpeakingBloc>().add(
-                
-      FetchSpeakingQuests(
+                FetchSpeakingQuests(
                   gameType: GameSubtype.speakMissingWord,
                   level: widget.level,
                 ),

@@ -26,9 +26,9 @@ class ClauseConnectorQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        firstClause,
-        secondClause,
-        connectorToUse,
-      ];
+    ...super.props,
+    firstClause,
+    secondClause,
+    connectorToUse,
+  ];
 }

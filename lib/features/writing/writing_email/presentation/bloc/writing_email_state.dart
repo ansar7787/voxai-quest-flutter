@@ -46,14 +46,23 @@ class WritingEmailLoaded extends WritingEmailState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class WritingEmailGameComplete extends WritingEmailState {
   final int xpEarned;
   final int coinsEarned;
 
-  const WritingEmailGameComplete({required this.xpEarned, required this.coinsEarned});
+  const WritingEmailGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

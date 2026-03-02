@@ -25,9 +25,5 @@ class PhrasalVerbsQuest extends GameQuest {
   String? get displaySentence => sentence ?? instruction;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        sentence,
-        phrasalVerb,
-      ];
+  List<Object?> get props => [...super.props, sentence, phrasalVerb];
 }

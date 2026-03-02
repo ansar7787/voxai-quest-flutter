@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/writing/opinion_writing/domain/usecases/get
 import 'opinion_writing_event.dart';
 import 'opinion_writing_state.dart';
 
-class OpinionWritingBloc extends Bloc<OpinionWritingEvent, OpinionWritingState> {
+class OpinionWritingBloc
+    extends Bloc<OpinionWritingEvent, OpinionWritingState> {
   final GetOpinionWritingQuests getQuests;
 
-  OpinionWritingBloc({required this.getQuests}) : super(OpinionWritingInitial()) {
+  OpinionWritingBloc({required this.getQuests})
+    : super(OpinionWritingInitial()) {
     on<FetchOpinionWritingQuests>(_onFetchQuests);
     on<SubmitOpinionWritingAnswer>(_onSubmitAnswer);
     on<NextOpinionWritingQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class OpinionWritingBloc extends Bloc<OpinionWritingEvent, OpinionWritingState> 
         if (newLives <= 0) {
           emit(OpinionWritingGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class OpinionWritingBloc extends Bloc<OpinionWritingEvent, OpinionWritingState> 
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(OpinionWritingGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          OpinionWritingGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

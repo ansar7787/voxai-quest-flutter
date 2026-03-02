@@ -15,7 +15,9 @@ class ListeningInferenceRepositoryImpl implements ListeningInferenceRepository {
   });
 
   @override
-  Future<Either<Failure, List<ListeningInferenceQuest>>> getQuests(int level) async {
+  Future<Either<Failure, List<ListeningInferenceQuest>>> getQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteQuests = await remoteDataSource.getQuests(level);

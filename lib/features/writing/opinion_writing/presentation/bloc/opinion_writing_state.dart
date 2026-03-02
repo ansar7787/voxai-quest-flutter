@@ -46,14 +46,23 @@ class OpinionWritingLoaded extends OpinionWritingState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class OpinionWritingGameComplete extends OpinionWritingState {
   final int xpEarned;
   final int coinsEarned;
 
-  const OpinionWritingGameComplete({required this.xpEarned, required this.coinsEarned});
+  const OpinionWritingGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/reading/true_false_reading/domain/usecases/
 import 'true_false_reading_event.dart';
 import 'true_false_reading_state.dart';
 
-class TrueFalseReadingBloc extends Bloc<TrueFalseReadingEvent, TrueFalseReadingState> {
+class TrueFalseReadingBloc
+    extends Bloc<TrueFalseReadingEvent, TrueFalseReadingState> {
   final GetTrueFalseReadingQuests getQuests;
 
-  TrueFalseReadingBloc({required this.getQuests}) : super(TrueFalseReadingInitial()) {
+  TrueFalseReadingBloc({required this.getQuests})
+    : super(TrueFalseReadingInitial()) {
     on<FetchTrueFalseReadingQuests>(_onFetchQuests);
     on<SubmitTrueFalseReadingAnswer>(_onSubmitAnswer);
     on<NextTrueFalseReadingQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class TrueFalseReadingBloc extends Bloc<TrueFalseReadingEvent, TrueFalseReadingS
         if (newLives <= 0) {
           emit(TrueFalseReadingGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class TrueFalseReadingBloc extends Bloc<TrueFalseReadingEvent, TrueFalseReadingS
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(TrueFalseReadingGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          TrueFalseReadingGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

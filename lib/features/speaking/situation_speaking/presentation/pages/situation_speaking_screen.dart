@@ -23,7 +23,6 @@ import 'package:voxai_quest/core/utils/speech_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/speaking/presentation/bloc/speaking_bloc.dart';
 
-
 class SituationSpeakingScreen extends StatefulWidget {
   final int level;
   const SituationSpeakingScreen({super.key, required this.level});
@@ -108,7 +107,11 @@ class _SituationSpeakingScreenState extends State<SituationSpeakingScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('speaking', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'speaking',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -146,8 +149,7 @@ class _SituationSpeakingScreenState extends State<SituationSpeakingScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<SpeakingBloc>().add(
-                
-      FetchSpeakingQuests(
+                FetchSpeakingQuests(
                   gameType: GameSubtype.situationSpeaking,
                   level: widget.level,
                 ),

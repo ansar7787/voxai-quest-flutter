@@ -40,12 +40,18 @@ class EmergencyHubQuestModel extends EmergencyHubQuest {
       xpReward: (json['xpReward'] as num?)?.toInt() ?? 10,
       coinReward: (json['coinReward'] as num?)?.toInt() ?? 10,
       livesAllowed: (json['livesAllowed'] as num?)?.toInt() ?? 3,
-      interactionType: EnumParser.parseInteractionType(json['interactionType'] as String?),
-      options: (json['options'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      interactionType: EnumParser.parseInteractionType(
+        json['interactionType'] as String?,
+      ),
+      options: (json['options'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       correctAnswerIndex: (json['correctAnswerIndex'] as num?)?.toInt(),
       emergencyType: json['emergencyType'] as String?,
       urgencyLevel: json['urgencyLevel'] as String?,
-      requiredActions: (json['requiredActions'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      requiredActions: (json['requiredActions'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       callerState: json['callerState'] as String?,
       dispatcherFeedback: json['dispatcherFeedback'] as String?,
     );
@@ -72,4 +78,3 @@ class EmergencyHubQuestModel extends EmergencyHubQuest {
     };
   }
 }
-

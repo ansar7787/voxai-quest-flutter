@@ -25,10 +25,5 @@ class IdiomsQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        idiom,
-        meaning,
-        example,
-      ];
+  List<Object?> get props => [...super.props, idiom, meaning, example];
 }

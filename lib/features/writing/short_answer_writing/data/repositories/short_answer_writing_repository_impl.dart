@@ -15,10 +15,13 @@ class ShortAnswerWritingRepositoryImpl implements ShortAnswerWritingRepository {
   });
 
   @override
-  Future<Either<Failure, List<ShortAnswerWritingQuest>>> getShortAnswerWritingQuests(int level) async {
+  Future<Either<Failure, List<ShortAnswerWritingQuest>>>
+  getShortAnswerWritingQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getShortAnswerWritingQuests(level);
+        final remoteQuests = await remoteDataSource.getShortAnswerWritingQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class ShortAnswerWritingRepositoryImpl implements ShortAnswerWritingRepository {
     }
   }
 }
-

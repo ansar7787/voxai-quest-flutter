@@ -8,7 +8,9 @@ class GetSummarizeStoryWritingQuests {
 
   GetSummarizeStoryWritingQuests(this.repository);
 
-  Future<Either<Failure, List<SummarizeStoryWritingQuest>>> call(int level) async {
+  Future<Either<Failure, List<SummarizeStoryWritingQuest>>> call(
+    int level,
+  ) async {
     return await repository.getSummarizeStoryWritingQuests(level);
   }
 }

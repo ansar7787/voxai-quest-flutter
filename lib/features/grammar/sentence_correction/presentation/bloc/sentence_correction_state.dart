@@ -46,14 +46,23 @@ class SentenceCorrectionLoaded extends SentenceCorrectionState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class SentenceCorrectionGameComplete extends SentenceCorrectionState {
   final int xpEarned;
   final int coinsEarned;
 
-  const SentenceCorrectionGameComplete({required this.xpEarned, required this.coinsEarned});
+  const SentenceCorrectionGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

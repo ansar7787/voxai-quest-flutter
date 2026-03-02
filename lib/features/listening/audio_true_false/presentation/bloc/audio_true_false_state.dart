@@ -42,14 +42,22 @@ class AudioTrueFalseLoaded extends AudioTrueFalseState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class AudioTrueFalseGameComplete extends AudioTrueFalseState {
   final int xpEarned;
   final int coinsEarned;
 
-  const AudioTrueFalseGameComplete({required this.xpEarned, required this.coinsEarned});
+  const AudioTrueFalseGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

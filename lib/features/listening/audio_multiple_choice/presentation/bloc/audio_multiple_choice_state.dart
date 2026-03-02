@@ -42,14 +42,22 @@ class AudioMultipleChoiceLoaded extends AudioMultipleChoiceState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class AudioMultipleChoiceGameComplete extends AudioMultipleChoiceState {
   final int xpEarned;
   final int coinsEarned;
 
-  const AudioMultipleChoiceGameComplete({required this.xpEarned, required this.coinsEarned});
+  const AudioMultipleChoiceGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/listening/listening_inference/domain/usecas
 import 'listening_inference_event.dart';
 import 'listening_inference_state.dart';
 
-class ListeningInferenceBloc extends Bloc<ListeningInferenceEvent, ListeningInferenceState> {
+class ListeningInferenceBloc
+    extends Bloc<ListeningInferenceEvent, ListeningInferenceState> {
   final GetListeningInferenceQuests getQuests;
 
-  ListeningInferenceBloc({required this.getQuests}) : super(ListeningInferenceInitial()) {
+  ListeningInferenceBloc({required this.getQuests})
+    : super(ListeningInferenceInitial()) {
     on<FetchListeningInferenceQuests>(_onFetchQuests);
     on<SubmitListeningInferenceAnswer>(_onSubmitAnswer);
     on<NextListeningInferenceQuestion>(_onNextQuestion);
@@ -38,10 +40,9 @@ class ListeningInferenceBloc extends Bloc<ListeningInferenceEvent, ListeningInfe
         if (newLives <= 0) {
           emit(ListeningInferenceGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -56,15 +57,14 @@ class ListeningInferenceBloc extends Bloc<ListeningInferenceEvent, ListeningInfe
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(ListeningInferenceGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          ListeningInferenceGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-        ));
+        emit(state.copyWith(currentIndex: nextIndex, lastAnswerCorrect: null));
       }
     }
   }
@@ -76,4 +76,3 @@ class ListeningInferenceBloc extends Bloc<ListeningInferenceEvent, ListeningInfe
     emit(ListeningInferenceInitial());
   }
 }
-

@@ -46,14 +46,23 @@ class WordFormationLoaded extends WordFormationState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class WordFormationGameComplete extends WordFormationState {
   final int xpEarned;
   final int coinsEarned;
 
-  const WordFormationGameComplete({required this.xpEarned, required this.coinsEarned});
+  const WordFormationGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

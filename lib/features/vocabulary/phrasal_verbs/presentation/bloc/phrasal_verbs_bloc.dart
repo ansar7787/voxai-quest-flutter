@@ -20,16 +20,15 @@ class PhrasalVerbsBloc extends Bloc<PhrasalVerbsEvent, PhrasalVerbsState> {
   ) async {
     emit(PhrasalVerbsLoading());
     final result = await getQuests(event.level);
-    result.fold(
-      (failure) => emit(PhrasalVerbsError(failure.message)),
-      (quests) {
-        if (quests.isEmpty) {
-          emit(const PhrasalVerbsError("No quests found for this level."));
-        } else {
-          emit(PhrasalVerbsLoaded(quests: quests));
-        }
-      },
-    );
+    result.fold((failure) => emit(PhrasalVerbsError(failure.message)), (
+      quests,
+    ) {
+      if (quests.isEmpty) {
+        emit(const PhrasalVerbsError("No quests found for this level."));
+      } else {
+        emit(PhrasalVerbsLoaded(quests: quests));
+      }
+    });
   }
 
   void _onSubmitAnswer(
@@ -45,10 +44,9 @@ class PhrasalVerbsBloc extends Bloc<PhrasalVerbsEvent, PhrasalVerbsState> {
         if (newLives <= 0) {
           emit(PhrasalVerbsGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -63,16 +61,20 @@ class PhrasalVerbsBloc extends Bloc<PhrasalVerbsEvent, PhrasalVerbsState> {
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(PhrasalVerbsGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          PhrasalVerbsGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

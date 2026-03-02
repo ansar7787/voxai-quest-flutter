@@ -23,7 +23,6 @@ import 'package:voxai_quest/core/utils/speech_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/roleplay/presentation/bloc/roleplay_bloc.dart';
 
-
 class SocialSparkScreen extends StatefulWidget {
   final int level;
   const SocialSparkScreen({super.key, required this.level});
@@ -93,7 +92,11 @@ class _SocialSparkScreenState extends State<SocialSparkScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('roleplay', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'roleplay',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
       backgroundColor: isDark
@@ -145,8 +148,7 @@ class _SocialSparkScreenState extends State<SocialSparkScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<RoleplayBloc>().add(
-                
-      FetchRoleplayQuests(
+                FetchRoleplayQuests(
                   gameType: GameSubtype.socialSpark,
                   level: widget.level,
                 ),

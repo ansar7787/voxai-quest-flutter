@@ -15,7 +15,9 @@ class FastSpeechDecoderRepositoryImpl implements FastSpeechDecoderRepository {
   });
 
   @override
-  Future<Either<Failure, List<FastSpeechDecoderQuest>>> getQuests(int level) async {
+  Future<Either<Failure, List<FastSpeechDecoderQuest>>> getQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteQuests = await remoteDataSource.getQuests(level);

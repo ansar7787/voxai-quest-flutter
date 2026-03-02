@@ -16,10 +16,13 @@ class ConflictResolverRepositoryImpl implements ConflictResolverRepository {
   });
 
   @override
-  Future<Either<Failure, List<ConflictResolverQuest>>> getConflictResolverQuests(int level) async {
+  Future<Either<Failure, List<ConflictResolverQuest>>>
+  getConflictResolverQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getConflictResolverQuests(level);
+        final remoteQuests = await remoteDataSource.getConflictResolverQuests(
+          level,
+        );
         return Right(remoteQuests);
       } on ServerException {
         return Left(ServerFailure('Server error occurred'));
@@ -29,4 +32,3 @@ class ConflictResolverRepositoryImpl implements ConflictResolverRepository {
     }
   }
 }
-

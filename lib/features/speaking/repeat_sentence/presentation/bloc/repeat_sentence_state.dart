@@ -42,14 +42,22 @@ class RepeatSentenceLoaded extends RepeatSentenceState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class RepeatSentenceGameComplete extends RepeatSentenceState {
   final int xpEarned;
   final int coinsEarned;
 
-  const RepeatSentenceGameComplete({required this.xpEarned, required this.coinsEarned});
+  const RepeatSentenceGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

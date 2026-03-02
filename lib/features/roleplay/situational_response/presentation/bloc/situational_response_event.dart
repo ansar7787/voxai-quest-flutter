@@ -29,6 +29,4 @@ class RestoreSituationalResponseLife extends SituationalResponseEvent {}
 
 class SituationalResponseHintUsed extends SituationalResponseEvent {}
 
-
 class RestartLevel extends SituationalResponseEvent {}
-

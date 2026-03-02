@@ -20,16 +20,15 @@ class AntonymSearchBloc extends Bloc<AntonymSearchEvent, AntonymSearchState> {
   ) async {
     emit(AntonymSearchLoading());
     final result = await getQuests(event.level);
-    result.fold(
-      (failure) => emit(AntonymSearchError(failure.message)),
-      (quests) {
-        if (quests.isEmpty) {
-          emit(const AntonymSearchError("No quests found for this level."));
-        } else {
-          emit(AntonymSearchLoaded(quests: quests));
-        }
-      },
-    );
+    result.fold((failure) => emit(AntonymSearchError(failure.message)), (
+      quests,
+    ) {
+      if (quests.isEmpty) {
+        emit(const AntonymSearchError("No quests found for this level."));
+      } else {
+        emit(AntonymSearchLoaded(quests: quests));
+      }
+    });
   }
 
   void _onSubmitAnswer(
@@ -45,10 +44,9 @@ class AntonymSearchBloc extends Bloc<AntonymSearchEvent, AntonymSearchState> {
         if (newLives <= 0) {
           emit(AntonymSearchGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -63,16 +61,20 @@ class AntonymSearchBloc extends Bloc<AntonymSearchEvent, AntonymSearchState> {
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(AntonymSearchGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          AntonymSearchGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

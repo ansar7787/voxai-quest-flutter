@@ -16,7 +16,9 @@ class TravelDeskRepositoryImpl implements TravelDeskRepository {
   });
 
   @override
-  Future<Either<Failure, List<TravelDeskQuest>>> getTravelDeskQuests(int level) async {
+  Future<Either<Failure, List<TravelDeskQuest>>> getTravelDeskQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteQuests = await remoteDataSource.getTravelDeskQuests(level);

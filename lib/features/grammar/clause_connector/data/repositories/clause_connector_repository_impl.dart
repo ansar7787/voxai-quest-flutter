@@ -15,10 +15,14 @@ class ClauseConnectorRepositoryImpl implements ClauseConnectorRepository {
   });
 
   @override
-  Future<Either<Failure, List<ClauseConnectorQuest>>> getClauseConnectorQuests(int level) async {
+  Future<Either<Failure, List<ClauseConnectorQuest>>> getClauseConnectorQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getClauseConnectorQuests(level);
+        final remoteQuests = await remoteDataSource.getClauseConnectorQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class ClauseConnectorRepositoryImpl implements ClauseConnectorRepository {
     }
   }
 }
-

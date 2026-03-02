@@ -15,10 +15,13 @@ class CorrectionWritingRepositoryImpl implements CorrectionWritingRepository {
   });
 
   @override
-  Future<Either<Failure, List<CorrectionWritingQuest>>> getCorrectionWritingQuests(int level) async {
+  Future<Either<Failure, List<CorrectionWritingQuest>>>
+  getCorrectionWritingQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getCorrectionWritingQuests(level);
+        final remoteQuests = await remoteDataSource.getCorrectionWritingQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class CorrectionWritingRepositoryImpl implements CorrectionWritingRepository {
     }
   }
 }
-

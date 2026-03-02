@@ -26,9 +26,9 @@ class TenseMasteryQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        sentenceWithBlank,
-        verb,
-        targetTense,
-      ];
+    ...super.props,
+    sentenceWithBlank,
+    verb,
+    targetTense,
+  ];
 }

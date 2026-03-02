@@ -556,33 +556,6 @@ class _ModernCategoryMapState extends State<ModernCategoryMap> {
       ],
     );
   }
-
-  Widget _buildVoxinNavButton(BuildContext context, bool isDark) {
-    final user = context.read<AuthBloc>().state.user;
-    final mascotEmoji =
-        VoxinAssets.mascotMap[user?.voxinMascot] ??
-        VoxinAssets.mascotMap['voxin_prime']!;
-
-    return ScaleButton(
-      onTap: () => context.push(AppRouter.voxinMascotRoute),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(15.r),
-          border: Border.all(color: Colors.white.withOpacity(0.2)),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(mascotEmoji, style: TextStyle(fontSize: 16.sp)),
-            SizedBox(width: 4.w),
-            Icon(Icons.style_rounded, color: Colors.cyanAccent, size: 14.r),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class _TrianglePainter extends CustomPainter {

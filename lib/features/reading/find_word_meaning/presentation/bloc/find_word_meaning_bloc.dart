@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/reading/find_word_meaning/domain/usecases/g
 import 'find_word_meaning_event.dart';
 import 'find_word_meaning_state.dart';
 
-class FindWordMeaningBloc extends Bloc<FindWordMeaningEvent, FindWordMeaningState> {
+class FindWordMeaningBloc
+    extends Bloc<FindWordMeaningEvent, FindWordMeaningState> {
   final GetFindWordMeaningQuests getQuests;
 
-  FindWordMeaningBloc({required this.getQuests}) : super(FindWordMeaningInitial()) {
+  FindWordMeaningBloc({required this.getQuests})
+    : super(FindWordMeaningInitial()) {
     on<FetchFindWordMeaningQuests>(_onFetchQuests);
     on<SubmitFindWordMeaningAnswer>(_onSubmitAnswer);
     on<NextFindWordMeaningQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class FindWordMeaningBloc extends Bloc<FindWordMeaningEvent, FindWordMeaningStat
         if (newLives <= 0) {
           emit(FindWordMeaningGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class FindWordMeaningBloc extends Bloc<FindWordMeaningEvent, FindWordMeaningStat
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(FindWordMeaningGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          FindWordMeaningGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

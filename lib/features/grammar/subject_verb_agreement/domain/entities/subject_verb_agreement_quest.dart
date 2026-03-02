@@ -23,9 +23,5 @@ class SubjectVerbAgreementQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        sentenceWithBlank,
-        subject,
-      ];
+  List<Object?> get props => [...super.props, sentenceWithBlank, subject];
 }

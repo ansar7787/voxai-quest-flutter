@@ -23,9 +23,5 @@ class CompleteSentenceQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        partialSentence,
-        completion,
-      ];
+  List<Object?> get props => [...super.props, partialSentence, completion];
 }

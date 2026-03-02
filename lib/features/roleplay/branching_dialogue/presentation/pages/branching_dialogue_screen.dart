@@ -150,8 +150,7 @@ class _BranchingDialogueScreenState extends State<BranchingDialogueScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<RoleplayBloc>().add(
-                
-      FetchRoleplayQuests(
+                FetchRoleplayQuests(
                   gameType: GameSubtype.branchingDialogue,
                   level: widget.level,
                 ),

@@ -15,7 +15,9 @@ class DetailSpotlightRepositoryImpl implements DetailSpotlightRepository {
   });
 
   @override
-  Future<Either<Failure, List<DetailSpotlightQuest>>> getQuests(int level) async {
+  Future<Either<Failure, List<DetailSpotlightQuest>>> getQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteQuests = await remoteDataSource.getQuests(level);

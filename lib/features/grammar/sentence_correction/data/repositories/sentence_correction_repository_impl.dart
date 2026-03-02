@@ -15,10 +15,13 @@ class SentenceCorrectionRepositoryImpl implements SentenceCorrectionRepository {
   });
 
   @override
-  Future<Either<Failure, List<SentenceCorrectionQuest>>> getSentenceCorrectionQuests(int level) async {
+  Future<Either<Failure, List<SentenceCorrectionQuest>>>
+  getSentenceCorrectionQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getSentenceCorrectionQuests(level);
+        final remoteQuests = await remoteDataSource.getSentenceCorrectionQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class SentenceCorrectionRepositoryImpl implements SentenceCorrectionRepository {
     }
   }
 }
-

@@ -26,9 +26,9 @@ class SituationalResponseQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        situation,
-        keywords,
-        sampleAnswer,
-      ];
+    ...super.props,
+    situation,
+    keywords,
+    sampleAnswer,
+  ];
 }

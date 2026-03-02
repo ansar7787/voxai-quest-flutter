@@ -22,7 +22,6 @@ import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/writing/presentation/bloc/writing_bloc.dart';
 
-
 class SentenceBuilderScreen extends StatefulWidget {
   final int level;
   const SentenceBuilderScreen({super.key, required this.level});
@@ -123,7 +122,11 @@ class _SentenceBuilderScreenState extends State<SentenceBuilderScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('writing', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'writing',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -170,8 +173,7 @@ class _SentenceBuilderScreenState extends State<SentenceBuilderScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<WritingBloc>().add(
-                
-      FetchWritingQuests(
+                FetchWritingQuests(
                   gameType: GameSubtype.sentenceBuilder,
                   level: widget.level,
                 ),

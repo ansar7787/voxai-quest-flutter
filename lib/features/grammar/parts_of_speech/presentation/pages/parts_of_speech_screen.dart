@@ -22,7 +22,6 @@ import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/grammar/presentation/bloc/grammar_bloc.dart';
 
-
 class PartsOfSpeechScreen extends StatefulWidget {
   final int level;
   const PartsOfSpeechScreen({super.key, required this.level});
@@ -122,8 +121,7 @@ class _PartsOfSpeechScreenState extends State<PartsOfSpeechScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<GrammarBloc>().add(
-                
-      FetchGrammarQuests(
+                FetchGrammarQuests(
                   gameType: GameSubtype.partsOfSpeech,
                   level: widget.level,
                 ),
@@ -496,17 +494,32 @@ class _PartsOfSpeechScreenState extends State<PartsOfSpeechScreen> {
       builder: (c) => ModernGameDialog(
         title: 'Speechless',
         description: 'You lost all hearts. Learn the roles of nouns and verbs!',
-        buttonText: 'RETRY',
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
-          Navigator.pop(c);
-          context.read<GrammarBloc>().add(RestoreLife());
-        },
-        secondaryButtonText: 'QUIT',
-        onSecondaryPressed: () {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<GrammarBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

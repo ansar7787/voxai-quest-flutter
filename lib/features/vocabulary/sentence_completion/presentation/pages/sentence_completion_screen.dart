@@ -22,7 +22,6 @@ import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/vocabulary/presentation/bloc/vocabulary_bloc.dart';
 
-
 class SentenceCompletionScreen extends StatefulWidget {
   final int level;
   const SentenceCompletionScreen({super.key, required this.level});
@@ -118,8 +117,7 @@ class _SentenceCompletionScreenState extends State<SentenceCompletionScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<VocabularyBloc>().add(
-                
-      FetchVocabularyQuests(
+                FetchVocabularyQuests(
                   gameType: GameSubtype.completeSentence,
                   level: widget.level,
                 ),
@@ -483,17 +481,32 @@ class _SentenceCompletionScreenState extends State<SentenceCompletionScreen> {
       builder: (c) => ModernGameDialog(
         title: 'Focus Lost!',
         description: 'Context is key. Review the sentence and try again!',
-        buttonText: 'RETRY',
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
-          Navigator.pop(c);
-          context.read<VocabularyBloc>().add(RestoreLife());
-        },
-        secondaryButtonText: 'QUIT',
-        onSecondaryPressed: () {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<VocabularyBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

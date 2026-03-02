@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/listening/audio_true_false/domain/usecases/
 import 'audio_true_false_event.dart';
 import 'audio_true_false_state.dart';
 
-class AudioTrueFalseBloc extends Bloc<AudioTrueFalseEvent, AudioTrueFalseState> {
+class AudioTrueFalseBloc
+    extends Bloc<AudioTrueFalseEvent, AudioTrueFalseState> {
   final GetAudioTrueFalseQuests getQuests;
 
-  AudioTrueFalseBloc({required this.getQuests}) : super(AudioTrueFalseInitial()) {
+  AudioTrueFalseBloc({required this.getQuests})
+    : super(AudioTrueFalseInitial()) {
     on<FetchAudioTrueFalseQuests>(_onFetchQuests);
     on<SubmitAudioTrueFalseAnswer>(_onSubmitAnswer);
     on<NextAudioTrueFalseQuestion>(_onNextQuestion);
@@ -38,10 +40,9 @@ class AudioTrueFalseBloc extends Bloc<AudioTrueFalseEvent, AudioTrueFalseState> 
         if (newLives <= 0) {
           emit(AudioTrueFalseGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -56,15 +57,14 @@ class AudioTrueFalseBloc extends Bloc<AudioTrueFalseEvent, AudioTrueFalseState> 
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(AudioTrueFalseGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          AudioTrueFalseGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-        ));
+        emit(state.copyWith(currentIndex: nextIndex, lastAnswerCorrect: null));
       }
     }
   }
@@ -76,4 +76,3 @@ class AudioTrueFalseBloc extends Bloc<AudioTrueFalseEvent, AudioTrueFalseState> 
     emit(AudioTrueFalseInitial());
   }
 }
-

@@ -22,7 +22,6 @@ import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/grammar/presentation/bloc/grammar_bloc.dart';
 
-
 class SubjectVerbAgreementScreen extends StatefulWidget {
   final int level;
   const SubjectVerbAgreementScreen({super.key, required this.level});
@@ -124,8 +123,7 @@ class _SubjectVerbAgreementScreenState
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<GrammarBloc>().add(
-                
-      FetchGrammarQuests(
+                FetchGrammarQuests(
                   gameType: GameSubtype.subjectVerbAgreement,
                   level: widget.level,
                 ),
@@ -463,17 +461,32 @@ class _SubjectVerbAgreementScreenState
         title: 'Discord Found',
         description:
             'You lost all hearts. Subjects and verbs must agree in number!',
-        buttonText: 'RETRY',
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
-          Navigator.pop(c);
-          context.read<GrammarBloc>().add(RestoreLife());
-        },
-        secondaryButtonText: 'QUIT',
-        onSecondaryPressed: () {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<GrammarBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

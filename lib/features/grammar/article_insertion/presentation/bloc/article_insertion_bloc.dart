@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/grammar/article_insertion/domain/usecases/g
 import 'article_insertion_event.dart';
 import 'article_insertion_state.dart';
 
-class ArticleInsertionBloc extends Bloc<ArticleInsertionEvent, ArticleInsertionState> {
+class ArticleInsertionBloc
+    extends Bloc<ArticleInsertionEvent, ArticleInsertionState> {
   final GetArticleInsertionQuests getQuests;
 
-  ArticleInsertionBloc({required this.getQuests}) : super(ArticleInsertionInitial()) {
+  ArticleInsertionBloc({required this.getQuests})
+    : super(ArticleInsertionInitial()) {
     on<FetchArticleInsertionQuests>(_onFetchQuests);
     on<SubmitArticleInsertionAnswer>(_onSubmitAnswer);
     on<NextArticleInsertionQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class ArticleInsertionBloc extends Bloc<ArticleInsertionEvent, ArticleInsertionS
         if (newLives <= 0) {
           emit(ArticleInsertionGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class ArticleInsertionBloc extends Bloc<ArticleInsertionEvent, ArticleInsertionS
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(ArticleInsertionGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          ArticleInsertionGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/listening/detail_spotlight/domain/usecases/
 import 'detail_spotlight_event.dart';
 import 'detail_spotlight_state.dart';
 
-class DetailSpotlightBloc extends Bloc<DetailSpotlightEvent, DetailSpotlightState> {
+class DetailSpotlightBloc
+    extends Bloc<DetailSpotlightEvent, DetailSpotlightState> {
   final GetDetailSpotlightQuests getQuests;
 
-  DetailSpotlightBloc({required this.getQuests}) : super(DetailSpotlightInitial()) {
+  DetailSpotlightBloc({required this.getQuests})
+    : super(DetailSpotlightInitial()) {
     on<FetchDetailSpotlightQuests>(_onFetchQuests);
     on<SubmitDetailSpotlightAnswer>(_onSubmitAnswer);
     on<NextDetailSpotlightQuestion>(_onNextQuestion);
@@ -38,10 +40,9 @@ class DetailSpotlightBloc extends Bloc<DetailSpotlightEvent, DetailSpotlightStat
         if (newLives <= 0) {
           emit(DetailSpotlightGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -56,15 +57,14 @@ class DetailSpotlightBloc extends Bloc<DetailSpotlightEvent, DetailSpotlightStat
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(DetailSpotlightGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          DetailSpotlightGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-        ));
+        emit(state.copyWith(currentIndex: nextIndex, lastAnswerCorrect: null));
       }
     }
   }
@@ -76,4 +76,3 @@ class DetailSpotlightBloc extends Bloc<DetailSpotlightEvent, DetailSpotlightStat
     emit(DetailSpotlightInitial());
   }
 }
-

@@ -35,7 +35,9 @@ class RepeatSentenceQuestModel extends RepeatSentenceQuest {
       xpReward: (json['xpReward'] as num?)?.toInt() ?? 10,
       coinReward: (json['coinReward'] as num?)?.toInt() ?? 10,
       livesAllowed: (json['livesAllowed'] as num?)?.toInt() ?? 3,
-      interactionType: EnumParser.parseInteractionType(json['interactionType'] as String?),
+      interactionType: EnumParser.parseInteractionType(
+        json['interactionType'] as String?,
+      ),
       textToSpeak: json['textToSpeak'] as String?,
       translation: json['translation'] as String?,
     );
@@ -57,4 +59,3 @@ class RepeatSentenceQuestModel extends RepeatSentenceQuest {
     };
   }
 }
-

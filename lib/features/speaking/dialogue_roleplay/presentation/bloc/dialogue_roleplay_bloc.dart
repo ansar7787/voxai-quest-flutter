@@ -4,10 +4,12 @@ import 'package:voxai_quest/features/speaking/dialogue_roleplay/domain/usecases/
 import 'dialogue_roleplay_event.dart';
 import 'dialogue_roleplay_state.dart';
 
-class DialogueRoleplayBloc extends Bloc<DialogueRoleplayEvent, DialogueRoleplayState> {
+class DialogueRoleplayBloc
+    extends Bloc<DialogueRoleplayEvent, DialogueRoleplayState> {
   final GetDialogueRoleplayQuests getQuests;
 
-  DialogueRoleplayBloc({required this.getQuests}) : super(DialogueRoleplayInitial()) {
+  DialogueRoleplayBloc({required this.getQuests})
+    : super(DialogueRoleplayInitial()) {
     on<FetchDialogueRoleplayQuests>(_onFetchQuests);
     on<SubmitDialogueRoleplayAnswer>(_onSubmitAnswer);
     on<NextDialogueRoleplayQuestion>(_onNextQuestion);
@@ -21,33 +23,34 @@ class DialogueRoleplayBloc extends Bloc<DialogueRoleplayEvent, DialogueRoleplayS
   ) async {
     emit(DialogueRoleplayLoading());
     final result = await getQuests(event.level);
-    result.fold(
-      (failure) => emit(DialogueRoleplayError(failure.message)),
-      (quests) {
-        if (quests.isEmpty) {
-          emit(const DialogueRoleplayError("No quests available"));
-          return;
-        }
-        final initialQuest = quests[0];
-        List<DialogueTurn> history = [];
-        int firstUserTurnIndex = 0;
+    result.fold((failure) => emit(DialogueRoleplayError(failure.message)), (
+      quests,
+    ) {
+      if (quests.isEmpty) {
+        emit(const DialogueRoleplayError("No quests available"));
+        return;
+      }
+      final initialQuest = quests[0];
+      List<DialogueTurn> history = [];
+      int firstUserTurnIndex = 0;
 
-        // Add all AI turns before the first user turn to history
-        for (int i = 0; i < initialQuest.turns!.length; i++) {
-          if (initialQuest.turns![i].isUser) {
-            firstUserTurnIndex = i;
-            break;
-          }
-          history.add(initialQuest.turns![i]);
+      // Add all AI turns before the first user turn to history
+      for (int i = 0; i < initialQuest.turns!.length; i++) {
+        if (initialQuest.turns![i].isUser) {
+          firstUserTurnIndex = i;
+          break;
         }
+        history.add(initialQuest.turns![i]);
+      }
 
-        emit(DialogueRoleplayLoaded(
+      emit(
+        DialogueRoleplayLoaded(
           quests: quests,
           currentTurnIndex: firstUserTurnIndex,
           conversationHistory: history,
-        ));
-      },
-    );
+        ),
+      );
+    });
   }
 
   void _onSubmitAnswer(
@@ -58,20 +61,22 @@ class DialogueRoleplayBloc extends Bloc<DialogueRoleplayEvent, DialogueRoleplayS
     if (state is DialogueRoleplayLoaded) {
       if (event.isCorrect) {
         final currentTurn = state.currentTurn;
-        final newHistory = List<DialogueTurn>.from(state.conversationHistory)..add(currentTurn);
-        emit(state.copyWith(
-          lastAnswerCorrect: true,
-          conversationHistory: newHistory,
-        ));
+        final newHistory = List<DialogueTurn>.from(state.conversationHistory)
+          ..add(currentTurn);
+        emit(
+          state.copyWith(
+            lastAnswerCorrect: true,
+            conversationHistory: newHistory,
+          ),
+        );
       } else {
         final newLives = state.livesRemaining - 1;
         if (newLives <= 0) {
           emit(DialogueRoleplayGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -85,7 +90,9 @@ class DialogueRoleplayBloc extends Bloc<DialogueRoleplayEvent, DialogueRoleplayS
     if (state is DialogueRoleplayLoaded) {
       int nextTurnIndex = state.currentTurnIndex + 1;
       final turns = state.currentQuest.turns!;
-      List<DialogueTurn> newHistory = List<DialogueTurn>.from(state.conversationHistory);
+      List<DialogueTurn> newHistory = List<DialogueTurn>.from(
+        state.conversationHistory,
+      );
 
       while (nextTurnIndex < turns.length && !turns[nextTurnIndex].isUser) {
         newHistory.add(turns[nextTurnIndex]);
@@ -95,11 +102,13 @@ class DialogueRoleplayBloc extends Bloc<DialogueRoleplayEvent, DialogueRoleplayS
       if (nextTurnIndex >= turns.length) {
         add(NextDialogueRoleplayQuestion());
       } else {
-        emit(state.copyWith(
-          currentTurnIndex: nextTurnIndex,
-          conversationHistory: newHistory,
-          lastAnswerCorrect: null,
-        ));
+        emit(
+          state.copyWith(
+            currentTurnIndex: nextTurnIndex,
+            conversationHistory: newHistory,
+            lastAnswerCorrect: null,
+          ),
+        );
       }
     }
   }
@@ -113,10 +122,12 @@ class DialogueRoleplayBloc extends Bloc<DialogueRoleplayEvent, DialogueRoleplayS
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(DialogueRoleplayGameComplete(
-          xpEarned: totalQuests * 20,
-          coinsEarned: totalQuests * 10,
-        ));
+        emit(
+          DialogueRoleplayGameComplete(
+            xpEarned: totalQuests * 20,
+            coinsEarned: totalQuests * 10,
+          ),
+        );
       } else {
         final nextQuest = state.quests[nextIndex];
         List<DialogueTurn> history = [];
@@ -130,12 +141,14 @@ class DialogueRoleplayBloc extends Bloc<DialogueRoleplayEvent, DialogueRoleplayS
           history.add(nextQuest.turns![i]);
         }
 
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          currentTurnIndex: firstUserTurnIndex,
-          conversationHistory: history,
-          lastAnswerCorrect: null,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            currentTurnIndex: firstUserTurnIndex,
+            conversationHistory: history,
+            lastAnswerCorrect: null,
+          ),
+        );
       }
     }
   }

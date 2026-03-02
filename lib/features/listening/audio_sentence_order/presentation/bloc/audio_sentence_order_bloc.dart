@@ -4,10 +4,12 @@ import 'package:voxai_quest/features/listening/audio_sentence_order/domain/useca
 import 'audio_sentence_order_event.dart';
 import 'audio_sentence_order_state.dart';
 
-class AudioSentenceOrderBloc extends Bloc<AudioSentenceOrderEvent, AudioSentenceOrderState> {
+class AudioSentenceOrderBloc
+    extends Bloc<AudioSentenceOrderEvent, AudioSentenceOrderState> {
   final GetAudioSentenceOrderQuests getQuests;
 
-  AudioSentenceOrderBloc({required this.getQuests}) : super(AudioSentenceOrderInitial()) {
+  AudioSentenceOrderBloc({required this.getQuests})
+    : super(AudioSentenceOrderInitial()) {
     on<FetchAudioSentenceOrderQuests>(_onFetchQuests);
     on<SubmitAudioSentenceOrderAnswer>(_onSubmitAnswer);
     on<NextAudioSentenceOrderQuestion>(_onNextQuestion);
@@ -32,7 +34,10 @@ class AudioSentenceOrderBloc extends Bloc<AudioSentenceOrderEvent, AudioSentence
   ) {
     final state = this.state;
     if (state is AudioSentenceOrderLoaded) {
-      final isCorrect = const ListEquality().equals(event.userOrder, event.correctOrder);
+      final isCorrect = const ListEquality().equals(
+        event.userOrder,
+        event.correctOrder,
+      );
       if (isCorrect) {
         emit(state.copyWith(lastAnswerCorrect: true));
       } else {
@@ -40,10 +45,9 @@ class AudioSentenceOrderBloc extends Bloc<AudioSentenceOrderEvent, AudioSentence
         if (newLives <= 0) {
           emit(AudioSentenceOrderGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -58,15 +62,14 @@ class AudioSentenceOrderBloc extends Bloc<AudioSentenceOrderEvent, AudioSentence
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(AudioSentenceOrderGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          AudioSentenceOrderGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-        ));
+        emit(state.copyWith(currentIndex: nextIndex, lastAnswerCorrect: null));
       }
     }
   }
@@ -78,4 +81,3 @@ class AudioSentenceOrderBloc extends Bloc<AudioSentenceOrderEvent, AudioSentence
     emit(AudioSentenceOrderInitial());
   }
 }
-

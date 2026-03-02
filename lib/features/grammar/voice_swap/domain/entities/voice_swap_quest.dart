@@ -23,9 +23,5 @@ class VoiceSwapQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        originalSentence,
-        targetVoice,
-      ];
+  List<Object?> get props => [...super.props, originalSentence, targetVoice];
 }

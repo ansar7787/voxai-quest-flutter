@@ -23,7 +23,6 @@ import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/reading/domain/entities/reading_quest.dart';
 import 'package:voxai_quest/features/reading/presentation/bloc/reading_bloc.dart';
 
-
 class ReadAndMatchScreen extends StatefulWidget {
   final int level;
   const ReadAndMatchScreen({super.key, required this.level});
@@ -166,8 +165,7 @@ class _ReadAndMatchScreenState extends State<ReadAndMatchScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<ReadingBloc>().add(
-                
-      FetchReadingQuests(
+                FetchReadingQuests(
                   gameType: GameSubtype.readAndMatch,
                   level: widget.level,
                 ),
@@ -476,17 +474,32 @@ class _ReadAndMatchScreenState extends State<ReadAndMatchScreen> {
       builder: (c) => ModernGameDialog(
         title: 'Connection Lost',
         description: 'Try to match the items more accurately next time!',
-        buttonText: 'RETRY',
         isSuccess: false,
+        isRescueLife: true,
+        buttonText: 'GIVE UP',
         onButtonPressed: () {
-          Navigator.pop(c);
-          context.read<ReadingBloc>().add(RestoreLife());
-        },
-        secondaryButtonText: 'QUIT',
-        onSecondaryPressed: () {
           Navigator.pop(c);
           context.pop();
         },
+        onAdAction: () {
+          void restoreLife() {
+            context.read<ReadingBloc>().add(RestoreLife());
+            Navigator.pop(c);
+          }
+
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          if (isPremium) {
+            restoreLife();
+          } else {
+            di.sl<AdService>().showRewardedAd(
+              isPremium: false,
+              onUserEarnedReward: (_) => restoreLife(),
+              onDismissed: () {},
+            );
+          }
+        },
+        adButtonText: 'WATCH AD TO CONTINUE',
       ),
     );
   }

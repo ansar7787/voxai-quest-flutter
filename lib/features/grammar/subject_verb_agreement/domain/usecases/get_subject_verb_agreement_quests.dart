@@ -8,7 +8,9 @@ class GetSubjectVerbAgreementQuests {
 
   GetSubjectVerbAgreementQuests(this.repository);
 
-  Future<Either<Failure, List<SubjectVerbAgreementQuest>>> call(int level) async {
+  Future<Either<Failure, List<SubjectVerbAgreementQuest>>> call(
+    int level,
+  ) async {
     return await repository.getSubjectVerbAgreementQuests(level);
   }
 }

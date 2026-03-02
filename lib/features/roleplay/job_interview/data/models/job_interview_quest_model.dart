@@ -40,12 +40,20 @@ class JobInterviewQuestModel extends JobInterviewQuest {
       xpReward: (json['xpReward'] as num?)?.toInt() ?? 10,
       coinReward: (json['coinReward'] as num?)?.toInt() ?? 10,
       livesAllowed: (json['livesAllowed'] as num?)?.toInt() ?? 3,
-      interactionType: EnumParser.parseInteractionType(json['interactionType'] as String?),
-      options: (json['options'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      interactionType: EnumParser.parseInteractionType(
+        json['interactionType'] as String?,
+      ),
+      options: (json['options'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       correctAnswerIndex: (json['correctAnswerIndex'] as num?)?.toInt(),
       question: json['question'] as String?,
-      sampleAnswers: (json['sampleAnswers'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      keyPoints: (json['keyPoints'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      sampleAnswers: (json['sampleAnswers'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      keyPoints: (json['keyPoints'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       role: json['role'] as String?,
       company: json['company'] as String?,
     );
@@ -72,4 +80,3 @@ class JobInterviewQuestModel extends JobInterviewQuest {
     };
   }
 }
-

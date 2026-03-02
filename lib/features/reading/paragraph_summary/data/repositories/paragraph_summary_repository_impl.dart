@@ -15,10 +15,13 @@ class ParagraphSummaryRepositoryImpl implements ParagraphSummaryRepository {
   });
 
   @override
-  Future<Either<Failure, List<ParagraphSummaryQuest>>> getParagraphSummaryQuests(int level) async {
+  Future<Either<Failure, List<ParagraphSummaryQuest>>>
+  getParagraphSummaryQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getParagraphSummaryQuests(level);
+        final remoteQuests = await remoteDataSource.getParagraphSummaryQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class ParagraphSummaryRepositoryImpl implements ParagraphSummaryRepository {
     }
   }
 }
-

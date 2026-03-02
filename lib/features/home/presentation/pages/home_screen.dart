@@ -22,6 +22,9 @@ import 'package:voxai_quest/core/presentation/widgets/ad_reward_card.dart';
 
 import 'package:voxai_quest/features/kids_zone/presentation/widgets/kids_reward_ad_card.dart';
 import 'package:voxai_quest/features/home/presentation/widgets/voxin_mascot_card.dart';
+import 'package:voxai_quest/core/presentation/widgets/banner_ad_widget.dart';
+import 'package:voxai_quest/features/home/presentation/widgets/daily_spin_card.dart';
+import 'package:voxai_quest/features/home/presentation/widgets/daily_mystery_spin_overlay.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,6 +35,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool _showChest = true;
+  bool _showSpinWheel = false;
   bool _chestOpened = false;
   int _rewardAmount = 0;
   late ConfettiController _confettiController;
@@ -303,11 +307,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       sliver: SliverList(
                         delegate: SliverChildListDelegate([
                           SizedBox(height: 48.h),
-                          const MotivationalQuote(),
                           SizedBox(height: 48.h),
+                          const MotivationalQuote(),
+                          SizedBox(height: 32.h),
+                          DailySpinCard(
+                            onTap: () {
+                              setState(() {
+                                _showSpinWheel = true;
+                              });
+                            },
+                          ),
+                          SizedBox(height: 32.h),
                           const AdRewardCard(margin: EdgeInsets.zero),
                           SizedBox(height: 16.h),
                           const KidsRewardAdCard(),
+                          SizedBox(height: 32.h),
+                          const BannerAdWidget(),
                           SizedBox(height: 120.h),
                         ]),
                       ),
@@ -321,6 +336,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   rewardAmount: _rewardAmount,
                   onOpen: _openChest,
                   confettiController: _confettiController,
+                ),
+              if (_showSpinWheel)
+                DailyMysterySpinOverlay(
+                  onClose: () {
+                    setState(() {
+                      _showSpinWheel = false;
+                    });
+                  },
                 ),
             ],
           );

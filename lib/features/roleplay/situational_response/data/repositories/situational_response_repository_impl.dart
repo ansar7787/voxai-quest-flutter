@@ -5,7 +5,8 @@ import 'package:voxai_quest/features/roleplay/situational_response/domain/entiti
 import 'package:voxai_quest/features/roleplay/situational_response/domain/repositories/situational_response_repository.dart';
 import 'package:voxai_quest/features/roleplay/situational_response/data/datasources/situational_response_remote_data_source.dart';
 
-class SituationalResponseRepositoryImpl implements SituationalResponseRepository {
+class SituationalResponseRepositoryImpl
+    implements SituationalResponseRepository {
   final SituationalResponseRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
 
@@ -15,10 +16,12 @@ class SituationalResponseRepositoryImpl implements SituationalResponseRepository
   });
 
   @override
-  Future<Either<Failure, List<SituationalResponseQuest>>> getSituationalResponseQuests(int level) async {
+  Future<Either<Failure, List<SituationalResponseQuest>>>
+  getSituationalResponseQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getSituationalResponseQuests(level);
+        final remoteQuests = await remoteDataSource
+            .getSituationalResponseQuests(level);
         return Right(remoteQuests);
       } catch (e) {
         return const Left(ServerFailure('Failed to fetch from server'));

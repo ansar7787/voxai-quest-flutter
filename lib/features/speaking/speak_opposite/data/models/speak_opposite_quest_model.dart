@@ -38,7 +38,9 @@ class SpeakOppositeQuestModel extends SpeakOppositeQuest {
       xpReward: (json['xpReward'] as num?)?.toInt() ?? 10,
       coinReward: (json['coinReward'] as num?)?.toInt() ?? 10,
       livesAllowed: (json['livesAllowed'] as num?)?.toInt() ?? 3,
-      interactionType: EnumParser.parseInteractionType(json['interactionType'] as String?),
+      interactionType: EnumParser.parseInteractionType(
+        json['interactionType'] as String?,
+      ),
       word: json['word'] as String?,
       phoneticScript: json['phoneticScript'] as String?,
       audioUrl: json['audioUrl'] as String?,
@@ -66,4 +68,3 @@ class SpeakOppositeQuestModel extends SpeakOppositeQuest {
     };
   }
 }
-

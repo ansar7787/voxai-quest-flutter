@@ -16,10 +16,14 @@ class MedicalConsultRepositoryImpl implements MedicalConsultRepository {
   });
 
   @override
-  Future<Either<Failure, List<MedicalConsultQuest>>> getMedicalConsultQuests(int level) async {
+  Future<Either<Failure, List<MedicalConsultQuest>>> getMedicalConsultQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getMedicalConsultQuests(level);
+        final remoteQuests = await remoteDataSource.getMedicalConsultQuests(
+          level,
+        );
         return Right(remoteQuests);
       } on ServerException {
         return Left(ServerFailure('Server error occurred'));
@@ -29,4 +33,3 @@ class MedicalConsultRepositoryImpl implements MedicalConsultRepository {
     }
   }
 }
-

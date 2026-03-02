@@ -20,7 +20,9 @@ class GourmetOrderRemoteDataSourceImpl implements GourmetOrderRemoteDataSource {
         .get();
 
     return snapshot.docs
-        .map((doc) => GourmetOrderQuestModel.fromJson(doc.data()..['id'] = doc.id))
+        .map(
+          (doc) => GourmetOrderQuestModel.fromJson(doc.data()..['id'] = doc.id),
+        )
         .toList();
   }
 }

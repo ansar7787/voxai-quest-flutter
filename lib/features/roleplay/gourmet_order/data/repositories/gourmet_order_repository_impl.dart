@@ -16,10 +16,14 @@ class GourmetOrderRepositoryImpl implements GourmetOrderRepository {
   });
 
   @override
-  Future<Either<Failure, List<GourmetOrderQuest>>> getGourmetOrderQuests(int level) async {
+  Future<Either<Failure, List<GourmetOrderQuest>>> getGourmetOrderQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getGourmetOrderQuests(level);
+        final remoteQuests = await remoteDataSource.getGourmetOrderQuests(
+          level,
+        );
         return Right(remoteQuests);
       } on ServerException {
         return Left(ServerFailure('Server error occurred'));
@@ -29,4 +33,3 @@ class GourmetOrderRepositoryImpl implements GourmetOrderRepository {
     }
   }
 }
-

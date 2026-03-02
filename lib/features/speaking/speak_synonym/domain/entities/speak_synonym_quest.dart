@@ -21,10 +21,5 @@ class SpeakSynonymQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        word,
-        synonyms,
-        translation,
-      ];
+  List<Object?> get props => [...super.props, word, synonyms, translation];
 }

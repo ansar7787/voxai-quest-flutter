@@ -20,16 +20,13 @@ class FlashcardsBloc extends Bloc<FlashcardsEvent, FlashcardsState> {
   ) async {
     emit(FlashcardsLoading());
     final result = await getQuests(event.level);
-    result.fold(
-      (failure) => emit(FlashcardsError(failure.message)),
-      (quests) {
-        if (quests.isEmpty) {
-          emit(const FlashcardsError("No quests found for this level."));
-        } else {
-          emit(FlashcardsLoaded(quests: quests));
-        }
-      },
-    );
+    result.fold((failure) => emit(FlashcardsError(failure.message)), (quests) {
+      if (quests.isEmpty) {
+        emit(const FlashcardsError("No quests found for this level."));
+      } else {
+        emit(FlashcardsLoaded(quests: quests));
+      }
+    });
   }
 
   void _onSubmitAnswer(
@@ -45,10 +42,9 @@ class FlashcardsBloc extends Bloc<FlashcardsEvent, FlashcardsState> {
         if (newLives <= 0) {
           emit(FlashcardsGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -63,16 +59,20 @@ class FlashcardsBloc extends Bloc<FlashcardsEvent, FlashcardsState> {
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(FlashcardsGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          FlashcardsGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }
@@ -84,10 +84,7 @@ class FlashcardsBloc extends Bloc<FlashcardsEvent, FlashcardsState> {
     emit(FlashcardsInitial());
   }
 
-  void _onHintUsed(
-    FlashcardsHintUsed event,
-    Emitter<FlashcardsState> emit,
-  ) {
+  void _onHintUsed(FlashcardsHintUsed event, Emitter<FlashcardsState> emit) {
     final state = this.state;
     if (state is FlashcardsLoaded) {
       emit(state.copyWith(hintUsed: true));

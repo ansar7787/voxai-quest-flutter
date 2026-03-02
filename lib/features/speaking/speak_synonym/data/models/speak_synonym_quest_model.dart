@@ -36,9 +36,13 @@ class SpeakSynonymQuestModel extends SpeakSynonymQuest {
       xpReward: (json['xpReward'] as num?)?.toInt() ?? 10,
       coinReward: (json['coinReward'] as num?)?.toInt() ?? 10,
       livesAllowed: (json['livesAllowed'] as num?)?.toInt() ?? 3,
-      interactionType: EnumParser.parseInteractionType(json['interactionType'] as String?),
+      interactionType: EnumParser.parseInteractionType(
+        json['interactionType'] as String?,
+      ),
       word: json['word'] as String?,
-      synonyms: (json['synonyms'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      synonyms: (json['synonyms'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       translation: json['translation'] as String?,
     );
   }
@@ -60,4 +64,3 @@ class SpeakSynonymQuestModel extends SpeakSynonymQuest {
     };
   }
 }
-

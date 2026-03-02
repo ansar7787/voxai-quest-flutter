@@ -5,7 +5,8 @@ import 'package:voxai_quest/features/writing/summarize_story_writing/data/dataso
 import 'package:voxai_quest/features/writing/summarize_story_writing/domain/entities/summarize_story_writing_quest.dart';
 import 'package:voxai_quest/features/writing/summarize_story_writing/domain/repositories/summarize_story_writing_repository.dart';
 
-class SummarizeStoryWritingRepositoryImpl implements SummarizeStoryWritingRepository {
+class SummarizeStoryWritingRepositoryImpl
+    implements SummarizeStoryWritingRepository {
   final SummarizeStoryWritingRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
 
@@ -15,10 +16,12 @@ class SummarizeStoryWritingRepositoryImpl implements SummarizeStoryWritingReposi
   });
 
   @override
-  Future<Either<Failure, List<SummarizeStoryWritingQuest>>> getSummarizeStoryWritingQuests(int level) async {
+  Future<Either<Failure, List<SummarizeStoryWritingQuest>>>
+  getSummarizeStoryWritingQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getSummarizeStoryWritingQuests(level);
+        final remoteQuests = await remoteDataSource
+            .getSummarizeStoryWritingQuests(level);
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class SummarizeStoryWritingRepositoryImpl implements SummarizeStoryWritingReposi
     }
   }
 }
-

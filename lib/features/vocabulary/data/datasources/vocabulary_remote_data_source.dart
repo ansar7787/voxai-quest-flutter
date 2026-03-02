@@ -25,7 +25,7 @@ class VocabularyRemoteDataSourceImpl implements VocabularyRemoteDataSource {
       final localData = await assetQuestService.getQuests(gameType, level);
       if (localData.isNotEmpty) {
         return localData.asMap().entries.map((entry) {
-          final json = entry.value as Map<String, dynamic>;
+          final json = entry.value;
           final index = entry.key;
           return VocabularyQuestModel.fromJson(
             json,

@@ -29,6 +29,4 @@ class RestoreConflictResolverLife extends ConflictResolverEvent {}
 
 class ConflictResolverHintUsed extends ConflictResolverEvent {}
 
-
 class RestartLevel extends ConflictResolverEvent {}
-

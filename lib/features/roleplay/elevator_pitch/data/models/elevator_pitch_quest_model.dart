@@ -40,13 +40,19 @@ class ElevatorPitchQuestModel extends ElevatorPitchQuest {
       xpReward: (json['xpReward'] as num?)?.toInt() ?? 10,
       coinReward: (json['coinReward'] as num?)?.toInt() ?? 10,
       livesAllowed: (json['livesAllowed'] as num?)?.toInt() ?? 3,
-      interactionType: EnumParser.parseInteractionType(json['interactionType'] as String?),
-      options: (json['options'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      interactionType: EnumParser.parseInteractionType(
+        json['interactionType'] as String?,
+      ),
+      options: (json['options'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       correctAnswerIndex: (json['correctAnswerIndex'] as num?)?.toInt(),
       investorProfile: json['investorProfile'] as String?,
       productDescription: json['productDescription'] as String?,
       timeLimit: json['timeLimit'] as String?,
-      keySellingPoints: (json['keySellingPoints'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      keySellingPoints: (json['keySellingPoints'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       feedback: json['feedback'] as String?,
     );
   }
@@ -72,4 +78,3 @@ class ElevatorPitchQuestModel extends ElevatorPitchQuest {
     };
   }
 }
-

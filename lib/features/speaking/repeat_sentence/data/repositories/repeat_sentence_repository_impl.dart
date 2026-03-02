@@ -15,10 +15,14 @@ class RepeatSentenceRepositoryImpl implements RepeatSentenceRepository {
   });
 
   @override
-  Future<Either<Failure, List<RepeatSentenceQuest>>> getRepeatSentenceQuests(int level) async {
+  Future<Either<Failure, List<RepeatSentenceQuest>>> getRepeatSentenceQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getRepeatSentenceQuests(level);
+        final remoteQuests = await remoteDataSource.getRepeatSentenceQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class RepeatSentenceRepositoryImpl implements RepeatSentenceRepository {
     }
   }
 }
-

@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/grammar/question_formatter/domain/usecases/
 import 'question_formatter_event.dart';
 import 'question_formatter_state.dart';
 
-class QuestionFormatterBloc extends Bloc<QuestionFormatterEvent, QuestionFormatterState> {
+class QuestionFormatterBloc
+    extends Bloc<QuestionFormatterEvent, QuestionFormatterState> {
   final GetQuestionFormatterQuests getQuests;
 
-  QuestionFormatterBloc({required this.getQuests}) : super(QuestionFormatterInitial()) {
+  QuestionFormatterBloc({required this.getQuests})
+    : super(QuestionFormatterInitial()) {
     on<FetchQuestionFormatterQuests>(_onFetchQuests);
     on<SubmitQuestionFormatterAnswer>(_onSubmitAnswer);
     on<NextQuestionFormatterQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class QuestionFormatterBloc extends Bloc<QuestionFormatterEvent, QuestionFormatt
         if (newLives <= 0) {
           emit(QuestionFormatterGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class QuestionFormatterBloc extends Bloc<QuestionFormatterEvent, QuestionFormatt
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(QuestionFormatterGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          QuestionFormatterGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

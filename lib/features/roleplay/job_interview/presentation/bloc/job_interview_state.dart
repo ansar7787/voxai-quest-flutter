@@ -51,13 +51,13 @@ class JobInterviewLoaded extends JobInterviewState {
 
   @override
   List<Object?> get props => [
-        quests,
-        currentIndex,
-        livesRemaining,
-        lastAnswerCorrect,
-        xpEarned,
-        coinsEarned,
-      ];
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    xpEarned,
+    coinsEarned,
+  ];
 }
 
 class JobInterviewError extends JobInterviewState {
@@ -71,7 +71,10 @@ class JobInterviewError extends JobInterviewState {
 class JobInterviewGameComplete extends JobInterviewState {
   final int xpEarned;
   final int coinsEarned;
-  const JobInterviewGameComplete({required this.xpEarned, required this.coinsEarned});
+  const JobInterviewGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

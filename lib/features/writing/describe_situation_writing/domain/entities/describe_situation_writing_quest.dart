@@ -26,9 +26,9 @@ class DescribeSituationWritingQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        situationContext,
-        requiredDetails,
-        imagePath,
-      ];
+    ...super.props,
+    situationContext,
+    requiredDetails,
+    imagePath,
+  ];
 }

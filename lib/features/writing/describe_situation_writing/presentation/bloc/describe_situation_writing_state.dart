@@ -46,14 +46,24 @@ class DescribeSituationWritingLoaded extends DescribeSituationWritingState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
-class DescribeSituationWritingGameComplete extends DescribeSituationWritingState {
+class DescribeSituationWritingGameComplete
+    extends DescribeSituationWritingState {
   final int xpEarned;
   final int coinsEarned;
 
-  const DescribeSituationWritingGameComplete({required this.xpEarned, required this.coinsEarned});
+  const DescribeSituationWritingGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

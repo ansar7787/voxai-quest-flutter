@@ -51,13 +51,13 @@ class GourmetOrderLoaded extends GourmetOrderState {
 
   @override
   List<Object?> get props => [
-        quests,
-        currentIndex,
-        livesRemaining,
-        lastAnswerCorrect,
-        xpEarned,
-        coinsEarned,
-      ];
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    xpEarned,
+    coinsEarned,
+  ];
 }
 
 class GourmetOrderError extends GourmetOrderState {
@@ -71,7 +71,10 @@ class GourmetOrderError extends GourmetOrderState {
 class GourmetOrderGameComplete extends GourmetOrderState {
   final int xpEarned;
   final int coinsEarned;
-  const GourmetOrderGameComplete({required this.xpEarned, required this.coinsEarned});
+  const GourmetOrderGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

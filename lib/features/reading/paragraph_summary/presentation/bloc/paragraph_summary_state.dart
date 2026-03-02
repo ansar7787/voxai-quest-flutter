@@ -46,14 +46,23 @@ class ParagraphSummaryLoaded extends ParagraphSummaryState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class ParagraphSummaryGameComplete extends ParagraphSummaryState {
   final int xpEarned;
   final int coinsEarned;
 
-  const ParagraphSummaryGameComplete({required this.xpEarned, required this.coinsEarned});
+  const ParagraphSummaryGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

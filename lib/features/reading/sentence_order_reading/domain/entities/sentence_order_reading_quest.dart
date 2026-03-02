@@ -23,9 +23,5 @@ class SentenceOrderReadingQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        shuffledSentences,
-        correctOrder,
-      ];
+  List<Object?> get props => [...super.props, shuffledSentences, correctOrder];
 }

@@ -46,14 +46,23 @@ class SubjectVerbAgreementLoaded extends SubjectVerbAgreementState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class SubjectVerbAgreementGameComplete extends SubjectVerbAgreementState {
   final int xpEarned;
   final int coinsEarned;
 
-  const SubjectVerbAgreementGameComplete({required this.xpEarned, required this.coinsEarned});
+  const SubjectVerbAgreementGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

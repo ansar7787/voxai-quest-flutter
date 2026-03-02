@@ -15,10 +15,14 @@ class SentenceBuilderRepositoryImpl implements SentenceBuilderRepository {
   });
 
   @override
-  Future<Either<Failure, List<SentenceBuilderQuest>>> getSentenceBuilderQuests(int level) async {
+  Future<Either<Failure, List<SentenceBuilderQuest>>> getSentenceBuilderQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getSentenceBuilderQuests(level);
+        final remoteQuests = await remoteDataSource.getSentenceBuilderQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class SentenceBuilderRepositoryImpl implements SentenceBuilderRepository {
     }
   }
 }
-

@@ -52,6 +52,8 @@ class _RepeatSentenceScreenState extends State<RepeatSentenceScreen> {
         level: widget.level,
       ),
     );
+    // Pre-load ads
+    di.sl<AdService>().loadRewardedAd();
   }
 
   @override
@@ -530,6 +532,31 @@ class _RepeatSentenceScreenState extends State<RepeatSentenceScreen> {
         onButtonPressed: () {
           Navigator.pop(c);
           context.pop(true);
+        },
+        onAdAction: () {
+          Navigator.pop(c);
+          final isPremium =
+              context.read<AuthBloc>().state.user?.isPremium ?? false;
+          final adService = di.sl<AdService>();
+          adService.showRewardedAd(
+            isPremium: isPremium,
+            onUserEarnedReward: (reward) {
+              // Dispatch Double Up Event
+              context.read<AuthBloc>().add(
+                AuthDoubleUpRewardsRequested(xp, coins),
+              );
+              // Show Success SnackBar
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("REWARDS DOUBLED! 💎💎"),
+                  backgroundColor: Color(0xFF10B981),
+                ),
+              );
+            },
+            onDismissed: () {
+              context.pop(true);
+            },
+          );
         },
       ),
     );

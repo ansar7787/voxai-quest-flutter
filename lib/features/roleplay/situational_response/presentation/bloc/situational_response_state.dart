@@ -51,13 +51,13 @@ class SituationalResponseLoaded extends SituationalResponseState {
 
   @override
   List<Object?> get props => [
-        quests,
-        currentIndex,
-        livesRemaining,
-        lastAnswerCorrect,
-        xpEarned,
-        coinsEarned,
-      ];
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    xpEarned,
+    coinsEarned,
+  ];
 }
 
 class SituationalResponseError extends SituationalResponseState {
@@ -71,7 +71,10 @@ class SituationalResponseError extends SituationalResponseState {
 class SituationalResponseGameComplete extends SituationalResponseState {
   final int xpEarned;
   final int coinsEarned;
-  const SituationalResponseGameComplete({required this.xpEarned, required this.coinsEarned});
+  const SituationalResponseGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

@@ -7,7 +7,7 @@ class ElevatorPitchBloc extends Bloc<ElevatorPitchEvent, ElevatorPitchState> {
   final GetElevatorPitchQuests getQuests;
 
   ElevatorPitchBloc({required this.getQuests}) : super(ElevatorPitchInitial()) {
-        on<RestartLevel>((event, emit) => emit(ElevatorPitchInitial()));
+    on<RestartLevel>((event, emit) => emit(ElevatorPitchInitial()));
     on<FetchElevatorPitchQuests>(_onFetchQuests);
     on<SubmitElevatorPitchAnswer>(_onSubmitAnswer);
     on<NextElevatorPitchQuestion>(_onNextQuestion);
@@ -22,7 +22,9 @@ class ElevatorPitchBloc extends Bloc<ElevatorPitchEvent, ElevatorPitchState> {
     emit(ElevatorPitchLoading());
     final result = await getQuests(event.level);
     result.fold(
-      (failure) => emit(const ElevatorPitchError("Failed to load elevator pitch quests")),
+      (failure) => emit(
+        const ElevatorPitchError("Failed to load elevator pitch quests"),
+      ),
       (quests) => emit(ElevatorPitchLoaded(quests: quests)),
     );
   }
@@ -34,17 +36,25 @@ class ElevatorPitchBloc extends Bloc<ElevatorPitchEvent, ElevatorPitchState> {
     final state = this.state;
     if (state is ElevatorPitchLoaded) {
       final isCorrect = event.isCorrect;
-      final newLives = isCorrect ? state.livesRemaining : state.livesRemaining - 1;
+      final newLives = isCorrect
+          ? state.livesRemaining
+          : state.livesRemaining - 1;
 
       if (newLives <= 0) {
         emit(ElevatorPitchGameOver());
       } else {
-        emit(state.copyWith(
-          livesRemaining: newLives,
-          lastAnswerCorrect: isCorrect,
-          xpEarned: isCorrect ? state.xpEarned + state.currentQuest.xpReward : state.xpEarned,
-          coinsEarned: isCorrect ? state.coinsEarned + state.currentQuest.coinReward : state.coinsEarned,
-        ));
+        emit(
+          state.copyWith(
+            livesRemaining: newLives,
+            lastAnswerCorrect: isCorrect,
+            xpEarned: isCorrect
+                ? state.xpEarned + state.currentQuest.xpReward
+                : state.xpEarned,
+            coinsEarned: isCorrect
+                ? state.coinsEarned + state.currentQuest.coinReward
+                : state.coinsEarned,
+          ),
+        );
       }
     }
   }
@@ -56,15 +66,19 @@ class ElevatorPitchBloc extends Bloc<ElevatorPitchEvent, ElevatorPitchState> {
     final state = this.state;
     if (state is ElevatorPitchLoaded) {
       if (state.currentIndex + 1 < state.quests.length) {
-        emit(state.copyWith(
-          currentIndex: state.currentIndex + 1,
-          lastAnswerCorrect: null,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: state.currentIndex + 1,
+            lastAnswerCorrect: null,
+          ),
+        );
       } else {
-        emit(ElevatorPitchGameComplete(
-          xpEarned: state.xpEarned,
-          coinsEarned: state.coinsEarned,
-        ));
+        emit(
+          ElevatorPitchGameComplete(
+            xpEarned: state.xpEarned,
+            coinsEarned: state.coinsEarned,
+          ),
+        );
       }
     }
   }
@@ -86,4 +100,3 @@ class ElevatorPitchBloc extends Bloc<ElevatorPitchEvent, ElevatorPitchState> {
     // Implement hint logic if needed
   }
 }
-

@@ -40,6 +40,8 @@ class ClaimDoubleKidsRewards extends KidsEvent {
   List<Object?> get props => [gameType, level];
 }
 
+class RestoreKidsLife extends KidsEvent {}
+
 class ResetKidsGame extends KidsEvent {}
 
 // States
@@ -144,6 +146,7 @@ class KidsBloc extends Bloc<KidsEvent, KidsState> {
     on<SubmitKidsAnswer>(_onSubmitAnswer);
     on<NextKidsQuestion>(_onNextQuestion);
     on<ClaimDoubleKidsRewards>(_onClaimDoubleRewards);
+    on<RestoreKidsLife>(_onRestoreLife);
     on<ResetKidsGame>(_onResetGame);
   }
 
@@ -276,6 +279,21 @@ class KidsBloc extends Bloc<KidsEvent, KidsState> {
         coinIncrease: 5,
       ),
     );
+  }
+
+  void _onRestoreLife(RestoreKidsLife event, Emitter<KidsState> emit) {
+    if (state is KidsGameOver || state is KidsLoaded) {
+      if (state is KidsGameOver) {
+        // Technically we don't have the last loaded state saved natively in KidsGameOver,
+        // so we need a way to rebuild KidsLoaded from KidsGameOver, or we intercept the life loss
+        // *before* it transitions to GameOver.
+        // For now, since `SubmitKidsAnswer` emits `KidsGameOver` and discards `KidsLoaded`,
+        // the easiest fix is changing `SubmitKidsAnswer` to keep it as `KidsLoaded` with 0 lives.
+      } else if (state is KidsLoaded) {
+        final s = state as KidsLoaded;
+        emit(s.copyWith(livesRemaining: 1, lastAnswerCorrect: null));
+      }
+    }
   }
 
   void _onResetGame(ResetKidsGame event, Emitter<KidsState> emit) {

@@ -15,10 +15,13 @@ class TrueFalseReadingRepositoryImpl implements TrueFalseReadingRepository {
   });
 
   @override
-  Future<Either<Failure, List<TrueFalseReadingQuest>>> getTrueFalseReadingQuests(int level) async {
+  Future<Either<Failure, List<TrueFalseReadingQuest>>>
+  getTrueFalseReadingQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getTrueFalseReadingQuests(level);
+        final remoteQuests = await remoteDataSource.getTrueFalseReadingQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class TrueFalseReadingRepositoryImpl implements TrueFalseReadingRepository {
     }
   }
 }
-

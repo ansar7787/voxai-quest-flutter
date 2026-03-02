@@ -16,10 +16,14 @@ class ElevatorPitchRepositoryImpl implements ElevatorPitchRepository {
   });
 
   @override
-  Future<Either<Failure, List<ElevatorPitchQuest>>> getElevatorPitchQuests(int level) async {
+  Future<Either<Failure, List<ElevatorPitchQuest>>> getElevatorPitchQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getElevatorPitchQuests(level);
+        final remoteQuests = await remoteDataSource.getElevatorPitchQuests(
+          level,
+        );
         return Right(remoteQuests);
       } on ServerException {
         return Left(ServerFailure('Server error occurred'));
@@ -29,4 +33,3 @@ class ElevatorPitchRepositoryImpl implements ElevatorPitchRepository {
     }
   }
 }
-

@@ -15,10 +15,13 @@ class SpeakMissingWordRepositoryImpl implements SpeakMissingWordRepository {
   });
 
   @override
-  Future<Either<Failure, List<SpeakMissingWordQuest>>> getSpeakMissingWordQuests(int level) async {
+  Future<Either<Failure, List<SpeakMissingWordQuest>>>
+  getSpeakMissingWordQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getSpeakMissingWordQuests(level);
+        final remoteQuests = await remoteDataSource.getSpeakMissingWordQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class SpeakMissingWordRepositoryImpl implements SpeakMissingWordRepository {
     }
   }
 }
-

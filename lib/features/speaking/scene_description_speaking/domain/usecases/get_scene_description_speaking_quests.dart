@@ -8,7 +8,9 @@ class GetSceneDescriptionSpeakingQuests {
 
   GetSceneDescriptionSpeakingQuests(this.repository);
 
-  Future<Either<Failure, List<SceneDescriptionSpeakingQuest>>> call(int level) async {
+  Future<Either<Failure, List<SceneDescriptionSpeakingQuest>>> call(
+    int level,
+  ) async {
     return await repository.getSceneDescriptionSpeakingQuests(level);
   }
 }

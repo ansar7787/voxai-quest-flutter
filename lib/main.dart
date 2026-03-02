@@ -12,6 +12,9 @@ import 'package:voxai_quest/core/utils/injection_container.dart' as di;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -20,6 +23,20 @@ void main() async {
 
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Explicitly enable offline persistence
+  FirebaseFirestore.instance.settings = const Settings(
+    persistenceEnabled: true,
+    cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+  );
+
+  // Initialize Crashlytics
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+
   await di.init();
 
   runApp(const MyApp());
@@ -34,8 +51,34 @@ void main() async {
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      final authBloc = di.sl<AuthBloc>();
+      final isPremium = authBloc.state.user?.isPremium ?? false;
+      di.sl<AdService>().showAppOpenAdIfAvailable(isPremium: isPremium);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

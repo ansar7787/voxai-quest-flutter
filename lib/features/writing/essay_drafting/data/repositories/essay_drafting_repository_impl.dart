@@ -15,10 +15,14 @@ class EssayDraftingRepositoryImpl implements EssayDraftingRepository {
   });
 
   @override
-  Future<Either<Failure, List<EssayDraftingQuest>>> getEssayDraftingQuests(int level) async {
+  Future<Either<Failure, List<EssayDraftingQuest>>> getEssayDraftingQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getEssayDraftingQuests(level);
+        final remoteQuests = await remoteDataSource.getEssayDraftingQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class EssayDraftingRepositoryImpl implements EssayDraftingRepository {
     }
   }
 }
-

@@ -20,7 +20,9 @@ class EmergencyHubRemoteDataSourceImpl implements EmergencyHubRemoteDataSource {
         .get();
 
     return snapshot.docs
-        .map((doc) => EmergencyHubQuestModel.fromJson(doc.data()..['id'] = doc.id))
+        .map(
+          (doc) => EmergencyHubQuestModel.fromJson(doc.data()..['id'] = doc.id),
+        )
         .toList();
   }
 }

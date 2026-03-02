@@ -5,7 +5,8 @@ import 'package:voxai_quest/features/listening/audio_multiple_choice/data/dataso
 import 'package:voxai_quest/features/listening/audio_multiple_choice/domain/entities/audio_multiple_choice_quest.dart';
 import 'package:voxai_quest/features/listening/audio_multiple_choice/domain/repositories/audio_multiple_choice_repository.dart';
 
-class AudioMultipleChoiceRepositoryImpl implements AudioMultipleChoiceRepository {
+class AudioMultipleChoiceRepositoryImpl
+    implements AudioMultipleChoiceRepository {
   final AudioMultipleChoiceRemoteDataSource remoteDataSource;
   final NetworkInfo networkInfo;
 
@@ -15,7 +16,9 @@ class AudioMultipleChoiceRepositoryImpl implements AudioMultipleChoiceRepository
   });
 
   @override
-  Future<Either<Failure, List<AudioMultipleChoiceQuest>>> getQuests(int level) async {
+  Future<Either<Failure, List<AudioMultipleChoiceQuest>>> getQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteQuests = await remoteDataSource.getQuests(level);

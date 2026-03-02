@@ -15,10 +15,13 @@ class ArticleInsertionRepositoryImpl implements ArticleInsertionRepository {
   });
 
   @override
-  Future<Either<Failure, List<ArticleInsertionQuest>>> getArticleInsertionQuests(int level) async {
+  Future<Either<Failure, List<ArticleInsertionQuest>>>
+  getArticleInsertionQuests(int level) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getArticleInsertionQuests(level);
+        final remoteQuests = await remoteDataSource.getArticleInsertionQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +31,3 @@ class ArticleInsertionRepositoryImpl implements ArticleInsertionRepository {
     }
   }
 }
-

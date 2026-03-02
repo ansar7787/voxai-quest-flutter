@@ -25,10 +25,5 @@ class PartsOfSpeechQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        sentence,
-        targetWord,
-        category,
-      ];
+  List<Object?> get props => [...super.props, sentence, targetWord, category];
 }

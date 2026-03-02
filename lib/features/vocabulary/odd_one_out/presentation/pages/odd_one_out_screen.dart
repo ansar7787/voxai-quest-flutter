@@ -22,7 +22,6 @@ import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/vocabulary/presentation/bloc/vocabulary_bloc.dart';
 
-
 class OddOneOutScreen extends StatefulWidget {
   final int level;
   const OddOneOutScreen({super.key, required this.level});
@@ -117,8 +116,7 @@ class _OddOneOutScreenState extends State<OddOneOutScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<VocabularyBloc>().add(
-                
-      FetchVocabularyQuests(
+                FetchVocabularyQuests(
                   gameType: GameSubtype.topicVocab,
                   level: widget.level,
                 ),

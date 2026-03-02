@@ -23,9 +23,5 @@ class DailyJournalQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        journalPrompt,
-        guidedQuestions,
-      ];
+  List<Object?> get props => [...super.props, journalPrompt, guidedQuestions];
 }

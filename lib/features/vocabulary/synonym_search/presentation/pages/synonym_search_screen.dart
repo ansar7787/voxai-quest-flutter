@@ -21,7 +21,6 @@ import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:voxai_quest/features/vocabulary/presentation/bloc/vocabulary_bloc.dart';
 
-
 class SynonymSearchScreen extends StatefulWidget {
   final int level;
   const SynonymSearchScreen({super.key, required this.level});
@@ -63,7 +62,11 @@ class _SynonymSearchScreenState extends State<SynonymSearchScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('vocabulary', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'vocabulary',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
       backgroundColor: isDark
@@ -106,8 +109,7 @@ class _SynonymSearchScreenState extends State<SynonymSearchScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<VocabularyBloc>().add(
-                
-      FetchVocabularyQuests(
+                FetchVocabularyQuests(
                   gameType: GameSubtype.synonymSearch,
                   level: widget.level,
                 ),

@@ -40,13 +40,19 @@ class ConflictResolverQuestModel extends ConflictResolverQuest {
       xpReward: (json['xpReward'] as num?)?.toInt() ?? 10,
       coinReward: (json['coinReward'] as num?)?.toInt() ?? 10,
       livesAllowed: (json['livesAllowed'] as num?)?.toInt() ?? 3,
-      interactionType: EnumParser.parseInteractionType(json['interactionType'] as String?),
-      options: (json['options'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      interactionType: EnumParser.parseInteractionType(
+        json['interactionType'] as String?,
+      ),
+      options: (json['options'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       correctAnswerIndex: (json['correctAnswerIndex'] as num?)?.toInt(),
       scenario: json['scenario'] as String?,
       antagonistName: json['antagonistName'] as String?,
       conflictPoint: json['conflictPoint'] as String?,
-      deEscalationTechniques: (json['deEscalationTechniques'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      deEscalationTechniques: (json['deEscalationTechniques'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       resolution: json['resolution'] as String?,
     );
   }
@@ -72,4 +78,3 @@ class ConflictResolverQuestModel extends ConflictResolverQuest {
     };
   }
 }
-

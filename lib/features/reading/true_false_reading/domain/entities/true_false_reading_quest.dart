@@ -23,9 +23,5 @@ class TrueFalseReadingQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        passage,
-        statement,
-      ];
+  List<Object?> get props => [...super.props, passage, statement];
 }

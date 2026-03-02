@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/reading/sentence_order_reading/domain/useca
 import 'sentence_order_reading_event.dart';
 import 'sentence_order_reading_state.dart';
 
-class SentenceOrderReadingBloc extends Bloc<SentenceOrderReadingEvent, SentenceOrderReadingState> {
+class SentenceOrderReadingBloc
+    extends Bloc<SentenceOrderReadingEvent, SentenceOrderReadingState> {
   final GetSentenceOrderReadingQuests getQuests;
 
-  SentenceOrderReadingBloc({required this.getQuests}) : super(SentenceOrderReadingInitial()) {
+  SentenceOrderReadingBloc({required this.getQuests})
+    : super(SentenceOrderReadingInitial()) {
     on<FetchSentenceOrderReadingQuests>(_onFetchQuests);
     on<SubmitSentenceOrderReadingAnswer>(_onSubmitAnswer);
     on<NextSentenceOrderReadingQuestion>(_onNextQuestion);
@@ -39,10 +41,9 @@ class SentenceOrderReadingBloc extends Bloc<SentenceOrderReadingEvent, SentenceO
         if (newLives <= 0) {
           emit(SentenceOrderReadingGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -57,16 +58,20 @@ class SentenceOrderReadingBloc extends Bloc<SentenceOrderReadingEvent, SentenceO
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(SentenceOrderReadingGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          SentenceOrderReadingGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-          hintUsed: false,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: nextIndex,
+            lastAnswerCorrect: null,
+            hintUsed: false,
+          ),
+        );
       }
     }
   }

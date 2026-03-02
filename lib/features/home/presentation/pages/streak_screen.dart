@@ -12,6 +12,8 @@ import 'package:voxai_quest/core/presentation/widgets/ad_reward_card.dart';
 import 'package:voxai_quest/features/auth/domain/entities/user_entity.dart';
 import 'package:voxai_quest/core/presentation/widgets/glass_tile.dart';
 import 'package:haptic_feedback/haptic_feedback.dart';
+import 'package:voxai_quest/core/utils/ad_service.dart';
+import 'package:voxai_quest/core/utils/injection_container.dart' as di;
 
 class StreakScreen extends StatelessWidget {
   const StreakScreen({super.key});
@@ -527,6 +529,27 @@ class StreakScreen extends StatelessWidget {
                     const AuthRepairStreakRequested(200),
                   ),
                 ),
+          onAdTap: user.currentStreak > 0
+              ? null
+              : () {
+                  final adService = di.sl<AdService>();
+                  adService.showRewardedAd(
+                    isPremium: user.isPremium,
+                    onDismissed: () {},
+                    onUserEarnedReward: (reward) {
+                      context.read<AuthBloc>().add(
+                        const AuthRepairStreakWithAdRequested(),
+                      );
+                      Haptics.vibrate(HapticsType.success);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("STREAK REPAIRED! 🔥"),
+                          backgroundColor: Color(0xFF10B981),
+                        ),
+                      );
+                    },
+                  );
+                },
         ),
         SizedBox(height: 16.h),
         _buildShopItem(
@@ -888,6 +911,7 @@ class StreakScreen extends StatelessWidget {
     required int cost,
     required int currentCoins,
     required VoidCallback? onTap,
+    VoidCallback? onAdTap,
     int? count,
     bool isActive = false,
     bool isDisabled = false,
@@ -1054,36 +1078,43 @@ class StreakScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10.w,
-                    vertical: 6.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: canAfford
-                        ? color.withValues(alpha: 0.1)
-                        : Colors.grey.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        LucideIcons.circleDollarSign,
-                        color: canAfford ? color : Colors.grey,
-                        size: 12.r,
+                if (onAdTap != null && !isDisabled) ...[
+                  SizedBox(width: 8.w),
+                  InkWell(
+                    onTap: onAdTap,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.w,
+                        vertical: 6.h,
                       ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        '$cost',
-                        style: GoogleFonts.outfit(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w900,
-                          color: canAfford ? color : Colors.grey,
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(
+                          color: Colors.amber.withValues(alpha: 0.3),
                         ),
                       ),
-                    ],
+                      child: Row(
+                        children: [
+                          Icon(
+                            LucideIcons.playCircle,
+                            color: Colors.amber,
+                            size: 12.r,
+                          ),
+                          SizedBox(width: 4.w),
+                          Text(
+                            'FREE',
+                            style: GoogleFonts.outfit(
+                              fontSize: 10.sp,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.amber,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
           ),

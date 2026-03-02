@@ -28,11 +28,11 @@ class EmergencyHubQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        emergencyType,
-        urgencyLevel,
-        requiredActions,
-        callerState,
-        dispatcherFeedback,
-      ];
+    ...super.props,
+    emergencyType,
+    urgencyLevel,
+    requiredActions,
+    callerState,
+    dispatcherFeedback,
+  ];
 }

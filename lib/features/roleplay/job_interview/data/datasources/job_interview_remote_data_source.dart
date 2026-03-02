@@ -20,7 +20,9 @@ class JobInterviewRemoteDataSourceImpl implements JobInterviewRemoteDataSource {
         .get();
 
     return snapshot.docs
-        .map((doc) => JobInterviewQuestModel.fromJson(doc.data()..['id'] = doc.id))
+        .map(
+          (doc) => JobInterviewQuestModel.fromJson(doc.data()..['id'] = doc.id),
+        )
         .toList();
   }
 }

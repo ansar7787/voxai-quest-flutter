@@ -29,10 +29,10 @@ class BranchingDialogueQuest extends GameQuest {
 
   @override
   List<Object?> get props => [
-        ...super.props,
-        scenario,
-        persona,
-        lastLine,
-        nodes,
-      ];
+    ...super.props,
+    scenario,
+    persona,
+    lastLine,
+    nodes,
+  ];
 }

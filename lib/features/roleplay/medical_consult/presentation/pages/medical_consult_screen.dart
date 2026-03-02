@@ -145,8 +145,7 @@ class _MedicalConsultScreenState extends State<MedicalConsultScreen> {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<RoleplayBloc>().add(
-                
-      FetchRoleplayQuests(
+                FetchRoleplayQuests(
                   gameType: GameSubtype.medicalConsult,
                   level: widget.level,
                 ),

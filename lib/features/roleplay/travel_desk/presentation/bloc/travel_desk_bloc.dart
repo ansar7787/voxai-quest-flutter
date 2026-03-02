@@ -7,7 +7,7 @@ class TravelDeskBloc extends Bloc<TravelDeskEvent, TravelDeskState> {
   final GetTravelDeskQuests getQuests;
 
   TravelDeskBloc({required this.getQuests}) : super(TravelDeskInitial()) {
-        on<RestartLevel>((event, emit) => emit(TravelDeskInitial()));
+    on<RestartLevel>((event, emit) => emit(TravelDeskInitial()));
     on<FetchTravelDeskQuests>(_onFetchQuests);
     on<SubmitTravelDeskAnswer>(_onSubmitAnswer);
     on<NextTravelDeskQuestion>(_onNextQuestion);
@@ -22,7 +22,8 @@ class TravelDeskBloc extends Bloc<TravelDeskEvent, TravelDeskState> {
     emit(TravelDeskLoading());
     final result = await getQuests(event.level);
     result.fold(
-      (failure) => emit(const TravelDeskError("Failed to load travel desk quests")),
+      (failure) =>
+          emit(const TravelDeskError("Failed to load travel desk quests")),
       (quests) => emit(TravelDeskLoaded(quests: quests)),
     );
   }
@@ -34,17 +35,25 @@ class TravelDeskBloc extends Bloc<TravelDeskEvent, TravelDeskState> {
     final state = this.state;
     if (state is TravelDeskLoaded) {
       final isCorrect = event.isCorrect;
-      final newLives = isCorrect ? state.livesRemaining : state.livesRemaining - 1;
+      final newLives = isCorrect
+          ? state.livesRemaining
+          : state.livesRemaining - 1;
 
       if (newLives <= 0) {
         emit(TravelDeskGameOver());
       } else {
-        emit(state.copyWith(
-          livesRemaining: newLives,
-          lastAnswerCorrect: isCorrect,
-          xpEarned: isCorrect ? state.xpEarned + state.currentQuest.xpReward : state.xpEarned,
-          coinsEarned: isCorrect ? state.coinsEarned + state.currentQuest.coinReward : state.coinsEarned,
-        ));
+        emit(
+          state.copyWith(
+            livesRemaining: newLives,
+            lastAnswerCorrect: isCorrect,
+            xpEarned: isCorrect
+                ? state.xpEarned + state.currentQuest.xpReward
+                : state.xpEarned,
+            coinsEarned: isCorrect
+                ? state.coinsEarned + state.currentQuest.coinReward
+                : state.coinsEarned,
+          ),
+        );
       }
     }
   }
@@ -56,15 +65,19 @@ class TravelDeskBloc extends Bloc<TravelDeskEvent, TravelDeskState> {
     final state = this.state;
     if (state is TravelDeskLoaded) {
       if (state.currentIndex + 1 < state.quests.length) {
-        emit(state.copyWith(
-          currentIndex: state.currentIndex + 1,
-          lastAnswerCorrect: null,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: state.currentIndex + 1,
+            lastAnswerCorrect: null,
+          ),
+        );
       } else {
-        emit(TravelDeskGameComplete(
-          xpEarned: state.xpEarned,
-          coinsEarned: state.coinsEarned,
-        ));
+        emit(
+          TravelDeskGameComplete(
+            xpEarned: state.xpEarned,
+            coinsEarned: state.coinsEarned,
+          ),
+        );
       }
     }
   }
@@ -79,11 +92,7 @@ class TravelDeskBloc extends Bloc<TravelDeskEvent, TravelDeskState> {
     }
   }
 
-  void _onHintUsed(
-    TravelDeskHintUsed event,
-    Emitter<TravelDeskState> emit,
-  ) {
+  void _onHintUsed(TravelDeskHintUsed event, Emitter<TravelDeskState> emit) {
     // Implement hint logic if needed
   }
 }
-

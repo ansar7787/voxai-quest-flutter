@@ -46,14 +46,23 @@ class FlashcardsLoaded extends FlashcardsState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class FlashcardsGameComplete extends FlashcardsState {
   final int xpEarned;
   final int coinsEarned;
 
-  const FlashcardsGameComplete({required this.xpEarned, required this.coinsEarned});
+  const FlashcardsGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

@@ -23,12 +23,7 @@ class ReadingSpeedCheckQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        passage,
-        targetWpm,
-      ];
+  List<Object?> get props => [...super.props, passage, targetWpm];
 
   String get question => '';
 }
-

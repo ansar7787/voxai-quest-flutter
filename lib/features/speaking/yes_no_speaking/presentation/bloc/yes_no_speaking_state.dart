@@ -42,14 +42,22 @@ class YesNoSpeakingLoaded extends YesNoSpeakingState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class YesNoSpeakingGameComplete extends YesNoSpeakingState {
   final int xpEarned;
   final int coinsEarned;
 
-  const YesNoSpeakingGameComplete({required this.xpEarned, required this.coinsEarned});
+  const YesNoSpeakingGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

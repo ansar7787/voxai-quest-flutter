@@ -76,10 +76,7 @@ class AlphabetGameScreen extends StatelessWidget {
       ),
       child: imageUrl != null && imageUrl.isNotEmpty
           ? ClipOval(
-              child: KidsImage(
-                imageUrl: imageUrl,
-                fallbackIcon: Icons.abc,
-              ),
+              child: KidsImage(imageUrl: imageUrl, fallbackIcon: Icons.abc),
             )
           : Center(
               child: Text(

@@ -15,10 +15,14 @@ class AcademicWordRepositoryImpl implements AcademicWordRepository {
   });
 
   @override
-  Future<Either<Failure, List<AcademicWordQuest>>> getAcademicWordQuests(int level) async {
+  Future<Either<Failure, List<AcademicWordQuest>>> getAcademicWordQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getAcademicWordQuests(level);
+        final remoteQuests = await remoteDataSource.getAcademicWordQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class AcademicWordRepositoryImpl implements AcademicWordRepository {
     }
   }
 }
-

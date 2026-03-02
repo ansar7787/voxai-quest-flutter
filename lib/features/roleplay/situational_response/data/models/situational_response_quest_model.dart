@@ -38,11 +38,17 @@ class SituationalResponseQuestModel extends SituationalResponseQuest {
       xpReward: (json['xpReward'] as num?)?.toInt() ?? 10,
       coinReward: (json['coinReward'] as num?)?.toInt() ?? 10,
       livesAllowed: (json['livesAllowed'] as num?)?.toInt() ?? 3,
-      interactionType: EnumParser.parseInteractionType(json['interactionType'] as String?),
-      options: (json['options'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      interactionType: EnumParser.parseInteractionType(
+        json['interactionType'] as String?,
+      ),
+      options: (json['options'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       correctAnswerIndex: (json['correctAnswerIndex'] as num?)?.toInt(),
       situation: json['situation'] as String?,
-      keywords: (json['keywords'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      keywords: (json['keywords'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       sampleAnswer: json['sampleAnswer'] as String?,
     );
   }
@@ -66,4 +72,3 @@ class SituationalResponseQuestModel extends SituationalResponseQuest {
     };
   }
 }
-

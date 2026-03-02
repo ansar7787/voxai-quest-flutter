@@ -36,9 +36,5 @@ class SynonymSearchQuest extends GameQuest {
   }
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        word,
-        synonyms,
-      ];
+  List<Object?> get props => [...super.props, word, synonyms];
 }

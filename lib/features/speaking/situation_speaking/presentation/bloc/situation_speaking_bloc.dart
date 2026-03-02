@@ -3,10 +3,12 @@ import 'package:voxai_quest/features/speaking/situation_speaking/domain/usecases
 import 'situation_speaking_event.dart';
 import 'situation_speaking_state.dart';
 
-class SituationSpeakingBloc extends Bloc<SituationSpeakingEvent, SituationSpeakingState> {
+class SituationSpeakingBloc
+    extends Bloc<SituationSpeakingEvent, SituationSpeakingState> {
   final GetSituationSpeakingQuests getQuests;
 
-  SituationSpeakingBloc({required this.getQuests}) : super(SituationSpeakingInitial()) {
+  SituationSpeakingBloc({required this.getQuests})
+    : super(SituationSpeakingInitial()) {
     on<FetchSituationSpeakingQuests>(_onFetchQuests);
     on<SubmitSituationSpeakingAnswer>(_onSubmitAnswer);
     on<NextSituationSpeakingQuestion>(_onNextQuestion);
@@ -38,10 +40,9 @@ class SituationSpeakingBloc extends Bloc<SituationSpeakingEvent, SituationSpeaki
         if (newLives <= 0) {
           emit(SituationSpeakingGameOver());
         } else {
-          emit(state.copyWith(
-            livesRemaining: newLives,
-            lastAnswerCorrect: false,
-          ));
+          emit(
+            state.copyWith(livesRemaining: newLives, lastAnswerCorrect: false),
+          );
         }
       }
     }
@@ -56,15 +57,14 @@ class SituationSpeakingBloc extends Bloc<SituationSpeakingEvent, SituationSpeaki
       final nextIndex = state.currentIndex + 1;
       if (nextIndex >= state.quests.length) {
         final totalQuests = state.quests.length;
-        emit(SituationSpeakingGameComplete(
-          xpEarned: totalQuests * 10,
-          coinsEarned: totalQuests * 5,
-        ));
+        emit(
+          SituationSpeakingGameComplete(
+            xpEarned: totalQuests * 10,
+            coinsEarned: totalQuests * 5,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          currentIndex: nextIndex,
-          lastAnswerCorrect: null,
-        ));
+        emit(state.copyWith(currentIndex: nextIndex, lastAnswerCorrect: null));
       }
     }
   }

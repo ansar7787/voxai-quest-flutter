@@ -15,7 +15,9 @@ class TopicVocabRepositoryImpl implements TopicVocabRepository {
   });
 
   @override
-  Future<Either<Failure, List<TopicVocabQuest>>> getTopicVocabQuests(int level) async {
+  Future<Either<Failure, List<TopicVocabQuest>>> getTopicVocabQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteQuests = await remoteDataSource.getTopicVocabQuests(level);
@@ -28,4 +30,3 @@ class TopicVocabRepositoryImpl implements TopicVocabRepository {
     }
   }
 }
-

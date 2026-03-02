@@ -52,20 +52,23 @@ class DialogueRoleplayLoaded extends DialogueRoleplayState {
 
   @override
   List<Object?> get props => [
-        quests,
-        currentIndex,
-        currentTurnIndex,
-        livesRemaining,
-        lastAnswerCorrect,
-        conversationHistory,
-      ];
+    quests,
+    currentIndex,
+    currentTurnIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    conversationHistory,
+  ];
 }
 
 class DialogueRoleplayGameComplete extends DialogueRoleplayState {
   final int xpEarned;
   final int coinsEarned;
 
-  const DialogueRoleplayGameComplete({required this.xpEarned, required this.coinsEarned});
+  const DialogueRoleplayGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

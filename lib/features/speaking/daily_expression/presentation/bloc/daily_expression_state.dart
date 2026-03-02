@@ -42,14 +42,22 @@ class DailyExpressionLoaded extends DailyExpressionState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class DailyExpressionGameComplete extends DailyExpressionState {
   final int xpEarned;
   final int coinsEarned;
 
-  const DailyExpressionGameComplete({required this.xpEarned, required this.coinsEarned});
+  const DailyExpressionGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

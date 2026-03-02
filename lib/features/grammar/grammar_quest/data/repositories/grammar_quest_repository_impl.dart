@@ -15,10 +15,14 @@ class GrammarQuestRepositoryImpl implements GrammarQuestRepository {
   });
 
   @override
-  Future<Either<Failure, List<GrammarQuestQuest>>> getGrammarQuestQuests(int level) async {
+  Future<Either<Failure, List<GrammarQuestQuest>>> getGrammarQuestQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteQuests = await remoteDataSource.getGrammarQuestQuests(level);
+        final remoteQuests = await remoteDataSource.getGrammarQuestQuests(
+          level,
+        );
         return Right(remoteQuests);
       } catch (e) {
         return Left(ServerFailure(e.toString()));
@@ -28,4 +32,3 @@ class GrammarQuestRepositoryImpl implements GrammarQuestRepository {
     }
   }
 }
-

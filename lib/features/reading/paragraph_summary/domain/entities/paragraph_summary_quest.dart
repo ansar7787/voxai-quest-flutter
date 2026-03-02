@@ -21,11 +21,7 @@ class ParagraphSummaryQuest extends GameQuest {
   });
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        passage,
-      ];
+  List<Object?> get props => [...super.props, passage];
 
   String get question => '';
 }
-

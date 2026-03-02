@@ -7,7 +7,7 @@ class EmergencyHubBloc extends Bloc<EmergencyHubEvent, EmergencyHubState> {
   final GetEmergencyHubQuests getQuests;
 
   EmergencyHubBloc({required this.getQuests}) : super(EmergencyHubInitial()) {
-        on<RestartLevel>((event, emit) => emit(EmergencyHubInitial()));
+    on<RestartLevel>((event, emit) => emit(EmergencyHubInitial()));
     on<FetchEmergencyHubQuests>(_onFetchQuests);
     on<SubmitEmergencyHubAnswer>(_onSubmitAnswer);
     on<NextEmergencyHubQuestion>(_onNextQuestion);
@@ -22,7 +22,8 @@ class EmergencyHubBloc extends Bloc<EmergencyHubEvent, EmergencyHubState> {
     emit(EmergencyHubLoading());
     final result = await getQuests(event.level);
     result.fold(
-      (failure) => emit(const EmergencyHubError("Failed to load emergency hub quests")),
+      (failure) =>
+          emit(const EmergencyHubError("Failed to load emergency hub quests")),
       (quests) => emit(EmergencyHubLoaded(quests: quests)),
     );
   }
@@ -34,17 +35,25 @@ class EmergencyHubBloc extends Bloc<EmergencyHubEvent, EmergencyHubState> {
     final state = this.state;
     if (state is EmergencyHubLoaded) {
       final isCorrect = event.isCorrect;
-      final newLives = isCorrect ? state.livesRemaining : state.livesRemaining - 1;
+      final newLives = isCorrect
+          ? state.livesRemaining
+          : state.livesRemaining - 1;
 
       if (newLives <= 0) {
         emit(EmergencyHubGameOver());
       } else {
-        emit(state.copyWith(
-          livesRemaining: newLives,
-          lastAnswerCorrect: isCorrect,
-          xpEarned: isCorrect ? state.xpEarned + state.currentQuest.xpReward : state.xpEarned,
-          coinsEarned: isCorrect ? state.coinsEarned + state.currentQuest.coinReward : state.coinsEarned,
-        ));
+        emit(
+          state.copyWith(
+            livesRemaining: newLives,
+            lastAnswerCorrect: isCorrect,
+            xpEarned: isCorrect
+                ? state.xpEarned + state.currentQuest.xpReward
+                : state.xpEarned,
+            coinsEarned: isCorrect
+                ? state.coinsEarned + state.currentQuest.coinReward
+                : state.coinsEarned,
+          ),
+        );
       }
     }
   }
@@ -56,15 +65,19 @@ class EmergencyHubBloc extends Bloc<EmergencyHubEvent, EmergencyHubState> {
     final state = this.state;
     if (state is EmergencyHubLoaded) {
       if (state.currentIndex + 1 < state.quests.length) {
-        emit(state.copyWith(
-          currentIndex: state.currentIndex + 1,
-          lastAnswerCorrect: null,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: state.currentIndex + 1,
+            lastAnswerCorrect: null,
+          ),
+        );
       } else {
-        emit(EmergencyHubGameComplete(
-          xpEarned: state.xpEarned,
-          coinsEarned: state.coinsEarned,
-        ));
+        emit(
+          EmergencyHubGameComplete(
+            xpEarned: state.xpEarned,
+            coinsEarned: state.coinsEarned,
+          ),
+        );
       }
     }
   }
@@ -86,4 +99,3 @@ class EmergencyHubBloc extends Bloc<EmergencyHubEvent, EmergencyHubState> {
     // Implement hint logic if needed
   }
 }
-

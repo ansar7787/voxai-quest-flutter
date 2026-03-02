@@ -42,14 +42,22 @@ class EmotionRecognitionLoaded extends EmotionRecognitionState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class EmotionRecognitionGameComplete extends EmotionRecognitionState {
   final int xpEarned;
   final int coinsEarned;
 
-  const EmotionRecognitionGameComplete({required this.xpEarned, required this.coinsEarned});
+  const EmotionRecognitionGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

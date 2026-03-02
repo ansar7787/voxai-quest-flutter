@@ -46,14 +46,23 @@ class QuestionFormatterLoaded extends QuestionFormatterState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class QuestionFormatterGameComplete extends QuestionFormatterState {
   final int xpEarned;
   final int coinsEarned;
 
-  const QuestionFormatterGameComplete({required this.xpEarned, required this.coinsEarned});
+  const QuestionFormatterGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

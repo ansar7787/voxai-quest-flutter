@@ -46,14 +46,23 @@ class GuessTitleLoaded extends GuessTitleState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect, hintUsed];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+    hintUsed,
+  ];
 }
 
 class GuessTitleGameComplete extends GuessTitleState {
   final int xpEarned;
   final int coinsEarned;
 
-  const GuessTitleGameComplete({required this.xpEarned, required this.coinsEarned});
+  const GuessTitleGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];

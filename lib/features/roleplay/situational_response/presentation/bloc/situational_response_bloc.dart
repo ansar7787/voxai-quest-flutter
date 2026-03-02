@@ -3,11 +3,13 @@ import 'package:voxai_quest/features/roleplay/situational_response/domain/usecas
 import 'situational_response_event.dart';
 import 'situational_response_state.dart';
 
-class SituationalResponseBloc extends Bloc<SituationalResponseEvent, SituationalResponseState> {
+class SituationalResponseBloc
+    extends Bloc<SituationalResponseEvent, SituationalResponseState> {
   final GetSituationalResponseQuests getQuests;
 
-  SituationalResponseBloc({required this.getQuests}) : super(SituationalResponseInitial()) {
-        on<RestartLevel>((event, emit) => emit(SituationalResponseInitial()));
+  SituationalResponseBloc({required this.getQuests})
+    : super(SituationalResponseInitial()) {
+    on<RestartLevel>((event, emit) => emit(SituationalResponseInitial()));
     on<FetchSituationalResponseQuests>(_onFetchQuests);
     on<SubmitSituationalResponseAnswer>(_onSubmitAnswer);
     on<NextSituationalResponseQuestion>(_onNextQuestion);
@@ -22,7 +24,11 @@ class SituationalResponseBloc extends Bloc<SituationalResponseEvent, Situational
     emit(SituationalResponseLoading());
     final result = await getQuests(event.level);
     result.fold(
-      (failure) => emit(const SituationalResponseError("Failed to load situational response quests")),
+      (failure) => emit(
+        const SituationalResponseError(
+          "Failed to load situational response quests",
+        ),
+      ),
       (quests) => emit(SituationalResponseLoaded(quests: quests)),
     );
   }
@@ -34,17 +40,25 @@ class SituationalResponseBloc extends Bloc<SituationalResponseEvent, Situational
     final state = this.state;
     if (state is SituationalResponseLoaded) {
       final isCorrect = event.isCorrect;
-      final newLives = isCorrect ? state.livesRemaining : state.livesRemaining - 1;
+      final newLives = isCorrect
+          ? state.livesRemaining
+          : state.livesRemaining - 1;
 
       if (newLives <= 0) {
         emit(SituationalResponseGameOver());
       } else {
-        emit(state.copyWith(
-          livesRemaining: newLives,
-          lastAnswerCorrect: isCorrect,
-          xpEarned: isCorrect ? state.xpEarned + state.currentQuest.xpReward : state.xpEarned,
-          coinsEarned: isCorrect ? state.coinsEarned + state.currentQuest.coinReward : state.coinsEarned,
-        ));
+        emit(
+          state.copyWith(
+            livesRemaining: newLives,
+            lastAnswerCorrect: isCorrect,
+            xpEarned: isCorrect
+                ? state.xpEarned + state.currentQuest.xpReward
+                : state.xpEarned,
+            coinsEarned: isCorrect
+                ? state.coinsEarned + state.currentQuest.coinReward
+                : state.coinsEarned,
+          ),
+        );
       }
     }
   }
@@ -56,15 +70,19 @@ class SituationalResponseBloc extends Bloc<SituationalResponseEvent, Situational
     final state = this.state;
     if (state is SituationalResponseLoaded) {
       if (state.currentIndex + 1 < state.quests.length) {
-        emit(state.copyWith(
-          currentIndex: state.currentIndex + 1,
-          lastAnswerCorrect: null,
-        ));
+        emit(
+          state.copyWith(
+            currentIndex: state.currentIndex + 1,
+            lastAnswerCorrect: null,
+          ),
+        );
       } else {
-        emit(SituationalResponseGameComplete(
-          xpEarned: state.xpEarned,
-          coinsEarned: state.coinsEarned,
-        ));
+        emit(
+          SituationalResponseGameComplete(
+            xpEarned: state.xpEarned,
+            coinsEarned: state.coinsEarned,
+          ),
+        );
       }
     }
   }
@@ -86,4 +104,3 @@ class SituationalResponseBloc extends Bloc<SituationalResponseEvent, Situational
     // Implement hint logic if needed
   }
 }
-

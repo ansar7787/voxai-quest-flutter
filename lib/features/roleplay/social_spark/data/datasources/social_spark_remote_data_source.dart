@@ -20,7 +20,9 @@ class SocialSparkRemoteDataSourceImpl implements SocialSparkRemoteDataSource {
         .get();
 
     return snapshot.docs
-        .map((doc) => SocialSparkQuestModel.fromJson(doc.data()..['id'] = doc.id))
+        .map(
+          (doc) => SocialSparkQuestModel.fromJson(doc.data()..['id'] = doc.id),
+        )
         .toList();
   }
 }

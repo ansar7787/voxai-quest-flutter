@@ -15,7 +15,9 @@ class WordReorderRepositoryImpl implements WordReorderRepository {
   });
 
   @override
-  Future<Either<Failure, List<WordReorderQuest>>> getWordReorderQuests(int level) async {
+  Future<Either<Failure, List<WordReorderQuest>>> getWordReorderQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteQuests = await remoteDataSource.getWordReorderQuests(level);
@@ -28,4 +30,3 @@ class WordReorderRepositoryImpl implements WordReorderRepository {
     }
   }
 }
-

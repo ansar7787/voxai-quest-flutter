@@ -15,7 +15,9 @@ class GuessTitleRepositoryImpl implements GuessTitleRepository {
   });
 
   @override
-  Future<Either<Failure, List<GuessTitleQuest>>> getGuessTitleQuests(int level) async {
+  Future<Either<Failure, List<GuessTitleQuest>>> getGuessTitleQuests(
+    int level,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
         final remoteQuests = await remoteDataSource.getGuessTitleQuests(level);
@@ -28,4 +30,3 @@ class GuessTitleRepositoryImpl implements GuessTitleRepository {
     }
   }
 }
-

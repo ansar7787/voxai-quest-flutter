@@ -5,13 +5,16 @@ abstract class MedicalConsultRemoteDataSource {
   Future<List<MedicalConsultQuestModel>> getMedicalConsultQuests(int level);
 }
 
-class MedicalConsultRemoteDataSourceImpl implements MedicalConsultRemoteDataSource {
+class MedicalConsultRemoteDataSourceImpl
+    implements MedicalConsultRemoteDataSource {
   final FirebaseFirestore firestore;
 
   MedicalConsultRemoteDataSourceImpl({required this.firestore});
 
   @override
-  Future<List<MedicalConsultQuestModel>> getMedicalConsultQuests(int level) async {
+  Future<List<MedicalConsultQuestModel>> getMedicalConsultQuests(
+    int level,
+  ) async {
     final snapshot = await firestore
         .collection('curriculum')
         .doc('roleplay')
@@ -20,7 +23,10 @@ class MedicalConsultRemoteDataSourceImpl implements MedicalConsultRemoteDataSour
         .get();
 
     return snapshot.docs
-        .map((doc) => MedicalConsultQuestModel.fromJson(doc.data()..['id'] = doc.id))
+        .map(
+          (doc) =>
+              MedicalConsultQuestModel.fromJson(doc.data()..['id'] = doc.id),
+        )
         .toList();
   }
 }

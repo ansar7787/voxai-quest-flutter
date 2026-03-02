@@ -29,6 +29,4 @@ class RestoreMedicalConsultLife extends MedicalConsultEvent {}
 
 class MedicalConsultHintUsed extends MedicalConsultEvent {}
 
-
 class RestartLevel extends MedicalConsultEvent {}
-

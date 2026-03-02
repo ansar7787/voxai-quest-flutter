@@ -42,14 +42,22 @@ class SpeakSynonymLoaded extends SpeakSynonymState {
   }
 
   @override
-  List<Object?> get props => [quests, currentIndex, livesRemaining, lastAnswerCorrect];
+  List<Object?> get props => [
+    quests,
+    currentIndex,
+    livesRemaining,
+    lastAnswerCorrect,
+  ];
 }
 
 class SpeakSynonymGameComplete extends SpeakSynonymState {
   final int xpEarned;
   final int coinsEarned;
 
-  const SpeakSynonymGameComplete({required this.xpEarned, required this.coinsEarned});
+  const SpeakSynonymGameComplete({
+    required this.xpEarned,
+    required this.coinsEarned,
+  });
 
   @override
   List<Object?> get props => [xpEarned, coinsEarned];
