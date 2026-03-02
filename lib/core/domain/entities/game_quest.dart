@@ -1,6 +1,17 @@
 import 'package:equatable/equatable.dart';
 
-enum InteractionType { speech, choice, writing, sequence, match }
+enum InteractionType {
+  speech,
+  choice,
+  writing,
+  sequence,
+  match,
+  speaking,
+  typing,
+  reorder,
+  trueFalse,
+  text,
+}
 
 enum GameSubtype {
   // 1. Speaking
@@ -47,6 +58,7 @@ enum GameSubtype {
   summarizeStoryWriting,
   writingEmail,
   correctionWriting,
+  essayDrafting,
   // 5. Grammar
   grammarQuest,
   sentenceCorrection,
@@ -106,13 +118,13 @@ enum QuestType {
 
 extension GameSubtypeX on GameSubtype {
   QuestType get category {
-    if (index < 10) return QuestType.speaking;
-    if (index < 20) return QuestType.listening;
-    if (index < 30) return QuestType.reading;
-    if (index < 40) return QuestType.writing;
-    if (index < 50) return QuestType.grammar;
-    if (index < 60) return QuestType.vocabulary;
-    if (index < 70) return QuestType.accent;
+    if (index >= 0 && index <= 9) return QuestType.speaking;
+    if (index >= 10 && index <= 19) return QuestType.listening;
+    if (index >= 20 && index <= 29) return QuestType.reading;
+    if (index >= 30 && index <= 40) return QuestType.writing;
+    if (index >= 41 && index <= 50) return QuestType.grammar;
+    if (index >= 51 && index <= 60) return QuestType.vocabulary;
+    if (index >= 61 && index <= 70) return QuestType.accent;
     return QuestType.roleplay;
   }
 
@@ -129,15 +141,15 @@ extension QuestTypeX on QuestType {
       case QuestType.reading:
         return GameSubtype.values.sublist(20, 30);
       case QuestType.writing:
-        return GameSubtype.values.sublist(30, 40);
+        return GameSubtype.values.sublist(30, 41);
       case QuestType.grammar:
-        return GameSubtype.values.sublist(40, 50);
+        return GameSubtype.values.sublist(41, 51);
       case QuestType.vocabulary:
-        return GameSubtype.values.sublist(50, 60);
+        return GameSubtype.values.sublist(51, 61);
       case QuestType.accent:
-        return GameSubtype.values.sublist(60, 70);
+        return GameSubtype.values.sublist(61, 71);
       case QuestType.roleplay:
-        return GameSubtype.values.sublist(70, 80);
+        return GameSubtype.values.sublist(71, 81);
     }
   }
 
@@ -177,6 +189,7 @@ class GameQuest extends Equatable {
   final int? correctAnswerIndex;
   final String? correctAnswer;
   final String? hint;
+  final String? textToSpeak;
 
   const GameQuest({
     required this.id,
@@ -192,6 +205,7 @@ class GameQuest extends Equatable {
     this.correctAnswerIndex,
     this.correctAnswer,
     this.hint,
+    this.textToSpeak,
   });
 
   @override
@@ -209,5 +223,6 @@ class GameQuest extends Equatable {
     correctAnswerIndex,
     correctAnswer,
     hint,
+    textToSpeak,
   ];
 }

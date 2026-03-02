@@ -12,6 +12,8 @@ import 'package:voxai_quest/core/presentation/themes/level_theme_helper.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart' as di;
 import 'package:voxai_quest/core/presentation/widgets/mesh_gradient_background.dart';
 import 'package:voxai_quest/core/presentation/widgets/glass_tile.dart';
+import 'package:voxai_quest/core/presentation/utils/voxin_assets.dart';
+import 'package:voxai_quest/core/utils/app_router.dart';
 
 class ModernCategoryMap extends StatefulWidget {
   final String gameType;
@@ -36,6 +38,45 @@ class _ModernCategoryMapState extends State<ModernCategoryMap> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToCurrentLevel(animate: false);
+    });
+  }
+
+  void _scrollToCurrentLevel({bool animate = true}) {
+    if (!_scrollController.hasClients) return;
+
+    final authState = context.read<AuthBloc>().state;
+    final int unlockedLevels =
+        authState.user?.unlockedLevels[widget.gameType] ?? 1;
+
+    final theme = LevelThemeHelper.getTheme(
+      widget.gameType,
+      isDark: Theme.of(context).brightness == Brightness.dark,
+    );
+    final double rowSpacing = _getVerticalSpacing(theme.category);
+
+    // Calculate height: AppBar (approx collapsed) + Padding (150.h) + (LevelIndex * spacing)
+    // We target the current level to be in the middle of the screen
+    final double targetY =
+        64.h + // Collapsed AppBar height
+        150.h + // Bottom padding of AppBar/Header in Stack
+        ((unlockedLevels - 1) * rowSpacing) +
+        (rowSpacing / 2) -
+        (ScreenUtil().screenHeight / 2);
+
+    final double maxScroll = _scrollController.position.maxScrollExtent;
+    final double safeTargetY = targetY.clamp(0.0, maxScroll);
+
+    if (animate) {
+      _scrollController.animateTo(
+        safeTargetY,
+        duration: 800.milliseconds,
+        curve: Curves.easeOutBack,
+      );
+    } else {
+      _scrollController.jumpTo(safeTargetY);
+    }
   }
 
   @override
@@ -313,6 +354,7 @@ class _ModernCategoryMapState extends State<ModernCategoryMap> {
         );
       },
       child: Stack(
+        clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
           Container(
@@ -329,12 +371,6 @@ class _ModernCategoryMapState extends State<ModernCategoryMap> {
                       offset: Offset(0, 6.h),
                       blurRadius: 12.r,
                     ),
-                    if (isCurrent)
-                      BoxShadow(
-                        color: theme.primaryColor.withValues(alpha: 0.5),
-                        blurRadius: 20.r,
-                        spreadRadius: 4.r,
-                      ),
                   ],
                   border: Border.all(color: Colors.white, width: 3.r),
                 ),
@@ -417,26 +453,16 @@ class _ModernCategoryMapState extends State<ModernCategoryMap> {
                 curve: Curves.easeInOut,
               ),
 
-          if (isCurrent)
-            Container(
-                  width: 105.r,
-                  height: 105.r,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: theme.primaryColor.withValues(alpha: 0.3),
-                      width: 2.r,
-                    ),
-                  ),
-                )
-                .animate(onPlay: (c) => c.repeat())
-                .scale(
-                  begin: const Offset(1, 1),
-                  end: const Offset(1.2, 1.2),
-                  duration: 2.seconds,
-                  curve: Curves.easeOut,
-                )
-                .fadeOut(),
+          if (isCurrent) ...[
+            // Mascot Marker
+            Positioned(
+              top: -65.h,
+              child: _buildMascotMarker(context)
+                  .animate()
+                  .fadeIn(duration: 600.milliseconds)
+                  .scale(delay: 200.milliseconds, curve: Curves.elasticOut),
+            ),
+          ],
 
           Positioned(
             top: isCurrent ? 12.r : 10.r,
@@ -445,7 +471,7 @@ class _ModernCategoryMapState extends State<ModernCategoryMap> {
               width: isCurrent ? 40.r : 35.r,
               height: isCurrent ? 18.r : 15.r,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
+                shape: BoxShape.circle, // Match the node precisely
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -479,6 +505,105 @@ class _ModernCategoryMapState extends State<ModernCategoryMap> {
       ),
     );
   }
+
+  Widget _buildMascotMarker(BuildContext context) {
+    final user = context.read<AuthBloc>().state.user;
+    final mascotEmoji =
+        VoxinAssets.mascotMap[user?.voxinMascot] ??
+        VoxinAssets.mascotMap['voxin_prime']!;
+    final accessoryEmoji =
+        VoxinAssets.accessoryMap[user?.voxinEquippedAccessory] ?? '';
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30.r), // Pill shape
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 8.r,
+                    offset: Offset(0, 4.h),
+                  ),
+                ],
+                border: Border.all(color: Colors.white, width: 2.r),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(mascotEmoji, style: TextStyle(fontSize: 24.sp)),
+                  if (accessoryEmoji.isNotEmpty) ...[
+                    SizedBox(width: 4.w),
+                    Text(accessoryEmoji, style: TextStyle(fontSize: 16.sp)),
+                  ],
+                ],
+              ),
+            )
+            .animate(onPlay: (c) => c.repeat(reverse: true))
+            .moveY(
+              begin: -4,
+              end: 4,
+              duration: 1.5.seconds,
+              curve: Curves.easeInOut,
+            ),
+        CustomPaint(
+          size: Size(12.w, 8.h),
+          painter: _TrianglePainter(color: Colors.white),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildVoxinNavButton(BuildContext context, bool isDark) {
+    final user = context.read<AuthBloc>().state.user;
+    final mascotEmoji =
+        VoxinAssets.mascotMap[user?.voxinMascot] ??
+        VoxinAssets.mascotMap['voxin_prime']!;
+
+    return ScaleButton(
+      onTap: () => context.push(AppRouter.voxinMascotRoute),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(15.r),
+          border: Border.all(color: Colors.white.withOpacity(0.2)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(mascotEmoji, style: TextStyle(fontSize: 16.sp)),
+            SizedBox(width: 4.w),
+            Icon(Icons.style_rounded, color: Colors.cyanAccent, size: 14.r),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TrianglePainter extends CustomPainter {
+  final Color color;
+  _TrianglePainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+    final path = Path();
+    path.moveTo(0, 0);
+    path.lineTo(size.width, 0);
+    path.lineTo(size.width / 2, size.height);
+    path.close();
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
 
 class CategoryPathPainter extends CustomPainter {

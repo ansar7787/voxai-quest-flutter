@@ -1,7 +1,6 @@
 import 'package:voxai_quest/core/domain/entities/game_quest.dart';
 
 class SpeakingQuest extends GameQuest {
-  final String? textToSpeak;
   final String? missingWord;
   final String? prompt;
   final String? sampleAnswer;
@@ -28,7 +27,7 @@ class SpeakingQuest extends GameQuest {
     super.correctAnswerIndex,
     super.correctAnswer,
     super.hint,
-    this.textToSpeak,
+    super.textToSpeak,
     this.missingWord,
     this.prompt,
     this.sampleAnswer,

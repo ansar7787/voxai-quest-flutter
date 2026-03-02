@@ -2,7 +2,6 @@ import 'package:voxai_quest/core/domain/entities/game_quest.dart';
 
 class ListeningQuest extends GameQuest {
   final String? audioUrl;
-  final String? textToSpeak;
   final String? transcription;
   final String? question;
   final String? statement;
@@ -30,7 +29,7 @@ class ListeningQuest extends GameQuest {
     super.correctAnswer,
     super.hint,
     this.audioUrl,
-    this.textToSpeak,
+    super.textToSpeak,
     this.transcription,
     this.question,
     this.statement,

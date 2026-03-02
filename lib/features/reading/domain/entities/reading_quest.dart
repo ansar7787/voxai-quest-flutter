@@ -11,7 +11,6 @@ class ReadingQuest extends GameQuest {
   final String? phoneticHint;
   final String? targetWord;
   final String? explanation;
-  final String? textToSpeak;
   final String? prompt;
 
   const ReadingQuest({
@@ -38,7 +37,7 @@ class ReadingQuest extends GameQuest {
     this.phoneticHint,
     this.targetWord,
     this.explanation,
-    this.textToSpeak,
+    super.textToSpeak,
     this.prompt,
   });
 

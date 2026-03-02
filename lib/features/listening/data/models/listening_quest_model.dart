@@ -23,6 +23,7 @@ class ListeningQuestModel extends ListeningQuest {
     super.audioOptions,
     super.transcript,
     super.targetEmotion,
+    super.textToSpeak,
   });
 
   factory ListeningQuestModel.fromJson(Map<String, dynamic> map, String id) {
@@ -59,6 +60,7 @@ class ListeningQuestModel extends ListeningQuest {
           : null,
       transcript: map['transcript'] as String?,
       targetEmotion: map['targetEmotion'],
+      textToSpeak: map['textToSpeak'] as String?,
     );
   }
 

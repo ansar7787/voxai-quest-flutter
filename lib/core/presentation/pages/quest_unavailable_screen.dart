@@ -74,7 +74,28 @@ class QuestUnavailableScreen extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(height: 60.h),
+                  SizedBox(height: 16.h),
+                  // DEBUGGING ERROR SUBHEADING
+                  Container(
+                    padding: EdgeInsets.all(12.r),
+                    decoration: BoxDecoration(
+                      color: Colors.red.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12.r),
+                      border: Border.all(
+                        color: Colors.red.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: SelectableText(
+                      "DEBUG ERROR:\n$message",
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.robotoMono(
+                        fontSize: 12.sp,
+                        color: Colors.redAccent,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 40.h),
                   ScaleButton(
                     onTap: onRetry ?? () => context.pop(),
                     child: Container(

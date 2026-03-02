@@ -122,14 +122,6 @@ class ReadingBloc extends Bloc<ReadingEvent, ReadingState> {
 
       emit(ReadingLoading());
       try {
-        final isConnected = await networkInfo.isConnected;
-        if (!isConnected) {
-          emit(
-            ReadingError("No internet connection. Please check your network."),
-          );
-          return;
-        }
-
         if (getQuest == null) {
           emit(ReadingError("UseCase dependency not provided"));
           return;

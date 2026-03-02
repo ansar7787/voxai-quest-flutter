@@ -5,7 +5,6 @@ class RoleplayQuest extends GameQuest {
   final String? persona;
   final String? prompt;
   final String? sampleAnswer;
-  final String? textToSpeak;
   final dynamic nodes;
   final String? situation;
   final List<String>? keywords;
@@ -29,7 +28,7 @@ class RoleplayQuest extends GameQuest {
     this.persona,
     this.prompt,
     this.sampleAnswer,
-    this.textToSpeak,
+    super.textToSpeak,
     this.nodes,
     this.situation,
     this.keywords,

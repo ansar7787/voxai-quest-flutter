@@ -33,6 +33,10 @@ class UserEntity extends Equatable {
   final String? kidsEquippedSticker;
   final List<String> kidsOwnedAccessories;
   final String? kidsEquippedAccessory;
+  final String? voxinMascot;
+  final String? voxinEquippedAccessory;
+  final List<String> voxinOwnedAccessories;
+  final List<String> voxinOwnedMascots;
   final List<int> claimedStreakMilestones;
   final List<int> claimedLevelMilestones;
   final List<Map<String, dynamic>> coinHistory;
@@ -141,6 +145,10 @@ class UserEntity extends Equatable {
     this.kidsEquippedSticker,
     this.kidsOwnedAccessories = const [],
     this.kidsEquippedAccessory,
+    this.voxinMascot,
+    this.voxinEquippedAccessory,
+    this.voxinOwnedAccessories = const [],
+    this.voxinOwnedMascots = const ['voxin_prime'],
     this.claimedStreakMilestones = const [],
     this.claimedLevelMilestones = const [],
     this.coinHistory = const [],
@@ -242,6 +250,10 @@ class UserEntity extends Equatable {
     kidsEquippedSticker,
     kidsOwnedAccessories,
     kidsEquippedAccessory,
+    voxinMascot,
+    voxinEquippedAccessory,
+    voxinOwnedAccessories,
+    voxinOwnedMascots,
     claimedStreakMilestones,
     claimedLevelMilestones,
     coinHistory,
@@ -282,6 +294,10 @@ class UserEntity extends Equatable {
     int? totalExp,
     Map<String, int>? unlockedLevels,
     bool? hasPermanentXPBoost,
+    String? voxinMascot,
+    String? voxinEquippedAccessory,
+    List<String>? voxinOwnedAccessories,
+    List<String>? voxinOwnedMascots,
   }) {
     return UserEntity(
       id: id,
@@ -322,6 +338,12 @@ class UserEntity extends Equatable {
       totalExp: totalExp ?? this.totalExp,
       unlockedLevels: unlockedLevels ?? this.unlockedLevels,
       hasPermanentXPBoost: hasPermanentXPBoost ?? this.hasPermanentXPBoost,
+      voxinMascot: voxinMascot ?? this.voxinMascot,
+      voxinEquippedAccessory:
+          voxinEquippedAccessory ?? this.voxinEquippedAccessory,
+      voxinOwnedAccessories:
+          voxinOwnedAccessories ?? this.voxinOwnedAccessories,
+      voxinOwnedMascots: voxinOwnedMascots ?? this.voxinOwnedMascots,
     );
   }
 }

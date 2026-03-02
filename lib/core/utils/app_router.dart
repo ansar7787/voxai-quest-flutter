@@ -10,6 +10,9 @@ import 'package:voxai_quest/features/home/presentation/pages/main_wrapper.dart';
 import 'package:voxai_quest/features/home/presentation/pages/category_games_page.dart';
 import 'package:voxai_quest/features/home/presentation/pages/quest_library_page.dart';
 import 'package:voxai_quest/features/home/presentation/pages/streak_screen.dart';
+import 'package:voxai_quest/features/home/presentation/pages/voxin_mascot_screen.dart';
+
+import 'package:voxai_quest/core/utils/injection_container.dart' as di;
 
 // Game Map Imports with Consistent Aliases
 // --- SPEAKING IMPORTS ---
@@ -137,6 +140,10 @@ import 'package:voxai_quest/features/writing/correction_writing/presentation/pag
     as cw_map;
 import 'package:voxai_quest/features/writing/correction_writing/presentation/pages/correction_writing_screen.dart'
     as cw_game;
+import 'package:voxai_quest/features/writing/essay_drafting/presentation/pages/essay_drafting_map.dart'
+    as ed_map;
+import 'package:voxai_quest/features/writing/essay_drafting/presentation/pages/essay_drafting_screen.dart'
+    as ed_game;
 
 // --- GRAMMAR IMPORTS ---
 import 'package:voxai_quest/features/grammar/grammar_quest/presentation/pages/grammar_quest_map.dart'
@@ -399,7 +406,6 @@ import 'package:voxai_quest/features/kids_zone/presentation/pages/games/food_gam
 import 'package:voxai_quest/features/kids_zone/presentation/pages/games/transport_game_screen.dart';
 import 'package:voxai_quest/features/kids_zone/presentation/pages/buddy_boutique_screen.dart';
 import 'package:voxai_quest/features/kids_zone/presentation/pages/admin/kids_admin_screen.dart';
-import 'package:voxai_quest/core/utils/injection_container.dart' as di;
 import 'package:voxai_quest/core/utils/discovery_helper.dart';
 
 class AppRouter {
@@ -424,8 +430,9 @@ class AppRouter {
   static const String adventureXPRoute = '/xp-details';
   static const String questCoinsRoute = '/coins-details';
   static const String questSequenceRoute = '/quest-sequence';
+  static const String voxinMascotRoute = '/voxin-mascot';
   static const String kidsZoneRoute = '/kids-zone';
-  static const String kidsLevelMapRoute = '/kids-level-map';
+  static const String kidsLevelMapRoute = '/kids/map/:gameType';
   static const String kidsAlphabetRoute = '/kids-alphabet';
   static const String kidsNumbersRoute = '/kids-numbers';
   static const String kidsColorsRoute = '/kids-colors';
@@ -451,6 +458,104 @@ class AppRouter {
   static const String kidsTransportRoute = '/kids-transport';
   static const String kidsBuddyBoutiqueRoute = '/kids-zone/boutique';
   static const String kidsAdminRoute = '/kids-admin';
+
+  static String getKidsGameTitle(String gameType) {
+    switch (gameType) {
+      case 'alphabet':
+        return 'Alphabet';
+      case 'numbers':
+        return 'Numbers';
+      case 'colors':
+        return 'Colors';
+      case 'shapes':
+        return 'Shapes';
+      case 'animals':
+        return 'Animals';
+      case 'fruits':
+        return 'Fruits';
+      case 'family':
+        return 'Family';
+      case 'school':
+        return 'School';
+      case 'verbs':
+        return 'Verbs';
+      case 'routine':
+        return 'Routine';
+      case 'emotions':
+        return 'Emotions';
+      case 'prepositions':
+        return 'Prepositions';
+      case 'phonics':
+        return 'Phonics';
+      case 'jumble':
+        return 'Jumble';
+      case 'time':
+        return 'Time';
+      case 'opposites':
+        return 'Opposites';
+      case 'day_night':
+        return 'Day/Night';
+      case 'nature':
+        return 'Nature';
+      case 'home':
+        return 'Home';
+      case 'food':
+        return 'Food';
+      case 'transport':
+        return 'Transport';
+      default:
+        return 'Kids Game';
+    }
+  }
+
+  static Color getKidsGameColor(String gameType) {
+    switch (gameType) {
+      case 'alphabet':
+        return const Color(0xFFF43F5E);
+      case 'numbers':
+        return const Color(0xFF0EA5E9);
+      case 'colors':
+        return const Color(0xFFF59E0B);
+      case 'shapes':
+        return const Color(0xFF10B981);
+      case 'animals':
+        return const Color(0xFF6366F1);
+      case 'fruits':
+        return const Color(0xFFEF4444);
+      case 'family':
+        return const Color(0xFFEC4899);
+      case 'school':
+        return const Color(0xFFF59E0B);
+      case 'verbs':
+        return const Color(0xFF8B5CF6);
+      case 'routine':
+        return const Color(0xFFF97316);
+      case 'emotions':
+        return const Color(0xFF06B6D4);
+      case 'prepositions':
+        return const Color(0xFF64748B);
+      case 'phonics':
+        return const Color(0xFFFFCC00);
+      case 'jumble':
+        return const Color(0xFFF43F5E);
+      case 'time':
+        return const Color(0xFF333333);
+      case 'opposites':
+        return const Color(0xFF94A3B8);
+      case 'day_night':
+        return const Color(0xFF1E293B);
+      case 'nature':
+        return const Color(0xFF16A34A);
+      case 'home':
+        return const Color(0xFFD946EF);
+      case 'food':
+        return const Color(0xFFFB923C);
+      case 'transport':
+        return const Color(0xFF2563EB);
+      default:
+        return Colors.blue;
+    }
+  }
 
   static final router = GoRouter(
     initialLocation: initialRoute,
@@ -551,6 +656,10 @@ class AppRouter {
           ),
         ],
       ),
+      GoRoute(
+        path: voxinMascotRoute,
+        builder: (context, state) => const VoxinMascotScreen(),
+      ),
 
       GoRoute(
         path: kidsZoneRoute,
@@ -574,11 +683,16 @@ class AppRouter {
       GoRoute(
         path: kidsLevelMapRoute,
         builder: (context, state) {
-          final extra = state.extra as Map<String, dynamic>;
+          final gameType = state.pathParameters['gameType'] ?? '';
+          final extra = state.extra as Map<String, dynamic>?;
+
           return KidsLevelMap(
-            gameType: extra['gameType'] as String,
-            title: extra['title'] as String,
-            primaryColor: extra['primaryColor'] as Color,
+            gameType: gameType.isEmpty
+                ? (extra?['gameType'] as String? ?? 'alphabet')
+                : gameType,
+            title: extra?['title'] as String? ?? getKidsGameTitle(gameType),
+            primaryColor:
+                extra?['primaryColor'] as Color? ?? getKidsGameColor(gameType),
           );
         },
       ),
@@ -586,140 +700,140 @@ class AppRouter {
         path: kidsAlphabetRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: AlphabetGameScreen(level: state.extra as int),
+          child: AlphabetGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsNumbersRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: NumbersGameScreen(level: state.extra as int),
+          child: NumbersGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsColorsRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: ColorsGameScreen(level: state.extra as int),
+          child: ColorsGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsShapesRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: ShapesGameScreen(level: state.extra as int),
+          child: ShapesGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsAnimalsRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: AnimalsGameScreen(level: state.extra as int),
+          child: AnimalsGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsFruitsRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: FruitsGameScreen(level: state.extra as int),
+          child: FruitsGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsFamilyRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: FamilyGameScreen(level: state.extra as int),
+          child: FamilyGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsSchoolRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: SchoolGameScreen(level: state.extra as int),
+          child: SchoolGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsVerbsRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: VerbsGameScreen(level: state.extra as int),
+          child: VerbsGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsRoutineRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: RoutineGameScreen(level: state.extra as int),
+          child: RoutineGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsEmotionsRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: EmotionsGameScreen(level: state.extra as int),
+          child: EmotionsGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsPrepositionsRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: PrepositionsGameScreen(level: state.extra as int),
+          child: PrepositionsGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsPhonicsRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: PhonicsGameScreen(level: state.extra as int),
+          child: PhonicsGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsTimeRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: TimeGameScreen(level: state.extra as int),
+          child: TimeGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsOppositesRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: OppositesGameScreen(level: state.extra as int),
+          child: OppositesGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsDayNightRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: DayNightGameScreen(level: state.extra as int),
+          child: DayNightGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsNatureRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: NatureGameScreen(level: state.extra as int),
+          child: NatureGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsHomeRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: HomeGameScreen(level: state.extra as int),
+          child: HomeGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsFoodRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: FoodGameScreen(level: state.extra as int),
+          child: FoodGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
         path: kidsTransportRoute,
         builder: (context, state) => BlocProvider(
           create: (context) => di.sl<KidsBloc>(),
-          child: TransportGameScreen(level: state.extra as int),
+          child: TransportGameScreen(level: state.extra as int? ?? 1),
         ),
       ),
       GoRoute(
@@ -916,6 +1030,9 @@ class AppRouter {
               }
               if (gameType == 'writingEmail') {
                 return const we_map.WritingEmailMap();
+              }
+              if (gameType == 'essayDrafting') {
+                return const ed_map.EssayDraftingMap();
               }
               return PlaceholderGameMap(
                 gameType: gameType ?? 'writingProject',
@@ -1249,6 +1366,8 @@ class AppRouter {
         return cw_game.CorrectionWritingScreen(level: level);
       case GameSubtype.writingEmail:
         return we_game.WritingEmailScreen(level: level);
+      case GameSubtype.essayDrafting:
+        return ed_game.EssayDraftingScreen(level: level);
       default:
         return sb_game.SentenceBuilderScreen(level: level);
     }

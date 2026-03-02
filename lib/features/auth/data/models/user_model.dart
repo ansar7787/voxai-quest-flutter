@@ -34,6 +34,10 @@ class UserModel extends UserEntity {
     super.kidsEquippedSticker,
     super.kidsOwnedAccessories,
     super.kidsEquippedAccessory,
+    super.voxinMascot,
+    super.voxinEquippedAccessory,
+    super.voxinOwnedAccessories = const [],
+    super.voxinOwnedMascots = const ['voxin_prime'],
     super.claimedStreakMilestones,
     super.claimedLevelMilestones,
     super.coinHistory,
@@ -187,6 +191,14 @@ class UserModel extends UserEntity {
           ? List<Map<String, dynamic>>.from(map['coinHistory'])
           : const [],
       hasPermanentXPBoost: map['hasPermanentXPBoost'] ?? false,
+      voxinMascot: map['voxinMascot'],
+      voxinEquippedAccessory: map['voxinEquippedAccessory'],
+      voxinOwnedAccessories: map['voxinOwnedAccessories'] != null
+          ? List<String>.from(map['voxinOwnedAccessories'])
+          : const [],
+      voxinOwnedMascots: map['voxinOwnedMascots'] != null
+          ? List<String>.from(map['voxinOwnedMascots'])
+          : const ['voxin_prime'],
     );
   }
 
@@ -225,6 +237,10 @@ class UserModel extends UserEntity {
     int? totalExp,
     Map<String, int>? unlockedLevels,
     bool? hasPermanentXPBoost,
+    String? voxinMascot,
+    String? voxinEquippedAccessory,
+    List<String>? voxinOwnedAccessories,
+    List<String>? voxinOwnedMascots,
   }) {
     return UserModel(
       id: id,
@@ -265,6 +281,12 @@ class UserModel extends UserEntity {
       totalExp: totalExp ?? this.totalExp,
       unlockedLevels: unlockedLevels ?? this.unlockedLevels,
       hasPermanentXPBoost: hasPermanentXPBoost ?? this.hasPermanentXPBoost,
+      voxinMascot: voxinMascot ?? this.voxinMascot,
+      voxinEquippedAccessory:
+          voxinEquippedAccessory ?? this.voxinEquippedAccessory,
+      voxinOwnedAccessories:
+          voxinOwnedAccessories ?? this.voxinOwnedAccessories,
+      voxinOwnedMascots: voxinOwnedMascots ?? this.voxinOwnedMascots,
     );
   }
 
@@ -314,6 +336,10 @@ class UserModel extends UserEntity {
       'claimedLevelMilestones': claimedLevelMilestones,
       'coinHistory': coinHistory,
       'hasPermanentXPBoost': hasPermanentXPBoost,
+      'voxinMascot': voxinMascot,
+      'voxinEquippedAccessory': voxinEquippedAccessory,
+      'voxinOwnedAccessories': voxinOwnedAccessories,
+      'voxinOwnedMascots': voxinOwnedMascots,
     };
   }
 

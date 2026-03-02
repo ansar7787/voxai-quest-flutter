@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:voxai_quest/core/data/services/asset_quest_service.dart';
 import 'package:voxai_quest/core/error/exceptions.dart';
 import 'package:voxai_quest/core/domain/entities/game_quest.dart';
 import 'package:voxai_quest/features/reading/data/models/reading_quest_model.dart';
@@ -12,8 +13,9 @@ abstract class ReadingRemoteDataSource {
 
 class ReadingRemoteDataSourceImpl implements ReadingRemoteDataSource {
   final FirebaseFirestore firestore;
+  final AssetQuestService assetQuestService;
 
-  ReadingRemoteDataSourceImpl(this.firestore);
+  ReadingRemoteDataSourceImpl(this.firestore, this.assetQuestService);
 
   @override
   Future<List<ReadingQuestModel>> getReadingQuest({
@@ -21,7 +23,16 @@ class ReadingRemoteDataSourceImpl implements ReadingRemoteDataSource {
     required int level,
   }) async {
     try {
-      // New structure: quests/{gameType}/levels/{level}
+      // 1. Try to load from Local Assets (Free & Fast)
+      final localData = await assetQuestService.getQuests(gameType.name, level);
+      if (localData.isNotEmpty) {
+        return localData.map((q) {
+          final questMap = q;
+          return ReadingQuestModel.fromJson(questMap, questMap['id'] ?? '');
+        }).toList();
+      }
+
+      // 2. Fallback to Firestore (Cloud)
       var doc = await firestore
           .collection('quests')
           .doc(gameType.name)
@@ -57,8 +68,6 @@ class ReadingRemoteDataSourceImpl implements ReadingRemoteDataSource {
           final questsList = data['quests'] as List;
           return questsList.map((q) {
             final questMap = q as Map<String, dynamic>;
-            // Ensure ID and other fields are consistent if needed,
-            // though they should be in the map from generation
             questMap['id'] ??= doc.id;
             return ReadingQuestModel.fromJson(
               questMap,

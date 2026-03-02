@@ -963,4 +963,20 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> awardKidsCoins(int amount) async {
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user != null) {
+        await _firestore.collection('users').doc(user.uid).update({
+          'kidsCoins': FieldValue.increment(amount),
+        });
+        return const Right(null);
+      }
+      return Left(AuthFailure('User not logged in'));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

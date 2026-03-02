@@ -51,6 +51,8 @@ class GameContentGenerator {
         return 'Participate in the conversation and choose your responses carefully.';
       case GameSubtype.audioFillBlanks:
         return 'Listen to the audio and fill in the missing words in the transcript.';
+      case GameSubtype.essayDrafting:
+        return 'Write a structured essay based on the provided topic, following the outline.';
       default:
         return 'Complete the challenge to improve your English skills.';
     }
@@ -156,6 +158,17 @@ class GameContentGenerator {
           'prefix': 'In my free time, I like to',
           'suffix': 'to relax.',
           'placeholder': 'read books',
+        };
+      case GameSubtype.essayDrafting:
+        return {
+          'topic': 'The Impact of Technology on Education',
+          'outline': [
+            'Introduction',
+            'Body Paragraph 1: Accessibility',
+            'Body Paragraph 2: Engagement',
+            'Conclusion',
+          ],
+          'minWords': 200,
         };
 
       // 5. Grammar

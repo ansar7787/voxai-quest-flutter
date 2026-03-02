@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,21 +10,18 @@ import 'package:voxai_quest/core/presentation/pages/quest_unavailable_screen.dar
 import 'package:voxai_quest/core/presentation/themes/level_theme_helper.dart';
 import 'package:voxai_quest/core/presentation/widgets/accent/harmonic_waves.dart';
 import 'package:voxai_quest/core/presentation/widgets/game_confetti.dart';
-import 'package:voxai_quest/core/presentation/widgets/glass_tile.dart';
 import 'package:voxai_quest/core/presentation/widgets/mesh_gradient_background.dart';
 import 'package:voxai_quest/core/presentation/widgets/modern_game_dialog.dart';
-import 'package:voxai_quest/core/presentation/widgets/modern_game_result_overlay.dart';
 import 'package:voxai_quest/core/presentation/widgets/scale_button.dart';
 import 'package:voxai_quest/core/presentation/widgets/shimmer_loading.dart';
-import 'package:voxai_quest/core/presentation/widgets/speaking/sonic_mic_button.dart';
 import 'package:voxai_quest/core/utils/ad_service.dart';
 import 'package:voxai_quest/core/utils/haptic_service.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart' as di;
 import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/core/utils/speech_service.dart';
 import 'package:voxai_quest/features/accent/presentation/bloc/accent_bloc.dart';
+import 'package:confetti/confetti.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
-
 
 class WordLinkingScreen extends StatefulWidget {
   final int level;
@@ -34,103 +32,101 @@ class WordLinkingScreen extends StatefulWidget {
 }
 
 class _WordLinkingScreenState extends State<WordLinkingScreen> {
-  final _speechService = di.sl<SpeechService>();
   final _hapticService = di.sl<HapticService>();
   final _soundService = di.sl<SoundService>();
-  bool _isListening = false;
+  final _ttsService = di.sl<SpeechService>();
   bool _isPlaying = false;
-  String _recognizedText = '';
-  bool _hasAnalyzed = false;
   bool _showConfetti = false;
+
+  List<String> _words = [];
+  final Set<int> _linkedIndices = {};
+  bool _hasSubmitted = false;
+
+  late ConfettiController _confettiController;
+  AccentLoaded? _lastLoadedState;
 
   @override
   void initState() {
     super.initState();
-    _speechService.initializeStt();
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 3),
+    );
     context.read<AccentBloc>().add(
       FetchAccentQuests(gameType: GameSubtype.wordLinking, level: widget.level),
     );
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
   }
 
   void _playAudio(String text) async {
     if (_isPlaying) return;
     setState(() => _isPlaying = true);
     _hapticService.light();
-    await _speechService.speak(text);
+    // Removed _soundService.playClick() to prevent double sound
+    await _ttsService.speak(text);
     if (mounted) setState(() => _isPlaying = false);
   }
 
-  void _startListening() {
-    _hapticService.success();
-    setState(() {
-      _isListening = true;
-      _recognizedText = '';
-      _hasAnalyzed = false;
-    });
-
-    _speechService.listen(
-      onResult: (result) {
-        setState(() {
-          _recognizedText = result;
-        });
-      },
-      onDone: () {
-        if (mounted) {
-          setState(() => _isListening = false);
-          _analyzeSpeech();
-        }
-      },
-    );
-  }
-
-  void _stopListening() async {
-    _hapticService.light();
-    await _speechService.stop();
-    setState(() => _isListening = false);
-    _analyzeSpeech();
-  }
-
-  void _analyzeSpeech() {
-    if (_hasAnalyzed || _recognizedText.isEmpty) return;
-    _hasAnalyzed = true;
-
-    final state = context.read<AccentBloc>().state;
-    if (state is! AccentLoaded) return;
-
-    final targetText = (state.currentQuest.word ?? "").toLowerCase().replaceAll(
-      RegExp(r'[^\w\s]'),
-      '',
-    );
-    final utteredText = _recognizedText.toLowerCase().replaceAll(
-      RegExp(r'[^\w\s]'),
-      '',
-    );
-
-    // Allowing 80% similarity for linked words
-    bool isCorrect =
-        utteredText == targetText ||
-        utteredText.contains(targetText) ||
-        (targetText.contains(utteredText) &&
-            utteredText.length > targetText.length * 0.8);
-
-    context.read<AccentBloc>().add(SubmitAnswer(isCorrect));
-  }
-
-  void _useHint() {
+  void _useHint(AccentLoaded state) {
+    if (state.hintUsed || _hasSubmitted) {
+      _hapticService.error();
+      return;
+    }
     _hapticService.selection();
+    _soundService.playHint();
+
+    int missingLink = -1;
+    for (int i = 0; i < _words.length - 1; i++) {
+      if (!_linkedIndices.contains(i)) {
+        missingLink = i;
+        break;
+      }
+    }
+
+    if (missingLink != -1) {
+      setState(() {
+        _linkedIndices.add(missingLink);
+      });
+      _checkCompletion();
+    }
+
     context.read<AccentBloc>().add(AccentHintUsed());
+  }
+
+  void _checkCompletion() {
+    if (_linkedIndices.length == _words.length - 1 && !_hasSubmitted) {
+      setState(() => _hasSubmitted = true);
+      _hapticService.success();
+      _soundService.playCorrect();
+      context.read<AccentBloc>().add(SubmitAnswer(true));
+
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        if (mounted) context.read<AccentBloc>().add(NextQuestion());
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('accent', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'accent',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: isDark
+          ? const Color(0xFF020617)
+          : const Color(0xFFF8FAFC),
       body: BlocConsumer<AccentBloc, AccentState>(
         listener: (context, state) {
           if (state is AccentGameComplete) {
+            _confettiController.play();
             setState(() => _showConfetti = true);
             final isPremium =
                 context.read<AuthBloc>().state.user?.isPremium ?? false;
@@ -144,31 +140,61 @@ class _WordLinkingScreenState extends State<WordLinkingScreen> {
             );
           } else if (state is AccentGameOver) {
             _showGameOverDialog(context);
+          } else if (state is AccentLoaded) {
+            if (_lastLoadedState?.currentQuest != state.currentQuest) {
+              _lastLoadedState = state;
+              _words = (state.currentQuest.word ?? "")
+                  .split(' ')
+                  .where((w) => w.isNotEmpty)
+                  .toList();
+              _linkedIndices.clear();
+              _hasSubmitted = false;
+            }
           }
         },
         builder: (context, state) {
-          if (state is AccentLoading || state is AccentInitial) {
+          if (state is AccentLoading ||
+              (state is AccentInitial && _lastLoadedState == null)) {
             return const GameShimmerLoading();
           }
-          if (state is AccentLoaded) {
-            return Stack(
-              children: [
-                MeshGradientBackground(colors: theme.backgroundColors),
-                HarmonicWaves(color: theme.primaryColor),
-                _buildGameUI(context, state, isDark, theme),
-              ],
-            );
-          }
+
           if (state is AccentError) {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<AccentBloc>().add(
-                
-      FetchAccentQuests(
+                FetchAccentQuests(
                   gameType: GameSubtype.wordLinking,
                   level: widget.level,
                 ),
               ),
+            );
+          }
+
+          final displayState = state is AccentLoaded ? state : _lastLoadedState;
+
+          if (displayState != null) {
+            return Stack(
+              children: [
+                MeshGradientBackground(colors: theme.backgroundColors),
+                HarmonicWaves(color: theme.primaryColor, height: 100),
+                _buildGameUI(context, displayState, isDark, theme),
+                if (_showConfetti)
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: ConfettiWidget(
+                      confettiController: _confettiController,
+                      blastDirectionality: BlastDirectionality.explosive,
+                      shouldLoop: false,
+                      colors: const [
+                        Colors.amber,
+                        Colors.blue,
+                        Colors.pink,
+                        Colors.orange,
+                        Colors.purple,
+                      ],
+                    ),
+                  ),
+              ],
             );
           }
           return const SizedBox.shrink();
@@ -190,50 +216,10 @@ class _WordLinkingScreenState extends State<WordLinkingScreen> {
       children: [
         Column(
           children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(20.w, 60.h, 20.w, 10.h),
-              child: Row(
-                children: [
-                  ScaleButton(
-                    onTap: () => context.pop(),
-                    child: Container(
-                      padding: EdgeInsets.all(10.r),
-                      decoration: BoxDecoration(
-                        color: isDark ? Colors.white10 : Colors.black12,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.close_rounded,
-                        size: 24.r,
-                        color: isDark ? Colors.white70 : Colors.black54,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 12.w),
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.r),
-                      child: LinearProgressIndicator(
-                        value: progress,
-                        minHeight: 14.h,
-                        backgroundColor: isDark
-                            ? Colors.white10
-                            : Colors.black.withValues(alpha: 0.05),
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          theme.primaryColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 12.w),
-                  _buildHintButton(state.hintUsed, theme.primaryColor),
-                  SizedBox(width: 12.w),
-                  _buildHeartCount(state.livesRemaining),
-                ],
-              ),
-            ),
+            _buildHeader(context, state, progress, theme, isDark),
             Expanded(
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: Column(
                   children: [
@@ -242,161 +228,303 @@ class _WordLinkingScreenState extends State<WordLinkingScreen> {
                       "WORD LINKING",
                       style: GoogleFonts.outfit(
                         fontSize: 12.sp,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w900,
                         letterSpacing: 4,
                         color: theme.primaryColor,
                       ),
                     ),
                     SizedBox(height: 8.h),
                     Text(
-                      "Connect the sounds",
-                      style: GoogleFonts.outfit(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.w900,
-                        color: isDark ? Colors.white : const Color(0xFF1E293B),
-                      ),
+                      quest.instruction,
                       textAlign: TextAlign.center,
-                    ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2),
+                      style: GoogleFonts.outfit(
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.w900,
+                        color: isDark ? Colors.white : const Color(0xFF0F172A),
+                      ),
+                    ).animate().fadeIn().slideY(begin: 0.1),
                     SizedBox(height: 40.h),
 
-                    // Linking Visualization Card
-                    GlassTile(
-                      padding: EdgeInsets.all(40.r),
-                      borderRadius: BorderRadius.circular(40.r),
-                      borderColor: theme.primaryColor.withValues(alpha: 0.3),
-                      child: Column(
-                        children: [
-                          ScaleButton(
-                            onTap: () => _playAudio(quest.word ?? ""),
-                            child: Container(
-                              padding: EdgeInsets.all(20.r),
-                              decoration: BoxDecoration(
-                                color: theme.primaryColor.withValues(
-                                  alpha: 0.1,
-                                ),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                _isPlaying
-                                    ? Icons.graphic_eq_rounded
-                                    : Icons.play_arrow_rounded,
-                                color: theme.primaryColor,
-                                size: 40.r,
-                              ),
+                    // Playback Button
+                    ScaleButton(
+                      onTap: () => _playAudio(quest.word ?? ""),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 24.w,
+                          vertical: 16.h,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              theme.primaryColor.withValues(alpha: 0.9),
+                              theme.primaryColor,
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(30.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: theme.primaryColor.withValues(alpha: 0.3),
+                              blurRadius: 12,
+                              offset: const Offset(0, 6),
                             ),
-                          ),
-                          SizedBox(height: 32.h),
-                          _buildLinkedText(
-                            quest.word ?? "Pick it up",
-                            isDark,
-                            theme.primaryColor,
-                          ),
-                          if (quest.phonetic != null) ...[
-                            SizedBox(height: 16.h),
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (_isPlaying)
+                              const HarmonicWaves(
+                                color: Colors.white,
+                                height: 30,
+                              ).animate().fadeIn()
+                            else
+                              Icon(
+                                Icons.volume_up_rounded,
+                                color: Colors.white,
+                                size: 28.r,
+                              ),
+                            SizedBox(width: 12.w),
                             Text(
-                              "Pronounced as: ${quest.phonetic}",
+                              "LISTEN",
                               style: GoogleFonts.outfit(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600,
-                                color: theme.primaryColor.withValues(
-                                  alpha: 0.7,
-                                ),
-                                fontStyle: FontStyle.italic,
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                letterSpacing: 2,
                               ),
                             ),
                           ],
-                        ],
+                        ),
                       ),
                     ).animate().fadeIn(delay: 400.ms).scale(),
 
-                    SizedBox(height: 48.h),
-                    if (_recognizedText.isNotEmpty)
-                      GlassTile(
-                        padding: EdgeInsets.all(20.r),
-                        color: theme.primaryColor.withValues(alpha: 0.1),
-                        child: Text(
-                          _recognizedText,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.outfit(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w800,
-                            color: theme.primaryColor,
-                          ),
+                    if (quest.phonetic != null) ...[
+                      SizedBox(height: 20.h),
+                      Text(
+                        "Pronounced as: ${quest.phonetic}",
+                        style: GoogleFonts.outfit(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          color: isDark ? Colors.white60 : Colors.black54,
+                          fontStyle: FontStyle.italic,
                         ),
-                      ).animate().fadeIn(),
-                    SizedBox(height: 40.h),
-                    if (state.lastAnswerCorrect == null)
-                      SonicMicButton(
-                        isListening: _isListening,
-                        onStart: _startListening,
-                        onStop: _stopListening,
-                        primaryColor: theme.primaryColor,
                       ),
-                    SizedBox(height: 16.h),
-                    Text(
-                      _isListening ? "RECORDING..." : "PRESS & HOLD TO SPEAK",
-                      style: GoogleFonts.outfit(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w700,
-                        color: isDark ? Colors.white38 : Colors.black38,
-                        letterSpacing: 1,
-                      ),
-                    ),
+                    ],
+
                     SizedBox(height: 60.h),
+
+                    // Magnet Connect Play Area
+                    if (state.lastAnswerCorrect == null)
+                      _buildMagnetPlayArea(isDark, theme)
+                    else
+                      SizedBox(height: 120.h),
+
+                    SizedBox(height: 40.h),
                   ],
                 ),
               ),
             ),
           ],
         ),
-        if (state.lastAnswerCorrect != null)
-          ModernGameResultOverlay(
-            isCorrect: state.lastAnswerCorrect!,
-            title: state.lastAnswerCorrect!
-                ? "CONNECTED FLUENCY!"
-                : "TRY LINKING THEM!",
-            subtitle: "The sounds flow together.",
-            onContinue: () => context.read<AccentBloc>().add(NextQuestion()),
-            primaryColor: theme.primaryColor,
-          ),
         if (_showConfetti) const GameConfetti(),
       ],
     );
   }
 
-  Widget _buildLinkedText(String text, bool isDark, Color primaryColor) {
-    // Assuming linked words are marked with '-' or we just show them linked in UI
-    final words = text.split(' ');
-    return Wrap(
-      alignment: WrapAlignment.center,
-      spacing: 8.w,
-      runSpacing: 16.h,
-      children: List.generate(words.length, (index) {
-        final word = words[index];
-        final isLast = index == words.length - 1;
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              word,
-              style: GoogleFonts.outfit(
-                fontSize: 28.sp,
-                fontWeight: FontWeight.w900,
-                color: isDark ? Colors.white : const Color(0xFF1E293B),
+  Widget _buildHeader(
+    BuildContext context,
+    AccentLoaded state,
+    double progress,
+    ThemeResult theme,
+    bool isDark,
+  ) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(20.w, 60.h, 20.w, 10.h),
+      child: Row(
+        children: [
+          ScaleButton(
+            onTap: () => context.pop(),
+            child: Container(
+              padding: EdgeInsets.all(10.r),
+              decoration: BoxDecoration(
+                color: isDark ? Colors.white10 : Colors.black12,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.close_rounded,
+                size: 24.r,
+                color: isDark ? Colors.white70 : Colors.black54,
               ),
             ),
-            if (!isLast)
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.w),
-                child: Icon(
-                  Icons.link_rounded,
-                  color: primaryColor.withValues(alpha: 0.5),
-                  size: 20.r,
-                ).animate(onPlay: (c) => c.repeat()).shimmer(),
+          ),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.r),
+              child: LinearProgressIndicator(
+                value: progress,
+                minHeight: 14.h,
+                backgroundColor: isDark
+                    ? Colors.white10
+                    : Colors.black.withValues(alpha: 0.05),
+                valueColor: AlwaysStoppedAnimation<Color>(theme.primaryColor),
               ),
+            ),
+          ),
+          SizedBox(width: 12.w),
+          if (!state.hintUsed) ...[
+            _buildHintButton(state, theme.primaryColor),
+            SizedBox(width: 12.w),
           ],
-        );
+          _buildHeartCount(state.livesRemaining),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMagnetPlayArea(bool isDark, ThemeResult theme) {
+    if (_words.length <= 1) {
+      return Center(
+        child: ScaleButton(
+          onTap: () {
+            setState(() => _hasSubmitted = true);
+            context.read<AccentBloc>().add(SubmitAnswer(true));
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
+            decoration: BoxDecoration(
+              color: theme.primaryColor,
+              borderRadius: BorderRadius.circular(24.r),
+            ),
+            child: Text(
+              "LINK SOUNDS",
+              style: GoogleFonts.outfit(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 12.w,
+      runSpacing: 24.h,
+      children: List.generate(_words.length * 2 - 1, (i) {
+        if (i.isEven) {
+          final wordIndex = i ~/ 2;
+          return _buildMagnetWord(
+            wordIndex,
+            _words[wordIndex],
+            isDark,
+            theme.primaryColor,
+          );
+        } else {
+          final linkIndex = i ~/ 2;
+          final isLinked = _linkedIndices.contains(linkIndex);
+          return isLinked
+              ? Icon(
+                  Icons.link_rounded,
+                  color: theme.primaryColor,
+                  size: 32.r,
+                ).animate().scale(curve: Curves.elasticOut)
+              : SizedBox(width: 8.w); // Drop target space
+        }
       }),
+    );
+  }
+
+  Widget _buildMagnetWord(
+    int index,
+    String word,
+    bool isDark,
+    Color primaryColor,
+  ) {
+    return DragTarget<int>(
+      onAcceptWithDetails: (details) {
+        if (_hasSubmitted) return;
+        final draggedIndex = details.data;
+        if (draggedIndex == index - 1 || draggedIndex == index + 1) {
+          final linkIndex = math.min(index, draggedIndex);
+          if (!_linkedIndices.contains(linkIndex)) {
+            setState(() {
+              _linkedIndices.add(linkIndex);
+            });
+            _hapticService.success();
+            _soundService.playCorrect();
+            _checkCompletion();
+          }
+        }
+      },
+      builder: (context, candidateData, rejectedData) {
+        final isHovered = candidateData.isNotEmpty;
+
+        return Draggable<int>(
+          data: index,
+          feedback: Material(
+            color: Colors.transparent,
+            child: _buildWordCard(word, isDark, primaryColor, isDragging: true),
+          ),
+          childWhenDragging: Opacity(
+            opacity: 0.4,
+            child: _buildWordCard(word, isDark, primaryColor),
+          ),
+          child: _buildWordCard(
+            word,
+            isDark,
+            primaryColor,
+            isHovered: isHovered,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildWordCard(
+    String word,
+    bool isDark,
+    Color primaryColor, {
+    bool isDragging = false,
+    bool isHovered = false,
+  }) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+      decoration: BoxDecoration(
+        color: isHovered
+            ? primaryColor.withValues(alpha: 0.1)
+            : (isDark ? Colors.white12 : Colors.black.withValues(alpha: 0.05)),
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(
+          color: isDragging || isHovered
+              ? primaryColor
+              : (isDark ? Colors.white24 : Colors.black12),
+          width: 2,
+        ),
+        boxShadow: [
+          if (isDragging || isHovered)
+            BoxShadow(
+              color: primaryColor.withValues(alpha: 0.3),
+              blurRadius: 12,
+              spreadRadius: 2,
+            ),
+        ],
+      ),
+      child: Text(
+        word,
+        style: GoogleFonts.outfit(
+          fontSize: 24.sp,
+          fontWeight: FontWeight.w800,
+          color: isDragging || (isHovered && isDark)
+              ? Colors.white
+              : (isHovered && !isDark)
+              ? Colors.black87
+              : (isDark ? Colors.white : Colors.black87),
+        ),
+      ),
     );
   }
 
@@ -425,21 +553,49 @@ class _WordLinkingScreenState extends State<WordLinkingScreen> {
     );
   }
 
-  Widget _buildHintButton(bool used, Color primaryColor) {
+  Widget _buildHintButton(AccentLoaded state, Color primaryColor) {
+    bool disabled = state.hintUsed;
     return ScaleButton(
-      onTap: used ? null : _useHint,
+      onTap: disabled ? null : () => _useHint(state),
       child: Container(
-        padding: EdgeInsets.all(8.r),
+        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
         decoration: BoxDecoration(
-          color: used
+          color: disabled
               ? Colors.grey.withValues(alpha: 0.1)
               : primaryColor.withValues(alpha: 0.1),
-          shape: BoxShape.circle,
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+            color: disabled
+                ? Colors.grey.withValues(alpha: 0.3)
+                : primaryColor.withValues(alpha: 0.5),
+            width: 1,
+          ),
         ),
-        child: Icon(
-          Icons.lightbulb_rounded,
-          color: used ? Colors.grey : primaryColor,
-          size: 24.r,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              disabled
+                  ? Icons.lightbulb_outline_rounded
+                  : Icons.lightbulb_rounded,
+              color: disabled ? Colors.grey : primaryColor,
+              size: 20.r,
+            ),
+            SizedBox(width: 6.w),
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, authState) {
+                final hintCount = authState.user?.hintCount ?? 0;
+                return Text(
+                  "$hintCount",
+                  style: GoogleFonts.outfit(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w900,
+                    color: disabled ? Colors.grey : primaryColor,
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -476,7 +632,9 @@ class _WordLinkingScreenState extends State<WordLinkingScreen> {
         isSuccess: false,
         onButtonPressed: () {
           Navigator.pop(c);
-          context.read<AccentBloc>().add(RestoreLife());
+          if (mounted) {
+            context.read<AccentBloc>().add(RestoreLife());
+          }
         },
         secondaryButtonText: 'QUIT',
         onSecondaryPressed: () {

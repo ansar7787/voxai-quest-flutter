@@ -68,6 +68,8 @@ class PromptStrategy {
         return '{"id": "w_corr_L{L}_{I}", "instruction": "Correct the text.", "type": "writing", "subtype": "correctionWriting", "difficulty": {L}, "text": "{BROKEN}"}';
       case GameSubtype.writingEmail:
         return '{"id": "w_em_L{L}_{I}", "instruction": "Write an email.", "type": "writing", "subtype": "writingEmail", "difficulty": {L}, "recipient": "{TO}", "context": "{INFO}"}';
+      case GameSubtype.essayDrafting:
+        return '{"id": "ed_L{L}_{I}", "instruction": "Draft an essay outline.", "type": "writing", "subtype": "essayDrafting", "difficulty": {L}, "topic": "{TOPIC}", "guidelines": "{PROMPTS}"}';
 
       // Category: Grammar (10)
       case GameSubtype.grammarQuest:

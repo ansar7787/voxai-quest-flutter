@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "979122525797",
+    "project_id": "voxai-quest",
+    "storage_bucket": "voxai-quest.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:979122525797:android:a44a492d7a6fec854d988c",
+        "android_client_info": {
+          "package_name": "com.voxai.quest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "979122525797-mtsk50uopobsq7lpm0pq2bajceea878e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.voxai.quest",
+            "certificate_hash": "f16bdc3228f6edd981a51492cd46894f56af0f8f"
+          }
+        },
+        {
+          "client_id": "979122525797-4g4asj12bf88u15l4vreq4i3r5c6mv74.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC67mjKunDsrot3Uh6Tg9XjNn1hhFv_5Co"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "979122525797-4g4asj12bf88u15l4vreq4i3r5c6mv74.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "979122525797-c6id3b5rvl068de8e70rh6ovo5sp84vd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.voxaiQuest"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

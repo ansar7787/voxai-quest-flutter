@@ -9,7 +9,6 @@ class GrammarQuest extends GameQuest {
   final List<int>? correctOrder;
   final String? explanation;
   final String? prompt;
-  final String? textToSpeak;
   final String? verb;
   final String? word;
   final String? targetTense;
@@ -37,7 +36,7 @@ class GrammarQuest extends GameQuest {
     this.correctOrder,
     this.explanation,
     this.prompt,
-    this.textToSpeak,
+    super.textToSpeak,
     this.verb,
     this.word,
     this.targetTense,

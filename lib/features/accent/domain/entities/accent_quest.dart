@@ -4,7 +4,6 @@ class AccentQuest extends GameQuest {
   final String? word;
   final String? phoneticHint;
   final String? targetWord;
-  final String? textToSpeak;
   final String? prompt;
   final String? sampleAnswer;
   final String? explanation;
@@ -32,7 +31,7 @@ class AccentQuest extends GameQuest {
     this.word,
     this.phoneticHint,
     this.targetWord,
-    this.textToSpeak,
+    super.textToSpeak,
     this.prompt,
     this.sampleAnswer,
     this.explanation,
@@ -45,4 +44,21 @@ class AccentQuest extends GameQuest {
   });
 
   String? get phonetic => phoneticHint;
+
+  @override
+  List<Object?> get props => [
+    ...super.props,
+    word,
+    phoneticHint,
+    targetWord,
+    prompt,
+    sampleAnswer,
+    explanation,
+    audioUrl,
+    words,
+    intonationMap,
+    syllables,
+    targetSpeed,
+    pitchPatterns,
+  ];
 }

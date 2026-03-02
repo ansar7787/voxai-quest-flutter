@@ -49,20 +49,40 @@ class SoundService {
     }
   }
 
+  Future<void> playClick() async {
+    if (_isMuted) return;
+    try {
+      if (_player.state == PlayerState.playing) await _player.stop();
+      await _player.setSource(
+        AssetSource('sounds/correct.mp3'),
+      ); // Using correct.mp3 as a generic click for now
+      await _player.resume();
+    } catch (e) {
+      debugPrint('Error playing sound (click): $e');
+    }
+  }
+
+  Future<void> playHint() async {
+    if (_isMuted) return;
+    try {
+      if (_player.state == PlayerState.playing) await _player.stop();
+      await _player.setSource(AssetSource('sounds/hint.mp3'));
+      await _player.resume();
+    } catch (e) {
+      debugPrint('Error playing sound (hint): $e');
+    }
+  }
+
   Future<void> playLevelComplete() async {
     if (_isMuted) return;
     try {
       if (_player.state == PlayerState.playing) await _player.stop();
-      // Try playing level_complete.mp3, fallback to correct.mp3 if fails
-      try {
-        await _player.setSource(AssetSource('sounds/level_complete.mp3'));
-        await _player.resume();
-      } catch (e) {
-        debugPrint('level_complete.mp3 not found, falling back to correct.mp3');
-        await playCorrect();
-      }
+      await _player.setSource(AssetSource('sounds/level_completed.mp3'));
+      await _player.resume();
     } catch (e) {
-      debugPrint('Error playing sound (level_complete): $e');
+      debugPrint('Error playing sound (level_completed): $e');
+      // Fallback
+      await playCorrect();
     }
   }
 }

@@ -3,7 +3,6 @@ import 'package:voxai_quest/core/domain/entities/game_quest.dart';
 class WritingQuest extends GameQuest {
   final String? passage;
   final String? question;
-  final String? textToSpeak;
   final String? missingWord;
   final String? prompt;
   final String? sampleAnswer;
@@ -33,7 +32,7 @@ class WritingQuest extends GameQuest {
     super.hint,
     this.passage,
     this.question,
-    this.textToSpeak,
+    super.textToSpeak,
     this.missingWord,
     this.prompt,
     this.sampleAnswer,

@@ -20,6 +20,9 @@ import 'package:voxai_quest/features/home/presentation/widgets/motivational_quot
 import 'package:voxai_quest/features/home/presentation/widgets/mystery_chest_overlay.dart';
 import 'package:voxai_quest/core/presentation/widgets/ad_reward_card.dart';
 
+import 'package:voxai_quest/features/kids_zone/presentation/widgets/kids_reward_ad_card.dart';
+import 'package:voxai_quest/features/home/presentation/widgets/voxin_mascot_card.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -124,6 +127,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   slivers: [
                     // Adaptive Command Pod
                     SliverToBoxAdapter(child: CommandPod(user: user)),
+
+                    // Voxin Companion (2026 Redesign)
+                    const SliverToBoxAdapter(child: VoxinMascotCard()),
 
                     // Discovery Hub
                     _buildSliverSectionHeader(
@@ -300,6 +306,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           const MotivationalQuote(),
                           SizedBox(height: 48.h),
                           const AdRewardCard(margin: EdgeInsets.zero),
+                          SizedBox(height: 16.h),
+                          const KidsRewardAdCard(),
                           SizedBox(height: 120.h),
                         ]),
                       ),

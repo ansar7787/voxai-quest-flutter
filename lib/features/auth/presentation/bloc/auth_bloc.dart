@@ -131,6 +131,35 @@ class AuthEquipKidsAccessoryRequested extends AuthEvent {
   List<Object?> get props => [accessoryId];
 }
 
+class AuthUpdateVoxinMascotRequested extends AuthEvent {
+  final String mascotId;
+  const AuthUpdateVoxinMascotRequested(this.mascotId);
+  @override
+  List<Object?> get props => [mascotId];
+}
+
+class AuthBuyVoxinAccessoryRequested extends AuthEvent {
+  final String accessoryId;
+  final int cost;
+  const AuthBuyVoxinAccessoryRequested(this.accessoryId, this.cost);
+  @override
+  List<Object?> get props => [accessoryId, cost];
+}
+
+class AuthEquipVoxinAccessoryRequested extends AuthEvent {
+  final String? accessoryId;
+  const AuthEquipVoxinAccessoryRequested(this.accessoryId);
+  @override
+  List<Object?> get props => [accessoryId];
+}
+
+class AuthAddKidsCoinsRequested extends AuthEvent {
+  final int amount;
+  const AuthAddKidsCoinsRequested(this.amount);
+  @override
+  List<Object?> get props => [amount];
+}
+
 class AuthRepairStreakRequested extends AuthEvent {
   final int cost;
   const AuthRepairStreakRequested(this.cost);
@@ -335,12 +364,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthUpdateKidsMascotRequested>(_onUpdateKidsMascotRequested);
     on<AuthBuyKidsAccessoryRequested>(_onBuyKidsAccessoryRequested);
     on<AuthEquipKidsAccessoryRequested>(_onEquipKidsAccessoryRequested);
+    on<AuthAddKidsCoinsRequested>(_onAddKidsCoinsRequested);
     on<AuthRepairStreakRequested>(_onRepairStreakRequested);
     on<AuthPurchaseStreakFreezeRequested>(_onPurchaseStreakFreezeRequested);
     on<AuthActivateDoubleXPRequested>(_onActivateDoubleXPRequested);
     on<AuthClaimStreakMilestoneRequested>(_onClaimStreakMilestoneRequested);
     on<AuthClaimLevelMilestoneRequested>(_onClaimLevelMilestoneRequested);
     on<AuthClaimDailyChestRequested>(_onClaimDailyChestRequested);
+    on<AuthUpdateVoxinMascotRequested>(_onUpdateVoxinMascotRequested);
+    on<AuthBuyVoxinAccessoryRequested>(_onBuyVoxinAccessoryRequested);
+    on<AuthEquipVoxinAccessoryRequested>(_onEquipVoxinAccessoryRequested);
     on<AuthClearPurchaseFeedback>(_onClearPurchaseFeedback);
 
     _userSubscription = _getUserStream().listen(
@@ -682,6 +715,128 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         // Revert on failure
         emit(AuthState.authenticated(currentUser));
       }, (_) => null);
+    }
+  }
+
+  Future<void> _onAddKidsCoinsRequested(
+    AuthAddKidsCoinsRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    if (state.user != null) {
+      final currentUser = state.user!;
+      final updatedUser = currentUser.copyWith(
+        kidsCoins: currentUser.kidsCoins + event.amount,
+      );
+      emit(AuthState.authenticated(updatedUser));
+
+      // We use the same update logic but the repository handles kidsCoins if we pass isKidsGame: true
+      // (Assuming the repository/usecase holds this logic as seen in grep)
+      // For now, let's just use the direct Firestore update if available or a generic update
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.id)
+          .update({'kidsCoins': FieldValue.increment(event.amount)});
+    }
+  }
+
+  Future<void> _onUpdateVoxinMascotRequested(
+    AuthUpdateVoxinMascotRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    if (state.user != null) {
+      final currentUser = state.user!;
+      final updatedUser = currentUser.copyWith(voxinMascot: event.mascotId);
+      final result = await _updateUser(UpdateUserParams(user: updatedUser));
+      result.fold(
+        (failure) => emit(
+          state.copyWith(
+            lastPurchaseType: 'voxin_mascot',
+            lastPurchaseSuccess: false,
+            message: failure.message,
+          ),
+        ),
+        (_) => emit(
+          AuthState.authenticated(
+            updatedUser,
+            lastPurchaseType: 'voxin_mascot',
+            lastPurchaseSuccess: true,
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> _onBuyVoxinAccessoryRequested(
+    AuthBuyVoxinAccessoryRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    if (state.user != null) {
+      final currentUser = state.user!;
+      if (currentUser.coins < event.cost) return;
+
+      final updatedOwned = List<String>.from(currentUser.voxinOwnedAccessories);
+      if (!updatedOwned.contains(event.accessoryId)) {
+        updatedOwned.add(event.accessoryId);
+      }
+
+      final newHistory = _addCoinHistoryEntry(
+        currentUser.coinHistory,
+        title: 'Bought Voxin Accessory',
+        amount: -event.cost,
+        isEarned: false,
+      );
+
+      final updatedUser = currentUser.copyWith(
+        coins: currentUser.coins - event.cost,
+        voxinOwnedAccessories: updatedOwned,
+        coinHistory: newHistory,
+      );
+      final result = await _updateUser(UpdateUserParams(user: updatedUser));
+      result.fold(
+        (failure) => emit(
+          state.copyWith(
+            lastPurchaseType: 'voxin_accessory',
+            lastPurchaseSuccess: false,
+            message: failure.message,
+          ),
+        ),
+        (_) => emit(
+          AuthState.authenticated(
+            updatedUser,
+            lastPurchaseType: 'voxin_accessory',
+            lastPurchaseSuccess: true,
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> _onEquipVoxinAccessoryRequested(
+    AuthEquipVoxinAccessoryRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    if (state.user != null) {
+      final currentUser = state.user!;
+      final updatedUser = currentUser.copyWith(
+        voxinEquippedAccessory: event.accessoryId,
+      );
+      final result = await _updateUser(UpdateUserParams(user: updatedUser));
+      result.fold(
+        (failure) => emit(
+          state.copyWith(
+            lastPurchaseType: 'voxin_equip',
+            lastPurchaseSuccess: false,
+            message: failure.message,
+          ),
+        ),
+        (_) => emit(
+          AuthState.authenticated(
+            updatedUser,
+            lastPurchaseType: 'voxin_equip',
+            lastPurchaseSuccess: true,
+          ),
+        ),
+      );
     }
   }
 

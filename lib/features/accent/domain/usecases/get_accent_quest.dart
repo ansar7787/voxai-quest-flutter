@@ -1,11 +1,27 @@
+import 'package:dartz/dartz.dart';
+import '../../../../core/error/failures.dart';
+import '../../../../core/domain/entities/game_quest.dart';
+import '../repositories/accent_repository.dart';
+import '../entities/accent_quest.dart';
+
 class GetAccentQuest {
-  final dynamic arg1;
-  final dynamic arg2;
-  final dynamic arg3;
-  GetAccentQuest([this.arg1, this.arg2, this.arg3]);
-  Future<dynamic> call(dynamic params) async { return null; }
+  final AccentRepository repository;
+
+  GetAccentQuest(this.repository);
+
+  Future<Either<Failure, List<AccentQuest>>> call(
+    GetAccentQuestParams params,
+  ) async {
+    return await repository.getAccentQuests(
+      gameType: params.gameType,
+      level: params.level,
+    );
+  }
 }
+
 class GetAccentQuestParams {
-  final dynamic user;
-  const GetAccentQuestParams({this.user});
+  final GameSubtype gameType;
+  final int level;
+
+  const GetAccentQuestParams({required this.gameType, required this.level});
 }

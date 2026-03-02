@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:voxai_quest/core/data/services/asset_quest_service.dart';
 import 'package:voxai_quest/core/error/exceptions.dart';
 import 'package:voxai_quest/core/domain/entities/game_quest.dart';
 import 'package:voxai_quest/features/grammar/data/models/grammar_quest_model.dart';
@@ -12,8 +13,9 @@ abstract class GrammarRemoteDataSource {
 
 class GrammarRemoteDataSourceImpl implements GrammarRemoteDataSource {
   final FirebaseFirestore firestore;
+  final AssetQuestService assetQuestService;
 
-  GrammarRemoteDataSourceImpl(this.firestore);
+  GrammarRemoteDataSourceImpl(this.firestore, this.assetQuestService);
 
   @override
   Future<List<GrammarQuestModel>> getGrammarQuest({
@@ -21,7 +23,16 @@ class GrammarRemoteDataSourceImpl implements GrammarRemoteDataSource {
     required int level,
   }) async {
     try {
-      // New structure: quests/{gameType}/levels/{level}
+      // 1. Try to load from Local Assets (Free & Fast)
+      final localData = await assetQuestService.getQuests(gameType.name, level);
+      if (localData.isNotEmpty) {
+        return localData.map((q) {
+          final questMap = q;
+          return GrammarQuestModel.fromJson(questMap, questMap['id'] ?? '');
+        }).toList();
+      }
+
+      // 2. Fallback to Firestore (Cloud)
       var doc = await firestore
           .collection('quests')
           .doc(gameType.name)
@@ -59,7 +70,6 @@ class GrammarRemoteDataSourceImpl implements GrammarRemoteDataSource {
             final questMap = q as Map<String, dynamic>;
             questMap['id'] ??= doc.id;
             questMap['subtype'] = gameType.name;
-            // Ensure difficulty fits if missing?
             questMap['difficulty'] ??= level;
             return GrammarQuestModel.fromJson(
               questMap,

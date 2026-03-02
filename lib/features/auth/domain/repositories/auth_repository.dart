@@ -53,4 +53,5 @@ abstract class AuthRepository {
   Future<Either<Failure, void>> purchaseStreakFreeze(int cost);
   Future<Either<Failure, void>> activateDoubleXP(int cost);
   Future<Either<Failure, void>> deleteAccount();
+  Future<Either<Failure, void>> awardKidsCoins(int amount);
 }

@@ -12,18 +12,17 @@ import 'package:voxai_quest/core/presentation/widgets/game_confetti.dart';
 import 'package:voxai_quest/core/presentation/widgets/glass_tile.dart';
 import 'package:voxai_quest/core/presentation/widgets/mesh_gradient_background.dart';
 import 'package:voxai_quest/core/presentation/widgets/modern_game_dialog.dart';
-import 'package:voxai_quest/core/presentation/widgets/modern_game_result_overlay.dart';
 import 'package:voxai_quest/core/presentation/widgets/scale_button.dart';
 import 'package:voxai_quest/core/presentation/widgets/shimmer_loading.dart';
-import 'package:voxai_quest/core/presentation/widgets/speaking/sonic_mic_button.dart';
 import 'package:voxai_quest/core/utils/ad_service.dart';
 import 'package:voxai_quest/core/utils/haptic_service.dart';
 import 'package:voxai_quest/core/utils/injection_container.dart' as di;
 import 'package:voxai_quest/core/utils/sound_service.dart';
 import 'package:voxai_quest/core/utils/speech_service.dart';
+import 'package:voxai_quest/features/accent/domain/entities/accent_quest.dart';
 import 'package:voxai_quest/features/accent/presentation/bloc/accent_bloc.dart';
+import 'package:confetti/confetti.dart';
 import 'package:voxai_quest/features/auth/presentation/bloc/auth_bloc.dart';
-
 
 class ShadowingChallengeScreen extends StatefulWidget {
   final int level;
@@ -44,9 +43,15 @@ class _ShadowingChallengeScreenState extends State<ShadowingChallengeScreen> {
   bool _hasAnalyzed = false;
   bool _showConfetti = false;
 
+  late ConfettiController _confettiController;
+  AccentLoaded? _lastLoadedState;
+
   @override
   void initState() {
     super.initState();
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 3),
+    );
     _speechService.initializeStt();
     context.read<AccentBloc>().add(
       FetchAccentQuests(
@@ -56,10 +61,17 @@ class _ShadowingChallengeScreenState extends State<ShadowingChallengeScreen> {
     );
   }
 
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
   void _playAudio(String text) async {
     if (_isPlaying) return;
     setState(() => _isPlaying = true);
     _hapticService.light();
+    // Removed _soundService.playClick() to prevent double sound
     await _speechService.speak(text);
     if (mounted) setState(() => _isPlaying = false);
   }
@@ -88,10 +100,13 @@ class _ShadowingChallengeScreenState extends State<ShadowingChallengeScreen> {
   }
 
   void _stopListening() async {
+    if (!_isListening) return;
     _hapticService.light();
     await _speechService.stop();
-    setState(() => _isListening = false);
-    _analyzeSpeech();
+    if (mounted) {
+      setState(() => _isListening = false);
+      _analyzeSpeech();
+    }
   }
 
   void _analyzeSpeech() {
@@ -117,24 +132,64 @@ class _ShadowingChallengeScreenState extends State<ShadowingChallengeScreen> {
         (targetText.contains(utteredText) &&
             utteredText.length > targetText.length * 0.7);
 
-    context.read<AccentBloc>().add(SubmitAnswer(isCorrect));
+    if (isCorrect) {
+      _hapticService.success();
+      _soundService.playCorrect();
+      context.read<AccentBloc>().add(SubmitAnswer(true));
+
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        if (mounted) context.read<AccentBloc>().add(NextQuestion());
+      });
+    } else {
+      _hapticService.error();
+      _soundService.playWrong();
+      setState(() {
+        _hasAnalyzed = false;
+        _recognizedText = '';
+      });
+      context.read<AccentBloc>().add(SubmitAnswer(false));
+    }
   }
 
-  void _useHint() {
+  void _useHint(AccentLoaded state, AccentQuest quest) {
+    if (state.hintUsed || _hasAnalyzed) {
+      _hapticService.error();
+      return;
+    }
     _hapticService.selection();
+    _soundService.playHint();
+
+    setState(() {
+      _hasAnalyzed = true;
+      _recognizedText = quest.word ?? "";
+    });
+
+    _hapticService.success();
+    context.read<AccentBloc>().add(SubmitAnswer(true));
     context.read<AccentBloc>().add(AccentHintUsed());
+
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      if (mounted) context.read<AccentBloc>().add(NextQuestion());
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final theme = LevelThemeHelper.getTheme('accent', level: widget.level, isDark: isDark);
+    final theme = LevelThemeHelper.getTheme(
+      'accent',
+      level: widget.level,
+      isDark: isDark,
+    );
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: isDark
+          ? const Color(0xFF020617)
+          : const Color(0xFFF8FAFC),
       body: BlocConsumer<AccentBloc, AccentState>(
         listener: (context, state) {
           if (state is AccentGameComplete) {
+            _confettiController.play();
             setState(() => _showConfetti = true);
             final isPremium =
                 context.read<AuthBloc>().state.user?.isPremium ?? false;
@@ -148,31 +203,53 @@ class _ShadowingChallengeScreenState extends State<ShadowingChallengeScreen> {
             );
           } else if (state is AccentGameOver) {
             _showGameOverDialog(context);
+          } else if (state is AccentLoaded) {
+            _lastLoadedState = state;
           }
         },
         builder: (context, state) {
-          if (state is AccentLoading || state is AccentInitial) {
+          if (state is AccentLoading ||
+              (state is AccentInitial && _lastLoadedState == null)) {
             return const GameShimmerLoading();
           }
-          if (state is AccentLoaded) {
-            return Stack(
-              children: [
-                MeshGradientBackground(colors: theme.backgroundColors),
-                HarmonicWaves(color: theme.primaryColor),
-                _buildGameUI(context, state, isDark, theme),
-              ],
-            );
-          }
+
           if (state is AccentError) {
             return QuestUnavailableScreen(
               message: state.message,
               onRetry: () => context.read<AccentBloc>().add(
-                
-      FetchAccentQuests(
+                FetchAccentQuests(
                   gameType: GameSubtype.shadowingChallenge,
                   level: widget.level,
                 ),
               ),
+            );
+          }
+
+          final displayState = state is AccentLoaded ? state : _lastLoadedState;
+
+          if (displayState != null) {
+            return Stack(
+              children: [
+                MeshGradientBackground(colors: theme.backgroundColors),
+                HarmonicWaves(color: theme.primaryColor, height: 100),
+                _buildGameUI(context, displayState, isDark, theme),
+                if (_showConfetti)
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: ConfettiWidget(
+                      confettiController: _confettiController,
+                      blastDirectionality: BlastDirectionality.explosive,
+                      shouldLoop: false,
+                      colors: const [
+                        Colors.amber,
+                        Colors.blue,
+                        Colors.pink,
+                        Colors.orange,
+                        Colors.purple,
+                      ],
+                    ),
+                  ),
+              ],
             );
           }
           return const SizedBox.shrink();
@@ -230,8 +307,10 @@ class _ShadowingChallengeScreenState extends State<ShadowingChallengeScreen> {
                     ),
                   ),
                   SizedBox(width: 12.w),
-                  _buildHintButton(state.hintUsed, theme.primaryColor),
-                  SizedBox(width: 12.w),
+                  if (!state.hintUsed) ...[
+                    _buildHintButton(state, theme.primaryColor, quest),
+                    SizedBox(width: 12.w),
+                  ],
                   _buildHeartCount(state.livesRemaining),
                 ],
               ),
@@ -246,7 +325,7 @@ class _ShadowingChallengeScreenState extends State<ShadowingChallengeScreen> {
                       "SHADOWING CHALLENGE",
                       style: GoogleFonts.outfit(
                         fontSize: 12.sp,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w900,
                         letterSpacing: 4,
                         color: theme.primaryColor,
                       ),
@@ -257,7 +336,7 @@ class _ShadowingChallengeScreenState extends State<ShadowingChallengeScreen> {
                       style: GoogleFonts.outfit(
                         fontSize: 24.sp,
                         fontWeight: FontWeight.w900,
-                        color: isDark ? Colors.white : const Color(0xFF1E293B),
+                        color: isDark ? Colors.white : const Color(0xFF0F172A),
                       ),
                       textAlign: TextAlign.center,
                     ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2),
@@ -289,37 +368,51 @@ class _ShadowingChallengeScreenState extends State<ShadowingChallengeScreen> {
                           ScaleButton(
                             onTap: () => _playAudio(quest.word ?? ""),
                             child: Container(
-                              width: double.infinity,
-                              padding: EdgeInsets.symmetric(vertical: 16.h),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 24.w,
+                                vertical: 16.h,
+                              ),
                               decoration: BoxDecoration(
-                                color: theme.primaryColor,
-                                borderRadius: BorderRadius.circular(16.r),
+                                gradient: LinearGradient(
+                                  colors: [
+                                    theme.primaryColor.withValues(alpha: 0.9),
+                                    theme.primaryColor,
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(30.r),
                                 boxShadow: [
                                   BoxShadow(
                                     color: theme.primaryColor.withValues(
-                                      alpha: 0.4,
+                                      alpha: 0.3,
                                     ),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 4),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 6),
                                   ),
                                 ],
                               ),
                               child: Row(
+                                mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(
-                                    _isPlaying
-                                        ? Icons.pause_rounded
-                                        : Icons.play_arrow_rounded,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: 8.w),
-                                  Text(
-                                    "LISTEN FIRST",
-                                    style: GoogleFonts.outfit(
+                                  if (_isPlaying)
+                                    const HarmonicWaves(
                                       color: Colors.white,
-                                      fontWeight: FontWeight.w800,
-                                      letterSpacing: 1,
+                                      height: 30,
+                                    ).animate().fadeIn()
+                                  else
+                                    Icon(
+                                      Icons.volume_up_rounded,
+                                      color: Colors.white,
+                                      size: 28.r,
+                                    ),
+                                  SizedBox(width: 12.w),
+                                  Text(
+                                    "LISTEN",
+                                    style: GoogleFonts.outfit(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      letterSpacing: 2,
                                     ),
                                   ),
                                 ],
@@ -341,26 +434,23 @@ class _ShadowingChallengeScreenState extends State<ShadowingChallengeScreen> {
                           style: GoogleFonts.outfit(
                             fontSize: 20.sp,
                             fontWeight: FontWeight.w800,
-                            color: theme.primaryColor,
+                            color: isDark ? theme.primaryColor : Colors.black87,
                           ),
                         ),
                       ).animate().fadeIn(),
                     SizedBox(height: 40.h),
                     if (state.lastAnswerCorrect == null)
-                      SonicMicButton(
-                        isListening: _isListening,
-                        onStart: _startListening,
-                        onStop: _stopListening,
-                        primaryColor: theme.primaryColor,
-                      ),
+                      _buildEchoAuraButton(isDark, theme)
+                    else
+                      SizedBox(height: 150.h),
                     SizedBox(height: 16.h),
                     Text(
-                      _isListening ? "RECORDING..." : "SHADOW NOW",
+                      _isListening ? "RELEASE TO SUBMIT" : "HOLD TO SHADOW",
                       style: GoogleFonts.outfit(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w700,
                         color: isDark ? Colors.white38 : Colors.black38,
-                        letterSpacing: 1,
+                        letterSpacing: 2,
                       ),
                     ),
                     SizedBox(height: 60.h),
@@ -370,19 +460,87 @@ class _ShadowingChallengeScreenState extends State<ShadowingChallengeScreen> {
             ),
           ],
         ),
-        if (state.lastAnswerCorrect != null)
-          ModernGameResultOverlay(
-            isCorrect: state.lastAnswerCorrect!,
-            title: state.lastAnswerCorrect!
-                ? "SHADOW MASTERED!"
-                : "KEEP ECHOING!",
-            subtitle: "Perfectly synced.",
-            onContinue: () => context.read<AccentBloc>().add(NextQuestion()),
-            primaryColor: theme.primaryColor,
-          ),
         if (_showConfetti) const GameConfetti(),
       ],
     );
+  }
+
+  Widget _buildEchoAuraButton(bool isDark, ThemeResult theme) {
+    return GestureDetector(
+      onTapDown: (_) => _startListening(),
+      onTapUp: (_) => _stopListening(),
+      onTapCancel: () => _stopListening(),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Base spacing box
+          SizedBox(width: 150.r, height: 150.r),
+
+          // The Echo Aura Layers
+          if (_isListening)
+            ...List.generate(3, (index) {
+              return Container(
+                    width: 100.r,
+                    height: 100.r,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: theme.primaryColor.withValues(
+                        alpha: 0.3 - (index * 0.1),
+                      ),
+                    ),
+                  )
+                  .animate(onPlay: (c) => c.repeat())
+                  .scale(
+                    begin: const Offset(1, 1),
+                    end: Offset(1.5 + (index * 0.3), 1.5 + (index * 0.3)),
+                    duration: (1000 + index * 200).ms,
+                    curve: Curves.easeOut,
+                  )
+                  .fadeOut(duration: (1000 + index * 200).ms);
+            }),
+
+          // Core Button
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: _isListening ? 110.r : 100.r,
+            height: _isListening ? 110.r : 100.r,
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                colors: _isListening
+                    ? [Colors.white, theme.primaryColor]
+                    : [
+                        theme.primaryColor.withValues(alpha: 0.8),
+                        theme.primaryColor.withValues(alpha: 0.4),
+                      ],
+                center: Alignment.topLeft,
+                radius: 1.5,
+              ),
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: _isListening
+                    ? Colors.white
+                    : theme.primaryColor.withValues(alpha: 0.6),
+                width: 3,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: theme.primaryColor.withValues(
+                    alpha: _isListening ? 0.6 : 0.3,
+                  ),
+                  blurRadius: _isListening ? 30 : 15,
+                  spreadRadius: _isListening ? 10 : 0,
+                ),
+              ],
+            ),
+            child: Icon(
+              Icons.mic_rounded,
+              color: _isListening ? theme.primaryColor : Colors.white,
+              size: _isListening ? 52.r : 48.r,
+            ),
+          ),
+        ],
+      ),
+    ).animate().fadeIn(delay: 600.ms).slideY(begin: 0.2);
   }
 
   Widget _buildHeartCount(int lives) {
@@ -410,21 +568,53 @@ class _ShadowingChallengeScreenState extends State<ShadowingChallengeScreen> {
     );
   }
 
-  Widget _buildHintButton(bool used, Color primaryColor) {
+  Widget _buildHintButton(
+    AccentLoaded state,
+    Color primaryColor,
+    AccentQuest quest,
+  ) {
+    bool disabled = state.hintUsed;
     return ScaleButton(
-      onTap: used ? null : _useHint,
+      onTap: disabled ? null : () => _useHint(state, quest),
       child: Container(
-        padding: EdgeInsets.all(8.r),
+        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
         decoration: BoxDecoration(
-          color: used
+          color: disabled
               ? Colors.grey.withValues(alpha: 0.1)
               : primaryColor.withValues(alpha: 0.1),
-          shape: BoxShape.circle,
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+            color: disabled
+                ? Colors.grey.withValues(alpha: 0.3)
+                : primaryColor.withValues(alpha: 0.5),
+            width: 1,
+          ),
         ),
-        child: Icon(
-          Icons.lightbulb_rounded,
-          color: used ? Colors.grey : primaryColor,
-          size: 24.r,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              disabled
+                  ? Icons.lightbulb_outline_rounded
+                  : Icons.lightbulb_rounded,
+              color: disabled ? Colors.grey : primaryColor,
+              size: 20.r,
+            ),
+            SizedBox(width: 6.w),
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, authState) {
+                final hintCount = authState.user?.hintCount ?? 0;
+                return Text(
+                  "$hintCount",
+                  style: GoogleFonts.outfit(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w900,
+                    color: disabled ? Colors.grey : primaryColor,
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -439,7 +629,7 @@ class _ShadowingChallengeScreenState extends State<ShadowingChallengeScreen> {
       builder: (c) => ModernGameDialog(
         title: 'Shadowing Hero!',
         description:
-            'You earned $xp XP and $coins Coins for your synchronized speech!',
+            'You earned 5 XP and 10 Coins for your synchronized speech!',
         buttonText: 'AWESOME',
         onButtonPressed: () {
           Navigator.pop(c);
@@ -461,7 +651,9 @@ class _ShadowingChallengeScreenState extends State<ShadowingChallengeScreen> {
         isSuccess: false,
         onButtonPressed: () {
           Navigator.pop(c);
-          context.read<AccentBloc>().add(RestoreLife());
+          if (mounted) {
+            context.read<AccentBloc>().add(RestoreLife());
+          }
         },
         secondaryButtonText: 'QUIT',
         onSecondaryPressed: () {

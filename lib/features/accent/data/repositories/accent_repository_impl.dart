@@ -3,11 +3,17 @@ import '../../../../core/error/failures.dart';
 import 'package:dartz/dartz.dart';
 import '../../../../core/domain/entities/game_quest.dart';
 import '../../domain/repositories/accent_repository.dart';
+import '../datasources/accent_remote_data_source.dart';
+import '../../../../core/network/network_info.dart';
 
 class AccentRepositoryImpl implements AccentRepository {
-  final dynamic remoteDataSource;
-  final dynamic networkInfo;
-  AccentRepositoryImpl({this.remoteDataSource, this.networkInfo});
+  final AccentRemoteDataSource remoteDataSource;
+  final NetworkInfo networkInfo;
+
+  AccentRepositoryImpl({
+    required this.remoteDataSource,
+    required this.networkInfo,
+  });
 
   @override
   Future<Either<Failure, List<AccentQuest>>> getAccentQuests({
@@ -21,11 +27,7 @@ class AccentRepositoryImpl implements AccentRepository {
       );
       return Right(remoteQuests);
     } catch (e) {
-      return const Left(
-        ServerFailure(
-          "Failed to connect to the server. Please check your internet connection.",
-        ),
-      );
+      return Left(ServerFailure(e.toString()));
     }
   }
 }

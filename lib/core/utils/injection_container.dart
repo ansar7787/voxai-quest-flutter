@@ -15,6 +15,7 @@ import 'package:voxai_quest/core/utils/payment_service.dart';
 import 'package:voxai_quest/core/utils/speech_service.dart';
 import 'package:voxai_quest/core/utils/quest_upload_service.dart';
 import 'package:voxai_quest/core/utils/tts_service.dart';
+import 'package:voxai_quest/core/data/services/asset_quest_service.dart';
 import 'package:voxai_quest/core/theme/theme_cubit.dart';
 import 'package:voxai_quest/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:voxai_quest/features/auth/data/repositories/auth_repository_impl.dart';
@@ -142,6 +143,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => TtsService());
   sl.registerLazySingleton(() => KidsTTSService());
   sl.registerLazySingleton(() => KidsAudioService());
+  sl.registerLazySingleton(() => AssetQuestService());
 
   // Data Sources
   sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -151,28 +153,37 @@ Future<void> init() async {
     ),
   );
   sl.registerLazySingleton<ReadingRemoteDataSource>(
-    () => ReadingRemoteDataSourceImpl(sl<FirebaseFirestore>()),
+    () => ReadingRemoteDataSourceImpl(sl<FirebaseFirestore>(), sl()),
   );
   sl.registerLazySingleton<WritingRemoteDataSource>(
-    () => WritingRemoteDataSourceImpl(sl<FirebaseFirestore>()),
+    () => WritingRemoteDataSourceImpl(sl<FirebaseFirestore>(), sl()),
   );
   sl.registerLazySingleton<SpeakingRemoteDataSource>(
-    () => SpeakingRemoteDataSourceImpl(sl<FirebaseFirestore>()),
+    () => SpeakingRemoteDataSourceImpl(sl<FirebaseFirestore>(), sl()),
   );
   sl.registerLazySingleton<GrammarRemoteDataSource>(
-    () => GrammarRemoteDataSourceImpl(sl<FirebaseFirestore>()),
+    () => GrammarRemoteDataSourceImpl(sl<FirebaseFirestore>(), sl()),
   );
   sl.registerLazySingleton<RoleplayRemoteDataSource>(
-    () => RoleplayRemoteDataSourceImpl(firestore: sl<FirebaseFirestore>()),
+    () => RoleplayRemoteDataSourceImpl(
+      firestore: sl<FirebaseFirestore>(),
+      assetQuestService: sl(),
+    ),
   );
   sl.registerLazySingleton<AccentRemoteDataSource>(
-    () => AccentRemoteDataSourceImpl(firestore: sl<FirebaseFirestore>()),
+    () => AccentRemoteDataSourceImpl(
+      firestore: sl<FirebaseFirestore>(),
+      assetQuestService: sl(),
+    ),
   );
   sl.registerLazySingleton<ListeningRemoteDataSource>(
-    () => ListeningRemoteDataSourceImpl(firestore: sl<FirebaseFirestore>()),
+    () => ListeningRemoteDataSourceImpl(
+      firestore: sl<FirebaseFirestore>(),
+      assetQuestService: sl(),
+    ),
   );
   sl.registerLazySingleton<VocabularyRemoteDataSource>(
-    () => VocabularyRemoteDataSourceImpl(sl<FirebaseFirestore>()),
+    () => VocabularyRemoteDataSourceImpl(sl<FirebaseFirestore>(), sl()),
   );
   sl.registerLazySingleton<KidsRemoteDataSource>(
     () => KidsRemoteDataSourceImpl(firestore: sl()),

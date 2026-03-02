@@ -207,6 +207,8 @@ class GameHelper {
         return Icons.help_center_rounded;
       case GameSubtype.articleInsertion:
         return Icons.add_circle_rounded;
+      case GameSubtype.essayDrafting:
+        return Icons.history_edu_rounded;
     }
   }
 }
